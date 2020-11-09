@@ -3,7 +3,10 @@
   add_host:
     name: "{{ 'host%02x.local' | format(item) }}"
     groups: testing
-  loop: "{{ range(1,num_hosts+1)|list }}"
+    cert_name: "{{ __vpn_dynamic_hosts_dummy_cert }}"
+    current_ip: "{{ __vpn_dynamic_hosts_dummy_ip }}"
+    current_subnet: "{{ __vpn_dynamic_hosts_dummy_cidr }}"
+  loop: "{{ range(1,__vpn_num_hosts+1)|list }}"
 
 - name: create mock vpn_connections
   set_fact:
@@ -12,7 +15,7 @@
       {% set myhosts = {} %}
       {% for host in groups['all'] %}
       {%   if '/' in host %}
-      {%     set _ = myhosts.__setitem__(main_hostname, "") %}
+      {%     set _ = myhosts.__setitem__(__vpn_main_hostname, "") %}
       {%   else %}
       {%     set _ = myhosts.__setitem__(host, "") %}
       {%   endif %}
