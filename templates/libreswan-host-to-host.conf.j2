@@ -1,0 +1,46 @@
+#jinja2: lstrip_blocks: True
+{% for tunnel in vpn_connections %}
+{%   if item in tunnel.hosts %}
+{%     for host in tunnel.hosts %}
+{%       if host == inventory_hostname or host == ansible_host %}
+{%         if tunnel.hosts[host] is mapping and 'hostname' in tunnel.hosts[host] %}
+{%           set host = tunnel.hosts[host].hostname %}
+{%         endif %}
+conn {{ (tunnel | json_query('name')) | ternary((tunnel.name | d('', true)) + '-', '') }}{{ host }}-to-{{ item }}
+  left={{ host }}
+  leftid=@{{ host }}
+{%       endif %}
+{%     endfor %}
+{%     if tunnel.hosts[item] is mapping and 'hostname' in tunnel.hosts[item] %}
+  right={{ tunnel.hosts[item].hostname | d(item) }}
+{%       if tunnel.auth_method == 'psk' %}
+  rightid=@{{ tunnel.hosts[item].hostname | d(item) }}
+{%       endif %}
+{%     else %}
+  right={{ hostvars[item].ansible_host | d(item) }}
+{%       if tunnel.auth_method == 'psk' %}
+  rightid=@{{ hostvars[item].ansible_host | d(item) }}
+{%       endif %}
+{%     endif %}
+  ikev2={{ __vpn_ikev2 }}
+{%     if 'auto' in tunnel %}
+  auto={{ tunnel.auto }}
+{%     endif %}
+{%     if 'rekey' in tunnel %}
+  rekey={{ tunnel.rekey | ternary('yes', 'no') }}
+{%     endif %}
+{%     if tunnel.auth_method == 'psk' %}
+  authby=secret
+{%     endif %}
+{%     if tunnel.auth_method == 'cert' %}
+  rightid=%fromcert
+  leftrsasigkey=%cert
+{%       for host in tunnel.hosts %}
+{%         if host == inventory_hostname or host == ansible_host %}
+  leftcert={{ tunnel.hosts[host].cert_name }}
+{%         endif %}
+{%       endfor %}
+  rightrsasigkey=%cert
+{%     endif %}
+{%   endif %}
+{% endfor %}

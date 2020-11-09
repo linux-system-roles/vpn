@@ -1,0 +1,23 @@
+---
+- name: dynamically add multiple hosts for testing
+  add_host:
+    name: "{{ 'host%02x.local' | format(item) }}"
+    groups: testing
+  loop: "{{ range(1,num_hosts+1)|list }}"
+
+- name: create mock vpn_connections
+  set_fact:
+    vpn_connections: |
+      {% set vpn_connections = [] %}
+      {% set myhosts = {} %}
+      {% for host in groups['all'] %}
+      {%   if '/' in host %}
+      {%     set _ = myhosts.__setitem__(main_hostname, "") %}
+      {%   else %}
+      {%     set _ = myhosts.__setitem__(host, "") %}
+      {%   endif %}
+      {% endfor %}
+      {% set empty_host = {} %}
+      {% set _ = empty_host.__setitem__('hosts', myhosts) %}
+      {% set _ = vpn_connections.append(empty_host) %}
+      {{ vpn_connections }}

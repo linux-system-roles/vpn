@@ -1,10 +1,10 @@
-# SPDX-License-Identifier: MIT
 ---
-# Put the role's internal variables here that are not distribution specific.
-# You can override these by defining the same variable with a different
-# value in a platform/version specific file in vars/
+__vpn_packages:
+  - libreswan
 
-# Examples of non-distribution specific (generic) internal variables:
-__template_foo_config: "foo.conf"
-__template_packages: []
-__template_services: []
+__vpn_services:
+  - ipsec
+
+__vpn_ikev2: 'insist'
+
+__vpn_nss_location: '/var/lib/ipsec/nss'

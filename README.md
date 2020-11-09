@@ -43,7 +43,7 @@ The user may provide a number of other variables that should be applied to the c
 
 | Parameter                                 | Description                                                                           | Type        | Required | Default                 | Libreswan Equivalent    |
 |-------------------------------------------|---------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:-----------------------:|
-| [name](#name)                             | A unique, arbitrary name used to identify the connection.                             | str         | no       | See [name](#name).      | conn `<name>`           |
+| [name](#name)                             | A unique, arbitrary name used to prefix the the connection name.                      | str         | no       | See [name](#name).      | conn `<name>`           |
 | [hosts](#hosts)                           | A vpn tunnel will be constructed between each pair of hosts in this dictionary.       | dict        | yes      | -                       | -                       |
 | [auth_method](#auth_method)               | Authentication method to be used for this tunnel.                                     | str         | no       | vpn\_auth\_method       | authby                  |
 | [auto](#auto)                             | What operation, if any, should be done automatically at startup.                      | str         | no       | -                       | auto                    |
@@ -51,7 +51,7 @@ The user may provide a number of other variables that should be applied to the c
 
 ### name
 
-By default, the role will generate a descriptive name for each tunnel it creates. For example, when creating a tunnel between `bastion1` and `bastion2`, the descriptive name of this connection on `bastion1` will be `bastion1-to-bastion2`. Similarly, the name of the connection associated with this tunnel on `bastion2` will be `bastion2-to-bastion1`. The user may choose to override the option to auto-generate these descriptive names (which may be sizeable if hosts are identified with long FQDNs) by specifying a name for the connection in this `name` field.
+By default, the role will generate a descriptive name for each tunnel it creates. For example, when creating a tunnel between `bastion1` and `bastion2`, the descriptive name of this connection on `bastion1` will be `bastion1-to-bastion2`. Similarly, the name of the connection associated with this tunnel on `bastion2` will be `bastion2-to-bastion1`. The user may choose to prefix these auto-generated names by specifying a value in the `name` field.
 
 ### auth_method
 

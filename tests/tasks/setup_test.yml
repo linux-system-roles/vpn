@@ -1,0 +1,25 @@
+---
+- name: Set platform/version specific variables
+  include_role:
+    name: linux-system-roles.vpn
+    tasks_from: set_vars
+    public: true
+
+- name: Change inventory_hostname
+  set_fact:
+    inventory_hostname: "{{ main_hostname }}"
+
+- name: Create nss directory for testing
+  file:
+    path: "{{ __vpn_nss_location }}"
+    state: directory
+    mode: '0600'
+
+- name: Create /etc/ipsec.d directory for testing
+  file:
+    path: "/etc/ipsec.d"
+    state: directory
+    mode: '0600'
+
+- name: Dynamically add more hosts
+  include_tasks: tasks/add_hosts.yml
