@@ -50,8 +50,7 @@
         msg: cert_name is missing or empty for one or more hosts in a tunnel
       when: '"True" in failure'
 
-    - name: generate psks on first host
-      run_once: true
+    - name: generate psks
       no_log: true
       set_fact:
         __vpn_psks: |
@@ -76,28 +75,35 @@
           {% endfor %}
           {{ __vpn_psks }}
 
-    - name: set psks for all hosts
-      no_log: true
-      set_fact:
-        __vpn_psks: "{{ hostvars[hostvars.keys() | first]['__vpn_psks'] }}"
-
   delegate_to: localhost
   run_once: true
+
+# The run_once host might not be the first one in hostvars - we do not have
+# a good way to know which host in hostvars was the run_once, and it might
+# change (i.e. on python2 if a non-stable hash is used for the dict)
+# So, find the values for the first hostvars that has __vpn_psks set
+# and use that value.
+- name: set psks for hosts
+  no_log: true
+  vars:
+    __vpn_psk_hostvars: "{{ hostvars.values() | selectattr('__vpn_psks', 'defined') | first }}"
+  set_fact:
+    __vpn_psks: "{{ __vpn_psk_hostvars.__vpn_psks }}"
 
 - name: build tunnels
   vars:
     tunnels: |
-      {% set ns = namespace(unique_tunnels=[]) %}
+      {% set unique_tunnels = [] %}
       {% for tunnel in vpn_connections %}
       {%   if inventory_hostname in tunnel.hosts %}
       {%     for node in tunnel.hosts %}
       {%       if node != inventory_hostname %}
-      {%         set _ = ns.unique_tunnels.append(node) %}
+      {%         set _ = unique_tunnels.append(node) %}
       {%       endif %}
       {%     endfor %}
       {%   endif %}
       {% endfor %}
-      {{ ns.unique_tunnels | unique }}
+      {{ unique_tunnels | unique }}
   block:
     - name: create ipsec.conf files
       template:

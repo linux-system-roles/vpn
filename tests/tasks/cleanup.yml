@@ -25,17 +25,17 @@
     - name: clean up files
       vars:
         tunnels: |
-          {% set ns = namespace(unique_tunnels=[]) %}
+          {% set unique_tunnels = [] %}
           {% for connection in vpn_connections | d([])%}
           {%   if inventory_hostname in connection.hosts %}
           {%     for node in connection.hosts %}
           {%       if node != inventory_hostname %}
-          {%         set _ = ns.unique_tunnels.append(node) %}
+          {%         set _ = unique_tunnels.append(node) %}
           {%       endif %}
           {%     endfor %}
           {%   endif %}
           {% endfor %}
-          {{ ns.unique_tunnels | unique }}
+          {{ unique_tunnels | unique }}
 
       block:
         - name: remove ipsec.conf files
