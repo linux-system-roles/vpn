@@ -28,6 +28,10 @@
               {% endfor %}
               {{ vpn_connections }}
 
+        - name: Save certname for main host
+          set_fact:
+            __vpn_main_certname: "{{ vpn_connections[0]['hosts'][main_hostname]['cert_name'] }}"
+
         - name: Use vpn role
           include_role:
             name: linux-system-roles.vpn
@@ -68,7 +72,7 @@
             item.content | b64decode is not
             search('rightrsasigkey=%cert') or
             item.content | b64decode is not
-            search('leftcert=cert' + (num_hosts+1)|string)
+            search('leftcert=' + __vpn_main_certname)
           loop: '{{ __vpn_register_conf.results }}'
           loop_control:
             index_var: idx
@@ -88,7 +92,7 @@
           set_fact:
             __vpn_success: false
           when: >-
-            item.content | b64decode is not search('^@' + main_hostname + ' @host0' + (idx+1)|string + '\.local : RSA \"cert' + (num_hosts+1)|string + '\"')
+            item.content | b64decode is not search('^@' + main_hostname + ' @host0' + (idx+1)|string + '\.local : RSA \"' + __vpn_main_certname + '\"')
           loop: '{{ __vpn_register_secrets.results }}'
           loop_control:
             index_var: idx
