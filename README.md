@@ -62,7 +62,11 @@ The user can define an authentication method to use at the tunnel level, however
 What operation, if any, should be done automatically at IPsec startup. Currently-accepted values are **add**, **ondemand**, **start**, and **ignore** (also the default, signifies no automatic startup operation).
 
 ### hosts
-Each key in this dictionary is the unique name of a host. If a host is listed here and is not part of the inventory list of hosts, it will be assumed that this host is not managed by our own inventory. In this case, the `hostname` parameter is required because it is necessary for setting up the local ends of such a tunnel. For each host key in this dictionary, the following host-specific parameters can be specified.  
+Each key in this dictionary is the unique name of a host. If a host is listed here and is not part of the inventory list of hosts, it will be assumed that this host is not managed by our own inventory. In this case, the `hostname` parameter is required because it is necessary for setting up the local ends of such a tunnel. 
+
+If the host key in the hosts list of your inventory is not the FQDN you want to use, you must use the `hostname` field under each host in this `vpn_connections` hosts dictionary to specify the actual FQDN or IP address you want the vpn role to use to set up the tunnel. If you do not specify `hostname`, then the role will use `ansible_host` if defined, or the host key in your hosts list if neither `ansible_host` nor `hostname` is defined. 
+
+For each host key in this dictionary, the following host-specific parameters can be specified.  
 
 | Parameter                         | Description                                                                                   | Type        | Required | Default                 | Libreswan Equivalent         |
 |-----------------------------------|-----------------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:----------------------------:|
