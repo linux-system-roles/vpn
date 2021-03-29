@@ -7,7 +7,9 @@
 {%         set host = tunnel.hosts[host].hostname | d((hostvars[host] | d({})).ansible_host | d(host)) %}
 conn {{ (tunnel | json_query('name')) | ternary((tunnel.name | d('', true)) + '-', '') }}{{ host }}-to-{{ otherhost }}
   left={{ host }}
+{%         if tunnel.auth_method == 'cert' and not host | ipaddr %}
   leftid=@{{ host }}
+{%         endif %}
 {%         if tunnel.hosts[host] is mapping and 'subnets' in tunnel.hosts[host] %}
   leftsubnets={
 {%-          for subnet in tunnel.hosts[host].subnets -%}
