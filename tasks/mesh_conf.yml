@@ -5,7 +5,9 @@
     current_ip: "{{ ansible_default_ipv4.address | d(ansible_default_ipv6.address) }}"
 
 - name: Set IP with prefix register
-  shell: "ip addr show | grep {{ current_ip }} | awk '{print $2}'"
+  shell: |-
+    set -euo pipefail
+    ip addr show | grep {{ current_ip }} | awk '{print $2}'
   register:
     ip_with_prefix_register
   changed_when: false

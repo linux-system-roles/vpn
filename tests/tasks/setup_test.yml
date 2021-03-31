@@ -46,15 +46,18 @@
       file:
         path: "/etc/ipsec.d/policies/private"
         state: touch
+        mode: "0600"
 
     - name: Create dummy policy files for testing
       file:
         path: "/etc/ipsec.d/policies/private-or-clear"
         state: touch
+        mode: "0600"
 
     - name: Create dummy policy files for testing
       file:
         path: "/etc/ipsec.d/policies/clear"
         state: touch
+        mode: "0600"
 
   when: __vpn_opportunistic | d(false)
