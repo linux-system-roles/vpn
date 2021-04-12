@@ -57,6 +57,7 @@ galaxy_info:
         - all
     - name: EL
       versions:
+        - 7
         - 8
         - 9
 
