@@ -22,6 +22,7 @@
               {% for tunnel in vpn_connections %}
               {%   set _ = tunnel.__setitem__("auth_method", "cert") %}
               {%   set _ = tunnel.__setitem__("auto", "start") %}
+              {%   set _ = tunnel.__setitem__("name", "tunnel%d" | format(loop.index)) %}
               {%   for host in tunnel.hosts %}
               {%     set temp_dict = {'cert_name': 'cert' + loop.index|string} %}
               {%     set _ = tunnel.hosts.__setitem__(host, temp_dict) %}
