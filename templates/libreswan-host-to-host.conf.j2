@@ -5,7 +5,7 @@
 {%     for host in tunnel.hosts %}
 {%       if host == inventory_hostname or host == ansible_host %}
 {%         set host = tunnel.hosts[host].hostname | d((hostvars[host] | d({})).ansible_host | d(host)) %}
-conn {{ (tunnel | json_query('name')) | ternary((tunnel.name | d('', true)) + '-', '') }}{{ host }}-to-{{ otherhost }}
+conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host }}-to-{{ otherhost }}
   left={{ host }}
   leftid={{ host | ipaddr | ternary('','@') }}{{ host }}
 {%         if tunnel.hosts[host] is mapping and 'subnets' in tunnel.hosts[host] %}
