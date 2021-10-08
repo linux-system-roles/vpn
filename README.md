@@ -24,6 +24,15 @@ The role will set up a vpn tunnel between each pair of hosts in the list of `vpn
 
 The Ansible controller requires the python `netaddr` package.
 
+See `meta/requirements.yml` for the requirements.  You must install the
+requirements before using this role:
+```
+ansible-galaxy collection install -vv -r meta/requirements.yml
+```
+See
+https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#using-meta-requirements-yml
+for more information.
+
 ## Variables
 
 These global variables should be applied to the configuration for every tunnel (unless the user overrides them in the configuration of a particular tunnel).
