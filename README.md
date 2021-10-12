@@ -24,7 +24,7 @@ The role will set up a vpn tunnel between each pair of hosts in the list of `vpn
 
 The Ansible controller requires the python `netaddr` package.
 
-## Global variables
+## Top-level variables
 
 These global variables should be applied to the configuration for every tunnel (unless the user overrides them in the configuration of a particular tunnel).
 
@@ -111,13 +111,13 @@ For each host key in this dictionary, the following host-specific parameters can
 
 | Parameter                         | Description                                                                                   | Type        | Required | Default                 | Libreswan Equivalent         |
 |-----------------------------------|-----------------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:----------------------------:|
-| [hostname](#hostname)             | Host or IP address to use for setting up a VPN connection.                                            | str         | no       | -                       | left/right                   |
+| [hostname](#hostname)             | Host name or IP address to use for setting up a VPN connection.                                            | str         | no       | -                       | left/right                   |
 | [cert_name](#cert_name)           | Certificate nickname of this host's certificate in the NSS database.                          | str         | no       | -                       | leftcert/rightcert           |
 | subnets                           | A list of the subnets that should be available via the VPN connection.                        | list        | no       | -                       | leftsubnets/rightsubnets     |
 
 #### hostname
 
-Can hold an IP address or FQDN. Specified only when overriding hostnames used by Ansible for SSH. Note that if a domain name is specified, it must be fully qualified to ensure that DNS resolution works correctly on host machines. This parameter is required when the host is not part of the inventory list of hosts.
+Can hold a host name or IP address. Specified only when overriding host names used by Ansible for SSH. Note that if a host name is specified, it must be fully qualified to ensure that DNS resolution works correctly on host machines. This parameter is required when the host is not part of the inventory list of hosts.
 
 #### cert_name
 It is assumed that the `cert_name` provided by the user exists in the IPSec NSS cert database. Users may use the certificate system role to issue these certificates.
