@@ -1,2 +1,4 @@
 ---
-skip_list: []
+skip_list:
+  - '106'  # role name does not match pattern
+  - '701'  # ignore meta/requirements.yml
