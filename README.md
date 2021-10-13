@@ -33,64 +33,75 @@ See
 https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#using-meta-requirements-yml
 for more information.
 
-## Variables
+## Top-level variables
 
 These global variables should be applied to the configuration for every tunnel (unless the user overrides them in the configuration of a particular tunnel).
 
 | Parameter                            | Description                                                                                   | Type        | Required | Default                 |
 |--------------------------------------|-----------------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|
-| vpn\_provider                        | VPN provider to use (e.g. libreswan, wireguard, etc.)                                         | str         | no       | libreswan               |
-| [vpn\_auth\_method](#vpn_auth_method)| VPN authentication method to use.                                                             | str         | no       | psk                     |
-| vpn\_regen\_keys                     | If pre-shared keys should be regenerated for sets of hosts with existing keys.                | bool        | no       | false                   |
-| vpn\_opportunistic                   | If an opportunistic mesh configuration should be used.                                        | bool        | no       | false                   |
+| vpn\_provider                        | VPN provider used (e.g. libreswan, wireguard, etc.)                                         | str         | no       | libreswan               |
+| [vpn\_auth\_method](#vpn_auth_method)| VPN authentication method used.                                                             | str         | no       | psk                     |
+| vpn\_regen\_keys                     | Whether pre-shared keys should be regenerated for sets of hosts with existing keys.                | bool        | no       | false                   |
+| vpn\_opportunistic                   | Whether an opportunistic mesh configuration should be used.                                        | bool        | no       | false                   |
 | vpn\_default\_policy                 | The default policy group to add target machines to under a mesh configuration.                | str         | no       | `private-or-clear`      |
 | [vpn\_connections](#vpn_connections) | List of VPN connections to make.                                                              | list        | yes      | -                       |
 
 ### vpn_auth_method
 
-Acceptable values are `psk` for shared secrets (PSK) authentication or `cert` for authentication using certificates.
+The value specified in this variable will determine the value of the `authby` field for the Libreswan tunnels opened.
+Acceptable values:
+* `psk` for pre-shared key (PSK) authentication
+* `cert` for authentication using certificates
 
 ### vpn_connections
 
-`vpn_connections` is a list of connections.  Each connection is either (1) a list of hosts specified by `hosts` or (2) a mesh configuration consisting of one or more subnets and profiles. In the first case (host-to-host use case), the role creates tunnels between each pair of hosts. At least one tunnel must be defined in this list. In the second case (mesh use case), the role deploys an opportunistic mesh configuration using the `policy`/`cidr` pairs defined by the user under `policies`.
+`vpn_connections` is a list of connections. Each connection is either:
 
-The user may provide a number of other variables that should be applied to the configuration for each tunnel. The list of these connection-specific options is outlined in the table below.
+* A list of hosts specified by `hosts`. In this host-to-host use case, the role creates tunnels between each pair of hosts. At least one tunnel must be defined in this list.
+
+* A mesh configuration consisting of one or more subnets and profiles. In this mesh use case, the role deploys an opportunistic mesh configuration using the `policy`/`cidr` pairs that you define in the `policies`.
+
+## Connection-specific variables
+
+In addition to the global variables, you may provide a number of other variables that will be applied to the configuration for each tunnel.
 
 | Parameter                                 | Description                                                                           | Type        | Required | Default                 | Libreswan Equivalent    |
 |-------------------------------------------|---------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:-----------------------:|
-| [name](#name)                             | A unique, arbitrary name used to prefix the the connection name.                      | str         | no       | See [name](#name).      | conn `<name>`           |
-| [hosts](#hosts)                           | A vpn tunnel will be constructed between each pair of hosts in this dictionary.       | dict        | yes      | -                       | -                       |
+| [name](#name)                             | A unique, arbitrary name used to prefix the connection name.                      | str         | no       | See [name](#name).      | conn `<name>`           |
+| [hosts](#hosts)                           | A VPN tunnel will be constructed between each pair of hosts in this dictionary.       | dict        | yes      | -                       | -                       |
 | [auth_method](#auth_method)               | Authentication method to be used for this connection.                                 | str         | no       | vpn\_auth\_method       | authby                  |
 | [auto](#auto)                             | What operation, if any, should be done automatically at startup.                      | str         | no       | -                       | auto                    |
-| [opportunistic](#opportunistic)           | If an opportunistic mesh configuration should be used.                                | bool        | no       | vpn\_opportunistic      | -                       |
+| [opportunistic](#opportunistic)           | Whether an opportunistic mesh configuration should be used.                                | bool        | no       | vpn\_opportunistic      | -                       |
 | [policies](#policies)                     | List of policy settings to use for an opportunistic mesh configuration.               | list        | no       | -                   | -                       |
 
 ### name
 
-By default, the role will generate a descriptive name for each tunnel it creates. For example, when creating a tunnel between `bastion1` and `bastion2`, the descriptive name of this connection on `bastion1` will be `bastion1-to-bastion2`. Similarly, the name of the connection associated with this tunnel on `bastion2` will be `bastion2-to-bastion1`. The user may choose to prefix these auto-generated names by specifying a value in the `name` field.
+By default, the role generates a descriptive name for each tunnel it creates from the perspective of each system. For example, when creating a tunnel between `bastion1` and `bastion2`, the descriptive name of this connection on `bastion1` is `bastion1-to-bastion2` but on `bastion2` the connection is named `bastion2-to-bastion1`. You may add a prefix to these auto-generated names by specifying a value in the `name` field.
 
 ### auth_method
 
-The user can define an authentication method to use at the connection level, however this is optional. If this parameter is not defined, the role will default to using the global variable `vpn_auth_method`. The value specified in this parameter will infer the value to be used in the `authby` field for a Libreswan tunnel. Acceptable values are the same as for `vpn_auth_method` (see [vpn_auth_method](#vpn_auth_method)). 
+Optionally, you can define an authentication method to use at the connection level. If `auth_method` is not defined, the role uses the global variable `vpn_auth_method`. The value of `auth_method`, or `vpn_auth_method`, determines the value of the `authby` field for the Libreswan tunnel opened for this connection. Acceptable values:
+* `psk` for pre-shared key (PSK) authentication
+* `cert` for authentication using certificates
 
 ### auto
 
-What operation, if any, should be done automatically at IPsec startup. Currently-accepted values are **add**, **ondemand**, **start**, and **ignore** (also the default, signifies no automatic startup operation).
+What operation, if any, should be done automatically at IPsec startup. Currently accepted values are **add**, **ondemand**, **start**, and **ignore**. The default value is null, which means no automatic startup operation.
 
 ### opportunistic
 
-By default, when multiple nodes are specified within a `vpn_connection`, host-to-host tunnels are created between each pair of those nodes. To override this in favor of using an opportunistic mesh configuration, the user can set `opportunistic` to true. If this is set to `true`, it is assumed that all hosts in the ansible inventory are to be included in this opportunistic mesh configuration.
+By default, the VPN System Role creates a host-to-host tunnel between each pair of nodes specified within a `vpn_connection`. You can instead configure an opportunistic mesh VPN by setting `opportunistic` to `true`, which will include all hosts in the Ansible inventory in the opportunistic mesh configuration.
+
+**Note:** When configuring an opportunistic mesh VPN using a control node that shares the same CIDR as one or more of mesh CIDRs used for encryption, add a clear policy entry for the control node CIDR in order to prevent an SSH connection loss during the play. See [example](#opportunistic-mesh-vpn-configuration).
 
 ### policies
 
-Policy rules related to opportunistic encryption can be set in this dictionary. If no policy rules are set, the default policy rule is `private-or-clear` (to override this default policy rule, see [cidr](#cidr)). Note that the default policy does not add a `0.0.0.0/0` entry into a policy file, but rather individual CIDRs are added to policy files based on the CIDRs of the target machines. It follows that the default policy rule will be applied to CIDRs of all the hosts over which this role is run, unless the CIDR of a particular target machine or group of target machines has a different policy rule specifically stated by the user in this section. If users wish to add a `0.0.0.0/0` entry to a particular policy file, they may add an item to this list where the `policy` value is the desired policy to be applied, and the `cidr` value is `0.0.0.0/0`.
-
-**Note:** When configuring mesh opportunistic VPN using a controller machine that shares the same CIDR as one or more of mesh CIDRs used for encryption, the user should add a `clear` policy entry for the controller machine CIDR in order to prevent an SSH connection loss during the play. See [example](#opportunistic-mesh-vpn-configuration).
+In this dictionary, you can set policy rules related to opportunistic encryption. If no policy rules are set, the default policy rule is `private-or-clear`. To override this default policy rule, see [cidr](#cidr). Note that the default policy does not add a `0.0.0.0/0` entry into a policy file. Instead, individual classless inter-domain routing (CIDR) values are added to policy files based on the CIDRs of the managed nodes. The default policy rule will be applied to CIDRs of all the hosts over which this role is run, unless you specify in this section a different policy rule for the CIDR of a particular managed node or group of managed nodes. If users wish to add a `0.0.0.0/0` entry to a particular policy file, they may add an item to this list where the policy value is the desired policy to be applied, and the CIDR value is `0.0.0.0/0`.
 
 | Parameter                                 | Description                                                                           | Type        | Required |
 |-------------------------------------------|---------------------------------------------------------------------------------------|:-----------:|:--------:|
 | [policy](#policy)                         | A valid policy connection group.                                                      | str         | no       |
-| [cidr](#cidr)                             | A valid CIDR to apply this policy rule to.                                            | str         | no       |
+| [cidr](#cidr)                             | A valid CIDR to which this policy rule is applied.                                            | str         | no       |
 
 #### policy
 
@@ -98,24 +109,24 @@ Valid values are `private`, `private-or-clear`, and `clear`.
 
 #### cidr
 
-In addition to any valid CIDR, the user may specify `default` in this field to apply the corresponding policy to all hosts that do not fit into one of the other specified policy groups, thereby overriding the default `private-or-clear` policy rule.
+In addition to any valid CIDR value, you may specify `default` in this field to apply the corresponding policy to all hosts that do not fit into one of the other specified policy groups, thereby overriding the default private-or-clear policy rule.
 
 ### hosts
-Each key in this dictionary is the unique name of a host. If a host is listed here and is not part of the inventory list of hosts, it will be assumed that this host is not managed by our own inventory. In this case, the `hostname` parameter is required because it is necessary for setting up the local ends of such a tunnel. 
+Each key in this dictionary is the unique name of a host. If a host is listed in `hosts` and not in the inventory file, the host will not be managed by the inventory. In such case, the `hostname` parameter is required because it is necessary for setting up the local ends of such a tunnel.
 
-If the host key in the hosts list of your inventory is not the FQDN you want to use, you must use the `hostname` field under each host in this `vpn_connections` hosts dictionary to specify the actual FQDN or IP address you want the vpn role to use to set up the tunnel. If you do not specify `hostname`, then the role will use `ansible_host` if defined, or the host key in your hosts list if neither `ansible_host` nor `hostname` is defined. 
+If the host key in the hosts list of your inventory is not the fully qualified domain name (FQDN) you want to use, you must use the `hostname` field under each host in this `vpn_connections` hosts dictionary to specify the actual FQDN or IP address you want the VPN role to use for setting up the tunnel. If you do not specify `hostname`, then the role will use `ansible_host` if defined, or the host key in your hosts list if neither `ansible_host` nor `hostname` is defined. 
 
 For each host key in this dictionary, the following host-specific parameters can be specified.  
 
 | Parameter                         | Description                                                                                   | Type        | Required | Default                 | Libreswan Equivalent         |
 |-----------------------------------|-----------------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:----------------------------:|
-| [hostname](#hostname)             | Host or IP to use for setting up a vpn connection.                                            | str         | no       | -                       | left/right                   |
+| [hostname](#hostname)             | Host name or IP address to use for setting up a VPN connection.                                            | str         | no       | -                       | left/right                   |
 | [cert_name](#cert_name)           | Certificate nickname of this host's certificate in the NSS database.                          | str         | no       | -                       | leftcert/rightcert           |
 | subnets                           | A list of the subnets that should be available via the VPN connection.                        | list        | no       | -                       | leftsubnets/rightsubnets     |
 
 #### hostname
 
-Can hold an IP address or FQDN. Specified only when overriding hostnames used by Ansible for SSH. Note that if a domain name is specified, it must be fully-qualified to ensure that DNS resolution will work correctly on host machines. This parameter is required when the host is not part of the inventory list of hosts.
+Can hold a host name or IP address. Specified only when overriding host names used by Ansible for SSH. Note that if a host name is specified, it must be fully qualified to ensure that DNS resolution works correctly on host machines. This parameter is required when the host is not part of the inventory list of hosts.
 
 #### cert_name
 It is assumed that the `cert_name` provided by the user exists in the IPSec NSS cert database. Users may use the certificate system role to issue these certificates.
