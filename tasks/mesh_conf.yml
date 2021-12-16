@@ -14,7 +14,7 @@
 
 - name: Set net CIDR fact
   set_fact:
-    current_subnet: "{{ ip_with_prefix_register.stdout | ipaddr('subnet') }}"
+    current_subnet: "{{ ip_with_prefix_register.stdout | vpn_ipaddr('subnet') }}"
 
 - name: Set policies fact
   set_fact:
@@ -32,7 +32,7 @@
       {% for node in ansible_play_hosts %}
       {%   set node_in_pol = {'flag': false} %}
       {%   for policy in policies %}
-      {%     if hostvars[node].current_ip | ipaddr(policy.cidr) | ipaddr('bool') %}
+      {%     if hostvars[node].current_ip | vpn_ipaddr(policy.cidr) | vpn_ipaddr('bool') %}
       {%       if node_in_pol.update({'flag': true}) %}{% endif %}
       {%     endif %}
       {%   endfor %}
