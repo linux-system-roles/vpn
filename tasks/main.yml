@@ -11,6 +11,18 @@
 
 - name: Controller tasks
   block:
+    - name: List packages on the controller to see if OpenSSL is installed
+      package_facts:
+      when: vpn_ensure_openssl | d(true)
+
+    - name: Ensure OpenSSL is installed on the controller
+      package:
+        name: openssl
+        state: present
+      when:
+        - vpn_ensure_openssl | d(true)
+        - "'openssl' not in ansible_facts.packages"
+
     - name: Enforce default auth method as needed
       set_fact:
         vpn_connections: |

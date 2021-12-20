@@ -37,6 +37,7 @@ These global variables should be applied to the configuration for every tunnel (
 | vpn\_regen\_keys                     | Whether pre-shared keys should be regenerated for sets of hosts with existing keys.                | bool        | no       | false                   |
 | vpn\_opportunistic                   | Whether an opportunistic mesh configuration should be used.                                        | bool        | no       | false                   |
 | vpn\_default\_policy                 | The default policy group to add target machines to under a mesh configuration.                | str         | no       | `private-or-clear`      |
+| [vpn\_ensure\_openssl](#vpn_ensure_openssl)    | Ensure the `openssl` package is installed on the controller.                          | bool        | no       | true      |
 | [vpn\_connections](#vpn_connections) | List of VPN connections to make.                                                              | list        | yes      | -                       |
 
 ### vpn_auth_method
@@ -45,6 +46,12 @@ The value specified in this variable will determine the value of the `authby` fi
 Acceptable values:
 * `psk` for pre-shared key (PSK) authentication
 * `cert` for authentication using certificates
+
+### vpn_ensure_openssl
+
+The role uses `openssl` to generate PSKs.  It requires this to be installed on the controller node.
+The default value is `true`.  If you have pre-generated your PSKs, or you are not using PSKs, then
+set `vpn_ensure_openssl: false`.
 
 ### vpn_connections
 
