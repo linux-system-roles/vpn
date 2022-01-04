@@ -2,6 +2,9 @@
 
 # Write extra requirements for running pytest here:
 # If you need ansible then uncomment the following line:
-#-ransible_pytest_extra_requirements.txt
+-ransible_pytest_extra_requirements.txt
 # If you need mock then uncomment the following line:
 #mock ; python_version < "3.0"
+# EL7 uses 1.0.16 or later of ipaddress
+ipaddress==1.0.16 ; python_version < "3.0"
+# otherwise - use ipaddress built into python
