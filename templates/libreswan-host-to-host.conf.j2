@@ -1,4 +1,5 @@
 #jinja2: lstrip_blocks: True
+{{ ansible_managed | comment }}
 {% for tunnel in vpn_connections %}
 {%   if item in tunnel.hosts %}
 {%     set otherhost = tunnel.hosts[item].hostname | d((hostvars[item] | d({})).ansible_host | d(item)) %}

@@ -92,7 +92,10 @@
           set_fact:
             __vpn_success: false
           when: >-
-            item.content | b64decode is not search('@' + __vpn_main_hostname + ' @host0' + (idx+1)|string + '\.local : RSA \"' + __vpn_main_certname + '\"')
+            item.content | b64decode |
+            regex_search('^@' + __vpn_main_hostname + ' @host0' +
+            (idx+1)|string + '\.local : RSA \"' + __vpn_main_certname + '\"',
+            multiline=True) | d() | length == 0
           loop: '{{ __vpn_register_secrets.results }}'
           loop_control:
             index_var: idx
