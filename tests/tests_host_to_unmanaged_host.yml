@@ -87,7 +87,10 @@
           set_fact:
             __vpn_success: false
           when: >-
-            __vpn_register_unmanaged_secrets.content | b64decode is not search('^@' + __vpn_main_hostname + ' ' + __vpn_unmanaged_hostname + ' : PSK *')
+            __vpn_register_unmanaged_secrets.content | b64decode |
+            regex_search('^@' + __vpn_main_hostname + ' ' +
+            __vpn_unmanaged_hostname + ' : PSK *',
+            multiline=True) | d() | length == 0
 
         - name: assert success for unmanaged host secrets files
           assert:

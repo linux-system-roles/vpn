@@ -1,4 +1,5 @@
 #jinja2: lstrip_blocks: True
+{{ ansible_managed | comment }}
 conn private
       type=tunnel
       left=%defaultroute

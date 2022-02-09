@@ -46,11 +46,11 @@
       {{ policies | unique }}
 
 - name: Write tunnel policies for each network
-  lineinfile:
-    dest: "/etc/ipsec.d/policies/{{ item.policy }}"
-    line: "{{ lookup('template', 'policy.j2') }}"
+  template:
+    src: 'policy.j2'
+    dest: "/etc/ipsec.d/policies/{{ item }}"
     mode: '0644'
-  loop: "{{ policies }}"
+  loop: "{{ policies | map(attribute='policy') | unique | list }}"
   notify:
     - __vpn_handler_enable_start_vpn
     - __vpn_handler_init_mesh_conns

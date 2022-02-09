@@ -1,1 +1,6 @@
-{{ item.cidr }}
+{{ ansible_managed | comment }}
+{% for policy in policies %}
+{%   if policy.policy == item %}
+{{ policy.cidr }}
+{%   endif %}
+{% endfor %}
