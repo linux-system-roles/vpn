@@ -4,3 +4,4 @@
 
   roles:
     - linux-system-roles.vpn
+  gather_facts: false

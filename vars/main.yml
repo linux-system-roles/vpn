@@ -8,3 +8,10 @@ __vpn_services:
 __vpn_ikev2: 'insist'
 
 __vpn_nss_location: '/var/lib/ipsec/nss'
+#
+# ansible_facts required by the role
+__vpn_required_facts:
+  - distribution
+  - distribution_major_version
+  - distribution_version
+  - os_family
