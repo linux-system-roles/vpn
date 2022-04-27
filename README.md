@@ -1,5 +1,7 @@
 # VPN System Role
 
+This is for ci-testing.
+
 A Role for managing setup and configuration of VPN tunnels.
 
 Basic usage:
