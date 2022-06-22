@@ -11,6 +11,8 @@ __vpn_nss_location: '/var/lib/ipsec/nss'
 #
 # ansible_facts required by the role
 __vpn_required_facts:
+  - default_ipv4
+  - default_ipv6
   - distribution
   - distribution_major_version
   - distribution_version
