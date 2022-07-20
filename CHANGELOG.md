@@ -16,9 +16,9 @@ Changelog
 
 - gather network facts default_ipv4 default_ipv6 (#56)
 
-Gather fact subset `network` instead of `min`
-Ensure facts `default_ipv4` and `default_ipv6`
-Ensure all tests work when using ANSIBLE_GATHERING=explicit
+    * Gather fact subset `network` instead of `min`
+    * Ensure facts `default_ipv4` and `default_ipv6`
+    * Ensure all tests work when using ANSIBLE_GATHERING=explicit
 
 - make min_ansible_version a string in meta/main.yml (#57)
 
