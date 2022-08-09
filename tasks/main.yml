@@ -46,6 +46,20 @@
         msg: list of hosts is empty for one or more tunnels
       when: '"True" in failure'
 
+    - name: Make sure there is at least one pair of hosts in each connection
+      set_fact:
+        vpn_connections: |
+          {% set new_vpn_connections = [] %}
+          {% for tunnel in vpn_connections %}
+          {%   if not tunnel.opportunistic | d(vpn_opportunistic) %}
+          {%     if tunnel.hosts | length == 1 %}
+          {%       set _ = tunnel.hosts.update({inventory_hostname: null}) %}
+          {%     endif %}
+          {%   endif %}
+          {%   set _ = new_vpn_connections.append(tunnel) %}
+          {% endfor %}
+          {{ new_vpn_connections }}
+
     - name: Ensure cert_names are populated when auth_method is cert
       vars:
         failure: >-
@@ -89,8 +103,12 @@
           {%         if not host2 in __vpn_psks[__vpn_idx] %}
           {%           set _ = __vpn_psks[__vpn_idx].__setitem__(host2, {}) %}
           {%         endif %}
-          {%         set psk = lookup('lines', 'openssl rand -base64 48') %}
-          {%         set val = {'pre_shared_key':psk} %}
+          {%         if tunnel.hosts[host2]['shared_key_content'] %}
+          {%           set val = {'pre_shared_key':tunnel.hosts[host2]['shared_key_content']} %}
+          {%         else %}
+          {%           set psk = lookup('lines', 'openssl rand -base64 48') %}
+          {%           set val = {'pre_shared_key':psk} %}
+          {%-        endif -%}
           {%         set _ = __vpn_psks[__vpn_idx][host1].__setitem__(host2, val) %}
           {%         set _ = __vpn_psks[__vpn_idx][host2].__setitem__(host1, val) %}
           {%       endfor %}
@@ -161,3 +179,4 @@
   loop: "{{ vpn_connections }}"
   loop_control:
     loop_var: conn
+  no_log: true
