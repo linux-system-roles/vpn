@@ -89,8 +89,12 @@
           {%         if not host2 in __vpn_psks[__vpn_idx] %}
           {%           set _ = __vpn_psks[__vpn_idx].__setitem__(host2, {}) %}
           {%         endif %}
-          {%         set psk = lookup('lines', 'openssl rand -base64 48') %}
-          {%         set val = {'pre_shared_key':psk} %}
+          {%         if tunnel.hosts[host2]['shared_key_content'] %}
+          {%           set val = {'pre_shared_key':tunnel.hosts[host2]['shared_key_content']} %}
+          {%         else %}
+          {%           set psk = lookup('lines', 'openssl rand -base64 48') %}
+          {%           set val = {'pre_shared_key':psk} %}
+          {%-        endif -%}
           {%         set _ = __vpn_psks[__vpn_idx][host1].__setitem__(host2, val) %}
           {%         set _ = __vpn_psks[__vpn_idx][host2].__setitem__(host1, val) %}
           {%       endfor %}
