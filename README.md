@@ -20,6 +20,8 @@ all:
 
 The role will set up a vpn tunnel between each pair of hosts in the list of `vpn_connections`, using the default parameters, including generating keys as needed.  This role assumes that the names of the hosts under `hosts` are the same as the names of the hosts used in the Ansible inventory, and that you can use those names to configure the tunnels (i.e. they are real FQDNs that resolve correctly).
 
+The exception to the above is when you define a `hostname` variable under any given host, containing an FQDN, in which case the role will assume this is a managed host and won't attempt to make any changes to it (more details in [hosts](#hosts))
+
 ## Requirements
 
 The Ansible controller requires the python `ipaddress` package on EL7 systems,
@@ -37,7 +39,7 @@ These global variables should be applied to the configuration for every tunnel (
 | vpn\_regen\_keys                     | Whether pre-shared keys should be regenerated for sets of hosts with existing keys.                | bool        | no       | false                   |
 | vpn\_opportunistic                   | Whether an opportunistic mesh configuration should be used.                                        | bool        | no       | false                   |
 | vpn\_default\_policy                 | The default policy group to add target machines to under a mesh configuration.                | str         | no       | `private-or-clear`      |
-| [vpn\_ensure\_openssl](#vpn_ensure_openssl)    | Ensure the `openssl` package is installed on the controller.                          | bool        | no       | true      |
+| [vpn\_ensure\_openssl](#vpn_ensure_openssl)    | Ensure the `openssl` package is installed on the controller. (see NOTE below)       | bool        | no       | true      |
 | [vpn\_connections](#vpn_connections) | List of VPN connections to make.                                                              | list        | yes      | -                       |
 
 ### vpn_auth_method
@@ -51,13 +53,13 @@ Acceptable values:
 
 The role uses `openssl` to generate PSKs.  It requires this to be installed on the controller node.
 The default value is `true`.  If you have pre-generated your PSKs, or you are not using PSKs, then
-set `vpn_ensure_openssl: false`.
+set `vpn_ensure_openssl: false`. You can also define the PSKs using the `shared_key_content` variable in a host in any given tunnel.
 
 ### vpn_connections
 
 `vpn_connections` is a list of connections. Each connection is either:
 
-* A list of hosts specified by `hosts`. In this host-to-host use case, the role creates tunnels between each pair of hosts. At least one tunnel must be defined in this list.
+* A list of hosts specified by `hosts`. In this host-to-host use case, the role creates tunnels between each pair of hosts. At least one tunnel must be defined in this list. If a single tunnel is required, you only need to specify the remote side.
 
 * A mesh configuration consisting of one or more subnets and profiles. In this mesh use case, the role deploys an opportunistic mesh configuration using the `policy`/`cidr` pairs that you define in the `policies`.
 
@@ -121,8 +123,11 @@ For each host key in this dictionary, the following host-specific parameters can
 | Parameter                         | Description                                                                                   | Type        | Required | Default                 | Libreswan Equivalent         |
 |-----------------------------------|-----------------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:----------------------------:|
 | [hostname](#hostname)             | Host name or IP address to use for setting up a VPN connection.                                            | str         | no       | -                       | left/right                   |
-| [cert_name](#cert_name)           | Certificate nickname of this host's certificate in the NSS database.                          | str         | no       | -                       | leftcert/rightcert           |
+| [cert_name](#cert_name)           | Certificate nickname of this host's certificate in the NSS database. (Only used when `auth_method` is `cert`) | str         | no       | -                       | leftcert/rightcert           |
 | subnets                           | A list of the subnets that should be available via the VPN connection.                        | list        | no       | -                       | leftsubnets/rightsubnets     |
+| shared_key_content                | A pre-defined PSK. If not defined, the role will generate one using `openssl`. **IMPORTANT:** it is strongly suggested that you don't set a string in your inventory, but instead read this from a Vault. | str         | no       | -                       | PSK from ipsec.secrets file                         |
+| leftid                            | How the left participant (local) should be identified for authentication.                     | str         | no       | the local host FQDN (not the controller)                      | leftid                   |
+| rightid                           | How the right participant (remote) should be identified for authentication.                   | str         | no       | the remote host FQDN                      | rightid                   |
 
 #### hostname
 
@@ -258,6 +263,24 @@ This playbook sets up host-to-host tunnels between each pair of hosts in the lis
             cert_name: bastion3cert
 ```
 
+### Host-to-managed-host (remote is an appliance, or not managed via Ansible)
+
+This playbook sets up a host-to-host tunnel between the current host in the inventory, and a remote host not managed by Ansible (like an appliance) which requires proper identification. In this example `this_host` should be manually set with the same name as `inventory_hostname`.
+
+```yaml
+  vars:
+    vpn_connections:
+      - auth_method: psk
+        auto: start
+        hosts:
+          this_host:
+            leftid: idofthecliet
+          nfsserver:
+            hostname: nfsserver.example.com
+            shared_key_content: "secure psk from vault"
+            rightid: idoftheserver
+```
+
 ### Opportunistic Mesh VPN configuration
 
 This playbook sets up an opportunistic mesh VPN configuration on each host in the list of `hosts`, using certificates for authentication. In this example, the controller machine shares the same CIDR as both of the target machines (`192.168.110.0/24`) and has IP address `192.168.110.7`. Therefore the controller machine will fall under a `private` policy which will automatically be created for the CIDR `192.168.110.0/24`. To prevent an SSH connection loss during the play, a `clear` policy for the controller machine has been added to the list of  `policies`. Note that there is also an item in the `policies` list where the `cidr` is equal to `default`. This is because this playbook is overriding the default policy rule to make it `private` instead of `private-or-clear`.
@@ -316,7 +339,6 @@ Two dictionaries (`ike` and `ipsec`) will be added to the `vpn_connections` dict
 | ipsec.lifetime                            | How long keying channel of an IPSec connection should last before being renegotiated. | str         | no       | vpn\_lifetime           | salifetime              |
 | ipsec.mode                                | The type of the connection. User can specify `tunnel` or `transport`, however Libreswan defaults this value to `tunnel` if not specified. If the hosts are behind NAT, the user should specify `transport`. | str         | no       | `tunnel`                | type                    |
 | [shared_key_src](#shared_key_src)         | **Not recommended.** Path to file on the controller host containing a PSK.            | str         | no       | -                       | From ipsec.secrets file |
-| [shared_key_content](#shared_key_content) | **Not recommended.** The actual PSK in a vault secret or base64 encoded string.       | str         | no       | -                       | From ipsec.secrets file |
 
 The following variables will be added under the [`hosts`](#hosts) dictionary:
 
