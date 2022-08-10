@@ -3,12 +3,15 @@
 {% for tunnel in vpn_connections %}
 {%   if item in tunnel.hosts %}
 {%     set otherhost = tunnel.hosts[item].hostname | d((hostvars[item] | d({})).ansible_host | d(item)) %}
+{%     set rightid = tunnel.hosts[item].rightid | d(otherhost) %}
 {%     for host in tunnel.hosts %}
 {%       if host == inventory_hostname or host == ansible_host %}
+{%         set thishost = host %}
 {%         set host = tunnel.hosts[host].hostname | d((hostvars[host] | d({})).ansible_host | d(host)) %}
+{%         set leftid = tunnel.hosts[thishost].leftid | d(host) %}
 conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host }}-to-{{ otherhost }}
   left={{ host }}
-  leftid={{ host | vpn_ipaddr | ternary('','@') }}{{ host }}
+  leftid={{ host | vpn_ipaddr | ternary('','@') }}{{ leftid }}
 {%         if tunnel.hosts[host] is mapping and 'subnets' in tunnel.hosts[host] %}
   leftsubnets={
 {%-          for subnet in tunnel.hosts[host].subnets -%}
@@ -21,7 +24,7 @@ conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host 
 {%     endfor %}
   right={{ otherhost }}
 {%     if tunnel.auth_method == 'psk' %}
-  rightid={{ otherhost | vpn_ipaddr | ternary('','@') }}{{ otherhost }}
+  rightid={{ otherhost | vpn_ipaddr | ternary('','@') }}{{ rightid }}
 {%     endif %}
 {%     if tunnel.hosts[item] is mapping and 'subnets' in tunnel.hosts[item] %}
   rightsubnets={
