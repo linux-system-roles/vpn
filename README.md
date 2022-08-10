@@ -128,6 +128,9 @@ For each host key in this dictionary, the following host-specific parameters can
 | shared_key_content                | A pre-defined PSK. If not defined, the role will generate one using `openssl`. **IMPORTANT:** it is strongly suggested that you don't set a string in your inventory, but instead read this from a Vault. | str         | no       | -                       | PSK from ipsec.secrets file                         |
 | leftid                            | How the left participant (local) should be identified for authentication.                     | str         | no       | the local host FQDN (not the controller)                      | leftid                   |
 | rightid                           | How the right participant (remote) should be identified for authentication.                   | str         | no       | the remote host FQDN                      | rightid                   |
+| ike                               | IKE encryption/authentication algorithm to be used for the connection (phase 1 aka ISAKMP SA). | str         | no       | -                      | ike                   |
+| esp                               | Specifies the algorithms that will be offered/accepted for a Child SA negotiation.             | str         | no       | -                      | esp                   |
+| type                              | The type of the connection.             | str         | no       | tunnel                      | type                   |
 
 #### hostname
 
@@ -325,19 +328,8 @@ Two dictionaries (`ike` and `ipsec`) will be added to the `vpn_connections` dict
 
 | Parameter                                 | Description                                                                           | Type        | Required | Default                 | Libreswan Equivalent    |
 |-------------------------------------------|---------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|-------------------------|
-| ike                                       | Defines information specific to setting up the IKE protocol.                          | dict        | no       | -                       | -                       |
-| ike.enc_alg                               | Which encryption algorithm to use for IKE.                                            | str         | no       | vpn\_enc\_alg           | ike                     |
-| ike.enc_keysize                           | Size of encryption key to use for IKE.                                                | str         | no       | -                       | ike                     |
-| ike.auth_alg                              | Which authentication algorithm to use for IKE.                                        | str         | no       | vpn\_auth\_alg          | ike                     |
-| ike.dh_group                              | Which Diffie-Hellman group to use for IKE.                                            | str         | no       | -                       | ike                     |
 | ike.lifetime                              | How long keying channel of an IKE connection should last before being renegotiated.   | str         | no       | vpn\_lifetime           | ikelifetime             |
-| ipsec                                     | Defines information specific to setting up IPSec protocol.                            | dict        | no       | -                       | -                       |
-| ipsec.enc_alg                             | Which encryption algorithm to use for IPSec.                                          | str         | no       | vpn\_enc\_alg           | esp                     |
-| ipsec.enc_keysize                         | Size of the encryption key used for IPSec.                                            | str         | no       | -                       | esp                     |
-| ipsec.auth_alg                            | Which authentication algorithm to use for IPSec.                                      | str         | no       | vpn\_auth\_alg          | esp                     |
-| ipsec.dh_group                            | Which Diffie-Hellman group to use for IPSec.                                          | str         | no       | -                       | esp                     |
-| ipsec.lifetime                            | How long keying channel of an IPSec connection should last before being renegotiated. | str         | no       | vpn\_lifetime           | salifetime              |
-| ipsec.mode                                | The type of the connection. User can specify `tunnel` or `transport`, however Libreswan defaults this value to `tunnel` if not specified. If the hosts are behind NAT, the user should specify `transport`. | str         | no       | `tunnel`                | type                    |
+| esp.lifetime                            | How long keying channel of an IPSec connection should last before being renegotiated. | str         | no       | vpn\_lifetime           | salifetime              |
 | [shared_key_src](#shared_key_src)         | **Not recommended.** Path to file on the controller host containing a PSK.            | str         | no       | -                       | From ipsec.secrets file |
 
 The following variables will be added under the [`hosts`](#hosts) dictionary:

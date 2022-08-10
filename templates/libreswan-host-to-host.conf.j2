@@ -35,6 +35,15 @@ conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host 
 }
 {%     endif %}
   ikev2={{ __vpn_ikev2 }}
+{%     if 'ike' in tunnel %}
+  ike={{ tunnel.ike }}
+{%     endif %}
+{%     if 'esp' in tunnel %}
+  esp={{ tunnel.esp }}
+{%     endif %}
+{%     if 'type' in tunnel %}
+  type={{ tunnel.type }}
+{%     endif %}
 {%     if 'auto' in tunnel %}
   auto={{ tunnel.auto }}
 {%     endif %}
