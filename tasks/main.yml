@@ -165,3 +165,4 @@
   loop: "{{ vpn_connections }}"
   loop_control:
     loop_var: conn
+  no_log: true
