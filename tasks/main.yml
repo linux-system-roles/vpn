@@ -11,17 +11,16 @@
 
 - name: Controller tasks
   block:
-    - name: List packages on the controller to see if OpenSSL is installed
-      package_facts:
-      when: vpn_ensure_openssl | d(true)
-
+    # NOTE: Trying to accomplish this without using sudo on the controller
+    # Basically, any task, even package_facts:, will use sudo if using
+    # become=true - so just use "exists" test to check for /usr/bin/openssl
     - name: Ensure OpenSSL is installed on the controller
       package:
         name: openssl
         state: present
       when:
         - vpn_ensure_openssl | d(true)
-        - "'openssl' not in ansible_facts.packages"
+        - not "/usr/bin/openssl" is exists
 
     - name: Enforce default auth method as needed
       set_fact:
