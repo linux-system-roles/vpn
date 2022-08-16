@@ -24,12 +24,13 @@
               {% for tunnel in vpn_connections %}
               {%   set _ = tunnel.__setitem__("auto", "start") %}
               {%   if __vpn_shared_key_content | d(false) %}
-              {%     set _ = tunnel["hosts"].__setitem__("host01.local", __skc_dict) %}
+              {%     set _ = tunnel["hosts"].__setitem__(__host, __dict) %}
               {%   endif %}
               {% endfor %}
               {{ vpn_connections }}
           vars:
-            __skc_dict:
+            __host: host01.local
+            __dict:
               shared_key_content: "{{ __vpn_shared_key_content }}"
 
         - name: Use vpn role
