@@ -41,6 +41,12 @@ conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host 
 {%     if 'esp_enc_alg' in tunnel %}
   esp={{ tunnel.esp_enc_alg }}
 {%     endif %}
+{%     if 'ikelifetime' in tunnel %}
+  ikelifetime={{ tunnel.ikelifetime }}
+{%     endif %}
+{%     if 'salifetime' in tunnel %}
+  salifetime={{ tunnel.salifetime }}
+{%     endif %}
 {%     if 'type' in tunnel %}
   type={{ tunnel.type }}
 {%     endif %}

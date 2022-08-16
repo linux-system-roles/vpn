@@ -130,6 +130,8 @@ For each host key in this dictionary, the following host-specific parameters can
 | rightid                           | How the right participant (remote) should be identified for authentication.                   | str         | no       | the remote host FQDN                      | rightid                   |
 | ike_enc_alg                       | IKE encryption/authentication algorithm to be used for the connection (phase 1 aka ISAKMP SA). | str         | no       | -                      | ike                   |
 | esp_enc_alg                       | Specifies the algorithms that will be offered/accepted for a Child SA negotiation.             | str         | no       | -                      | esp                   |
+| ikelifetime                       | How long the keying channel of a connection (buzzphrase: “IKE SA” or “Parent SA”) should last before being renegotiated. | str         | no       | -           | ikelifetime             |
+| salifetime                        | How long a particular instance of a connection (a set of encryption/authentication keys for user packets) should last, from successful negotiation to expiry | str         | no       | -           | salifetime              |
 | type                              | The type of the connection.             | str         | no       | tunnel                      | type                   |
 
 #### hostname
@@ -320,17 +322,8 @@ The following global variables will be added. Additionally, `pubkey` will be add
 | vpn\_enc\_alg                        | VPN encryption algorithm to use. See [Algorithms section](#algorithms) for acceptable values. | str         | no       | -                       |
 | vpn\_auth\_alg                       | VPN authentication algorithm to use.                                                          | str         | no       | SHA-2                   |
 | vpn\_wait                            | If tasks should wait for the VPN tunnel to be started up.                                     | bool        | no       | false                   |
-| [vpn\_lifetime](#vpn_lifetime)       | How long a VPN instance should last before being renegotiated. Acceptable values are an integer optionally followed by **s** (a time in seconds) or a decimal number followed by **m**, **h**, or **d** (a time in minutes, hours, or days respectively). | int         | no       | -                       |
 | vpn\_public\_key\_src                | Path to file on the controller host containing public key used by default.                    | str         | no       | -                       |
 | vpn\_public\_key\_content            | Contains the public key used by default for public key authentication without certificates.   | str         | no       | -                       |
-
-Two dictionaries (`ike` and `ipsec`) will be added to the `vpn_connections` dictionary:
-
-| Parameter                                 | Description                                                                           | Type        | Required | Default                 | Libreswan Equivalent    |
-|-------------------------------------------|---------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|-------------------------|
-| ike.lifetime                              | How long keying channel of an IKE connection should last before being renegotiated.   | str         | no       | vpn\_lifetime           | ikelifetime             |
-| esp.lifetime                            | How long keying channel of an IPSec connection should last before being renegotiated. | str         | no       | vpn\_lifetime           | salifetime              |
-| [shared_key_src](#shared_key_src)         | **Not recommended.** Path to file on the controller host containing a PSK.            | str         | no       | -                       | From ipsec.secrets file |
 
 The following variables will be added under the [`hosts`](#hosts) dictionary:
 
