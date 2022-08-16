@@ -128,8 +128,8 @@ For each host key in this dictionary, the following host-specific parameters can
 | shared_key_content                | A pre-defined PSK. If not defined, the role will generate one using `openssl`. **IMPORTANT:** it is strongly suggested that you don't set a string in your inventory, but instead read this from a Vault. Also, the PSK will be visible while running in verbose or debug mode. | str         | no       | -                       | PSK from ipsec.secrets file                         |
 | leftid                            | How the left participant (local) should be identified for authentication.                     | str         | no       | the local host FQDN (not the controller)                      | leftid                   |
 | rightid                           | How the right participant (remote) should be identified for authentication.                   | str         | no       | the remote host FQDN                      | rightid                   |
-| ike                               | IKE encryption/authentication algorithm to be used for the connection (phase 1 aka ISAKMP SA). | str         | no       | -                      | ike                   |
-| esp                               | Specifies the algorithms that will be offered/accepted for a Child SA negotiation.             | str         | no       | -                      | esp                   |
+| ike_enc_alg                       | IKE encryption/authentication algorithm to be used for the connection (phase 1 aka ISAKMP SA). | str         | no       | -                      | ike                   |
+| esp_enc_alg                       | Specifies the algorithms that will be offered/accepted for a Child SA negotiation.             | str         | no       | -                      | esp                   |
 | type                              | The type of the connection.             | str         | no       | tunnel                      | type                   |
 
 #### hostname
