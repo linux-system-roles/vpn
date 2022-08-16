@@ -8,6 +8,7 @@
 
   vars:
     __vpn_num_hosts: 2
+    __vpn_shared_key_content: this is the shared key
 
   tasks:
 
@@ -22,6 +23,9 @@
             vpn_connections: |
               {% for tunnel in vpn_connections %}
               {%   set _ = tunnel.__setitem__("auto", "start") %}
+              {%   if __vpn_shared_key_content | d(false) %}
+              {%     set _ = tunnel["hosts"].__setitem__("host01.local", {"shared_key_content": __vpn_shared_key_content}) %}
+              {%   endif %}
               {% endfor %}
               {{ vpn_connections }}
 
