@@ -86,7 +86,7 @@
         msg: cert_name is missing or empty for one or more hosts in a tunnel
       when: '"True" in failure'
 
-    - name: generate psks
+    - name: Generate PSKs or use provided shared_key_content
       no_log: true
       set_fact:
         __vpn_psks: |
