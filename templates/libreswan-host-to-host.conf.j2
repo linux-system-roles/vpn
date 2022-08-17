@@ -35,11 +35,11 @@ conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host 
 }
 {%     endif %}
   ikev2={{ __vpn_ikev2 }}
-{%     if 'ike_enc_alg' in tunnel %}
-  ike={{ tunnel.ike_enc_alg }}
+{%     if 'ike' in tunnel %}
+  ike={{ tunnel.ike }}
 {%     endif %}
-{%     if 'esp_enc_alg' in tunnel %}
-  esp={{ tunnel.esp_enc_alg }}
+{%     if 'esp' in tunnel %}
+  esp={{ tunnel.esp }}
 {%     endif %}
 {%     if 'ikelifetime' in tunnel %}
   ikelifetime={{ tunnel.ikelifetime }}
