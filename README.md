@@ -131,7 +131,7 @@ For each host key in this dictionary, the following host-specific parameters can
 | ike                               | IKE encryption/authentication algorithm to be used for the connection (phase 1 aka ISAKMP SA). | str         | no       | -                      | ike                   |
 | esp                               | Specifies the algorithms that will be offered/accepted for a Child SA negotiation.             | str         | no       | -                      | esp                   |
 | type                              | The type of the connection.             | str         | no       | tunnel                      | type                   |
-| ikelifetime                       | How long the keying channel of a connection (buzzphrase: “IKE SA” or “Parent SA”) should last before being renegotiated. | str         | no       | -           | ikelifetime             |
+| ikelifetime                       | How long the keying channel of a connection (buzzphrase: "IKE SA" or "Parent SA") should last before being renegotiated. | str         | no       | -           | ikelifetime             |
 | salifetime                        | How long a particular instance of a connection (a set of encryption/authentication keys for user packets) should last, from successful negotiation to expiry | str         | no       | -           | salifetime              |
 | type                              | The type of the connection.             | str         | no       | tunnel                      | type                   |
 
