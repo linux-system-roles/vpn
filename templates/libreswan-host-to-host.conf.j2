@@ -43,12 +43,13 @@ conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host 
                       'retransmit_timeout': 'retransmit-timeout',
                       'salifetime': 'salifetime', 'type': 'type'} %}
 {%     set needs_quotes = {'leftupdown': 'leftupdown'} %}
-{%     for key, value in options.items() %}
+{%     for key, ipsec_key in options.items() %}
 {%       if key in tunnel %}
-{%         if key in needs_quotes %}
-  {{ value }}="{{ tunnel[key] }}"
+{%         set val = tunnel[key] %}
+{%         if key in needs_quotes and val is not none %}
+  {{ ipsec_key }}="{{ val }}"
 {%         else %}
-  {{ value }}={{ tunnel[key] }}
+  {{ ipsec_key }}={{ val }}
 {%         endif %}
 {%       endif %}
 {%     endfor %}
