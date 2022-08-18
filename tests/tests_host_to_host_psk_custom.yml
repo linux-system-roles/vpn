@@ -16,6 +16,7 @@
     __vpn_ikelifetime: 15h
     __vpn_salifetime: 16h
     __vpn_type: tunnel_type_for_testing
+    __vpn_retransmit_timeout: 10s
     vpn_ensure_openssl: false
   tasks:
 
@@ -44,6 +45,7 @@
               ikelifetime: "{{ __vpn_ikelifetime }}"
               salifetime: "{{ __vpn_salifetime }}"
               type: "{{ __vpn_type }}"
+              retransmit_timeout: "{{ __vpn_retransmit_timeout }}"
             __hostmain: mainhost.local
             __host1: host01.local
             __host2: host02.local
@@ -95,7 +97,9 @@
             item.content | b64decode is not
             search('salifetime=' + __vpn_salifetime) or
             item.content | b64decode is not
-            search('type=' + __vpn_type)
+            search('type=' + __vpn_type) or
+            item.content | b64decode is not
+            search('retransmit-timeout=' + __vpn_retransmit_timeout)
           loop: '{{ __vpn_register_conf.results }}'
           loop_control:
             index_var: idx
