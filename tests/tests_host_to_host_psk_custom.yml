@@ -20,7 +20,8 @@
     __vpn_dpddelay: 30s
     __vpn_dpdtimeout: 31s
     __vpn_dpdaction: restart
-    __vpn_leftupdown: ipsec_updown --route yes
+    __vpn_leftupdown: leftupdown --option=value
+    __vpn_leftupdown_expected: '"leftupdown --option=value"'
     vpn_ensure_openssl: false
   tasks:
 
@@ -115,7 +116,7 @@
             item.content | b64decode is not
             search('dpdaction=' + __vpn_dpdaction) or
             item.content | b64decode is not
-            search('leftupdown="' + __vpn_leftupdown + '"')
+            search('leftupdown=' + __vpn_leftupdown_expected)
           loop: '{{ __vpn_register_conf.results }}'
           loop_control:
             index_var: idx
