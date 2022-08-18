@@ -17,6 +17,10 @@
     __vpn_salifetime: 16h
     __vpn_type: tunnel_type_for_testing
     __vpn_retransmit_timeout: 10s
+    __vpn_dpddelay: 30s
+    __vpn_dpdtimeout: 31s
+    __vpn_dpdaction: restart
+    __vpn_leftupdown: ipsec_updown --route yes
     vpn_ensure_openssl: false
   tasks:
 
@@ -46,6 +50,10 @@
               salifetime: "{{ __vpn_salifetime }}"
               type: "{{ __vpn_type }}"
               retransmit_timeout: "{{ __vpn_retransmit_timeout }}"
+              dpddelay: "{{ __vpn_dpddelay }}"
+              dpdtimeout: "{{ __vpn_dpdtimeout }}"
+              dpdaction: "{{ __vpn_dpdaction }}"
+              leftupdown: "{{ __vpn_leftupdown }}"
             __hostmain: mainhost.local
             __host1: host01.local
             __host2: host02.local
@@ -99,7 +107,15 @@
             item.content | b64decode is not
             search('type=' + __vpn_type) or
             item.content | b64decode is not
-            search('retransmit-timeout=' + __vpn_retransmit_timeout)
+            search('retransmit-timeout=' + __vpn_retransmit_timeout) or
+            item.content | b64decode is not
+            search('dpddelay=' + __vpn_dpddelay) or
+            item.content | b64decode is not
+            search('dpdtimeout=' + __vpn_dpdtimeout) or
+            item.content | b64decode is not
+            search('dpdaction=' + __vpn_dpdaction) or
+            item.content | b64decode is not
+            search('leftupdown="' + __vpn_leftupdown + '"')
           loop: '{{ __vpn_register_conf.results }}'
           loop_control:
             index_var: idx
