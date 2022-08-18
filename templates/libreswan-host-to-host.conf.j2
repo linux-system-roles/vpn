@@ -35,27 +35,23 @@ conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host 
 }
 {%     endif %}
   ikev2={{ __vpn_ikev2 }}
-{%     if 'ike' in tunnel %}
-  ike={{ tunnel.ike }}
-{%     endif %}
-{%     if 'esp' in tunnel %}
-  esp={{ tunnel.esp }}
-{%     endif %}
-{%     if 'ikelifetime' in tunnel %}
-  ikelifetime={{ tunnel.ikelifetime }}
-{%     endif %}
-{%     if 'salifetime' in tunnel %}
-  salifetime={{ tunnel.salifetime }}
-{%     endif %}
-{%     if 'type' in tunnel %}
-  type={{ tunnel.type }}
-{%     endif %}
-{%     if 'auto' in tunnel %}
-  auto={{ tunnel.auto }}
-{%     endif %}
-{%     if tunnel.retransmit_timeout %}
-  retransmit-timeout={{ tunnel.retransmit_timeout }}
-{%     endif %}
+{# options key is name of tunnel parameter #}
+{# options value is name to use in ipsec config #}
+{%     set options = {'auto': 'auto', 'dpdaction': 'dpdaction', 'dpddelay': 'dpddelay',
+                      'dpdtimeout': 'dpdtimeout', 'esp': 'esp', 'ike': 'ike',
+                      'ikelifetime': 'ikelifetime', 'leftupdown': 'leftupdown',
+                      'retransmit_timeout': 'retransmit-timeout',
+                      'salifetime': 'salifetime', 'type': 'type'} %}
+{%     set needs_quotes = {'leftupdown': 'leftupdown'} %}
+{%     for key, value in options.items() %}
+{%       if key in tunnel %}
+{%         if key in needs_quotes %}
+  {{ value }}="{{ tunnel[key] }}"
+{%         else %}
+  {{ value }}={{ tunnel[key] }}
+{%         endif %}
+{%       endif %}
+{%     endfor %}
 {%     if tunnel.auth_method == 'psk' %}
   authby=secret
 {%     endif %}

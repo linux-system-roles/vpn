@@ -66,6 +66,7 @@ set `vpn_ensure_openssl: false`. You can also define the PSKs using the `shared_
 ## Connection-specific variables
 
 In addition to the global variables, you may provide a number of other variables that will be applied to the configuration for each tunnel.
+**NOTE** All time fields (for example `ikelifetime` and others) accept the time as a number + unit e.g. `13h` for 13 hours, `10s` for 10 seconds.
 
 | Parameter                                 | Description                                                                           | Type        | Required | Default                 | Libreswan Equivalent    |
 |-------------------------------------------|---------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:-----------------------:|
@@ -79,11 +80,15 @@ In addition to the global variables, you may provide a number of other variables
 | ike                            | IKE encryption/authentication algorithm to be used for the connection (phase 1 aka ISAKMP SA). **NOTE** Do not set this unless you must, or really know what you are doing| str         | no       | -                      | ike                   |
 | esp                            | Specifies the algorithms that will be offered/accepted for a Child SA negotiation. **NOTE** Do not set this unless you must, or really know what you are doing| str         | no       | -                      | esp                   |
 | type                           | The type of the connection.  See the libreswan docs for the possible values           | str         | no       | tunnel                      | type                   |
-| ikelifetime                    | How long the keying channel of a connection (buzzphrase: "IKE SA" or "Parent SA") should last before being renegotiated.  The value is specified as a number and a unit like `10h` which is 10 hours.| str         | no       | -           | ikelifetime             |
-| salifetime                     | How long a particular instance of a connection (a set of encryption/authentication keys for user packets) should last, from successful negotiation to expiry.  The value is specified as a number and a unit like `10h` which is 10 hours. | str         | no       | -           | salifetime              |
-| retransmit_timeout             | How long a single packet, including retransmits of that packet, may take before the IKE attempt is aborted. | str         | no       | -           | retransmit-timeout              |
+| ikelifetime                    | How long the keying channel of a connection (buzzphrase: "IKE SA" or "Parent SA") should last before being renegotiated.| str         | no       | -           | ikelifetime             |
+| salifetime                     | How long a particular instance of a connection (a set of encryption/authentication keys for user packets) should last, from successful negotiation to expiry.| str         | no       | -           | salifetime              |
+| retransmit_timeout             | How long a single packet, including retransmits of that packet, may take before the IKE attempt is aborted.| str         | no       | -           | retransmit-timeout              |
+| dpddelay             | Set the delay time between Dead Peer Detection (IKEv1 RFC 3706) or IKEv2 Liveness keepalives that are sent for this connection.  If this is set, dpdtimeout also needs to be set| str         | no       | -           | dpddelay              |
+| dpdtimeout             | Set the length of time that we will idle without hearing back from our peer. After this period has elapsed with no response and no traffic, we will declare the peer dead, and remove the SA. Set value bigger than dpddelay to enable. If dpdtimeout is set, dpddelay also needs to be set. | str         | no       | -           | dpdtimeout              |
+| dpdaction             | When a DPD enabled peer is declared dead, what action should be taken.  See libreswan docs for values.| str         | no       | -           | dpdaction              |
+| [leftupdown](#leftupdown)             | The "updown" script to run to adjust routing and/or firewalling when the status of the connection changes (default `ipsec _updown`).  See below.| str         | no       | -           | leftupdown              |
 
-For the default values, and possible values, of `ike`, `esp`, `type`, `ikelifetime`, `salifetime` and `retransmit_timeout`, please consult the [libreswan documentation](https://libreswan.org/man/ipsec.conf.5.html).  You will usually not need to set these.
+For the default values, and possible values, of `ike`, `esp`, `type`, et. al., please consult the [libreswan documentation](https://libreswan.org/man/ipsec.conf.5.html).  You will usually not need to set these.
 
 ### name
 
@@ -104,6 +109,30 @@ What operation, if any, should be done automatically at IPsec startup. Currently
 By default, the VPN System Role creates a host-to-host tunnel between each pair of nodes specified within a `vpn_connection`. You can instead configure an opportunistic mesh VPN by setting `opportunistic` to `true`, which will include all hosts in the Ansible inventory in the opportunistic mesh configuration.
 
 **Note:** When configuring an opportunistic mesh VPN using a control node that shares the same CIDR as one or more of mesh CIDRs used for encryption, add a clear policy entry for the control node CIDR in order to prevent an SSH connection loss during the play. See [example](#opportunistic-mesh-vpn-configuration).
+
+### leftupdown
+
+It is best to keep it simple - no arguments with spaces, shell metacharacters, or other characters which require quoting or escaping - it will be
+difficult to pass them through the various layers of yaml, ansible, jinja, and shell.  Example:
+```yaml
+  leftupdown: ipsec_updown --route yes
+```
+will result in the config file
+```
+leftupdown="ipsec_updown --route yes"
+```
+If you need to pass an argument which requires quoting, use single quotes:
+```
+  leftupdown: ipsec_updown --route 'a quoted route value'
+```
+will result in the config file
+```
+leftupdown="ipsec_updown --route 'a quoted route value'"
+```
+If you need a custom script, the role does not current have the ability to copy or create a script on the managed host.  You'll have to figure
+out some way to place the script on the host. Then you can point to the script using the full path, like `/usr/local/bin/myscript`.
+
+By default, Libreswan runs `ipsec_updown --route yes`. You can disable that by using `leftupdown: null`.
 
 ### policies
 
