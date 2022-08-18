@@ -53,6 +53,9 @@ conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host 
 {%     if 'auto' in tunnel %}
   auto={{ tunnel.auto }}
 {%     endif %}
+{%     if tunnel.retransmit_timeout %}
+  retransmit-timeout={{ tunnel.retransmit_timeout }}
+{%     endif %}
 {%     if tunnel.auth_method == 'psk' %}
   authby=secret
 {%     endif %}

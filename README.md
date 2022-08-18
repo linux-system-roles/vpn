@@ -81,8 +81,9 @@ In addition to the global variables, you may provide a number of other variables
 | type                           | The type of the connection.  See the libreswan docs for the possible values           | str         | no       | tunnel                      | type                   |
 | ikelifetime                    | How long the keying channel of a connection (buzzphrase: "IKE SA" or "Parent SA") should last before being renegotiated.  The value is specified as a number and a unit like `10h` which is 10 hours.| str         | no       | -           | ikelifetime             |
 | salifetime                     | How long a particular instance of a connection (a set of encryption/authentication keys for user packets) should last, from successful negotiation to expiry.  The value is specified as a number and a unit like `10h` which is 10 hours. | str         | no       | -           | salifetime              |
+| retransmit_timeout             | How long a single packet, including retransmits of that packet, may take before the IKE attempt is aborted. | str         | no       | -           | retransmit-timeout              |
 
-For the default values, and possible values, of `ike`, `esp`, `type`, `ikelifetime`, and `salifetime`, please consult the [libreswan documentation](https://libreswan.org/man/ipsec.conf.5.html).  You will usually not need to set these.
+For the default values, and possible values, of `ike`, `esp`, `type`, `ikelifetime`, `salifetime` and `retransmit_timeout`, please consult the [libreswan documentation](https://libreswan.org/man/ipsec.conf.5.html).  You will usually not need to set these.
 
 ### name
 
