@@ -20,6 +20,8 @@ all:
 
 The role will set up a vpn tunnel between each pair of hosts in the list of `vpn_connections`, using the default parameters, including generating keys as needed.  This role assumes that the names of the hosts under `hosts` are the same as the names of the hosts used in the Ansible inventory, and that you can use those names to configure the tunnels (i.e. they are real FQDNs that resolve correctly).
 
+The exception to the above is when you define a `hostname` variable under any given host, containing an FQDN, in which case the role will assume this is a managed host and won't attempt to make any changes to it (more details in [hosts](#hosts))
+
 ## Requirements
 
 The Ansible controller requires the python `ipaddress` package on EL7 systems,
@@ -37,7 +39,7 @@ These global variables should be applied to the configuration for every tunnel (
 | vpn\_regen\_keys                     | Whether pre-shared keys should be regenerated for sets of hosts with existing keys.                | bool        | no       | false                   |
 | vpn\_opportunistic                   | Whether an opportunistic mesh configuration should be used.                                        | bool        | no       | false                   |
 | vpn\_default\_policy                 | The default policy group to add target machines to under a mesh configuration.                | str         | no       | `private-or-clear`      |
-| [vpn\_ensure\_openssl](#vpn_ensure_openssl)    | Ensure the `openssl` package is installed on the controller.                          | bool        | no       | true      |
+| [vpn\_ensure\_openssl](#vpn_ensure_openssl)    | Ensure the `openssl` package is installed on the controller.                        | bool        | no       | true      |
 | [vpn\_connections](#vpn_connections) | List of VPN connections to make.                                                              | list        | yes      | -                       |
 
 ### vpn_auth_method
@@ -51,19 +53,20 @@ Acceptable values:
 
 The role uses `openssl` to generate PSKs.  It requires this to be installed on the controller node.
 The default value is `true`.  If you have pre-generated your PSKs, or you are not using PSKs, then
-set `vpn_ensure_openssl: false`.
+set `vpn_ensure_openssl: false`. You can also define the PSKs using the `shared_key_content` variable in a host in any given tunnel.
 
 ### vpn_connections
 
 `vpn_connections` is a list of connections. Each connection is either:
 
-* A list of hosts specified by `hosts`. In this host-to-host use case, the role creates tunnels between each pair of hosts. At least one tunnel must be defined in this list.
+* A list of hosts specified by `hosts`. In this host-to-host use case, the role creates tunnels between each pair of hosts. At least one tunnel must be defined in this list. If a single tunnel is required, you only need to specify the remote side.
 
 * A mesh configuration consisting of one or more subnets and profiles. In this mesh use case, the role deploys an opportunistic mesh configuration using the `policy`/`cidr` pairs that you define in the `policies`.
 
 ## Connection-specific variables
 
 In addition to the global variables, you may provide a number of other variables that will be applied to the configuration for each tunnel.
+**NOTE** All time fields (for example `ikelifetime` and others) accept the time as a number + unit e.g. `13h` for 13 hours, `10s` for 10 seconds.
 
 | Parameter                                 | Description                                                                           | Type        | Required | Default                 | Libreswan Equivalent    |
 |-------------------------------------------|---------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:-----------------------:|
@@ -73,6 +76,19 @@ In addition to the global variables, you may provide a number of other variables
 | [auto](#auto)                             | What operation, if any, should be done automatically at startup.                      | str         | no       | -                       | auto                    |
 | [opportunistic](#opportunistic)           | Whether an opportunistic mesh configuration should be used.                                | bool        | no       | vpn\_opportunistic      | -                       |
 | [policies](#policies)                     | List of policy settings to use for an opportunistic mesh configuration.               | list        | no       | -                   | -                       |
+| shared\_key\_content             | A pre-defined PSK. If not defined, the role will generate one using `openssl`. **IMPORTANT:** It is strongly suggested that you do not use this parameter, and instead let the role generate the values.  If you must use this, do not set a string in your inventory, but instead read this from a Vault. Also, the PSK will be visible while running in verbose or debug mode. | str         | no       | -                       | PSK from ipsec.secrets file                         |
+| ike                            | IKE encryption/authentication algorithm to be used for the connection (phase 1 aka ISAKMP SA). **NOTE** Do not set this unless you must, or really know what you are doing| str         | no       | -                      | ike                   |
+| esp                            | Specifies the algorithms that will be offered/accepted for a Child SA negotiation. **NOTE** Do not set this unless you must, or really know what you are doing| str         | no       | -                      | esp                   |
+| type                           | The type of the connection.  See the libreswan docs for the possible values           | str         | no       | tunnel                      | type                   |
+| ikelifetime                    | How long the keying channel of a connection (buzzphrase: "IKE SA" or "Parent SA") should last before being renegotiated.| str         | no       | -           | ikelifetime             |
+| salifetime                     | How long a particular instance of a connection (a set of encryption/authentication keys for user packets) should last, from successful negotiation to expiry.| str         | no       | -           | salifetime              |
+| retransmit_timeout             | How long a single packet, including retransmits of that packet, may take before the IKE attempt is aborted.| str         | no       | -           | retransmit-timeout              |
+| dpddelay             | Set the delay time between Dead Peer Detection (IKEv1 RFC 3706) or IKEv2 Liveness keepalives that are sent for this connection.  If this is set, dpdtimeout also needs to be set| str         | no       | -           | dpddelay              |
+| dpdtimeout             | Set the length of time that we will idle without hearing back from our peer. After this period has elapsed with no response and no traffic, we will declare the peer dead, and remove the SA. Set value bigger than dpddelay to enable. If dpdtimeout is set, dpddelay also needs to be set. | str         | no       | -           | dpdtimeout              |
+| dpdaction             | When a DPD enabled peer is declared dead, what action should be taken.  See libreswan docs for values.| str         | no       | -           | dpdaction              |
+| [leftupdown](#leftupdown)             | The "updown" script to run to adjust routing and/or firewalling when the status of the connection changes (default `ipsec _updown`).  See below.| str         | no       | -           | leftupdown              |
+
+For the default values, and possible values, of `ike`, `esp`, `type`, et. al., please consult the [libreswan documentation](https://libreswan.org/man/ipsec.conf.5.html).  You will usually not need to set these.
 
 ### name
 
@@ -93,6 +109,30 @@ What operation, if any, should be done automatically at IPsec startup. Currently
 By default, the VPN System Role creates a host-to-host tunnel between each pair of nodes specified within a `vpn_connection`. You can instead configure an opportunistic mesh VPN by setting `opportunistic` to `true`, which will include all hosts in the Ansible inventory in the opportunistic mesh configuration.
 
 **Note:** When configuring an opportunistic mesh VPN using a control node that shares the same CIDR as one or more of mesh CIDRs used for encryption, add a clear policy entry for the control node CIDR in order to prevent an SSH connection loss during the play. See [example](#opportunistic-mesh-vpn-configuration).
+
+### leftupdown
+
+It is best to keep it simple - no arguments with spaces, shell metacharacters, or other characters which require quoting or escaping - it will be
+difficult to pass them through the various layers of yaml, ansible, jinja, and shell.  Example:
+```yaml
+  leftupdown: ipsec_updown --route yes
+```
+will result in the config file
+```
+leftupdown="ipsec_updown --route yes"
+```
+If you need to pass an argument which requires quoting, use single quotes:
+```
+  leftupdown: ipsec_updown --route 'a quoted route value'
+```
+will result in the config file
+```
+leftupdown="ipsec_updown --route 'a quoted route value'"
+```
+If you need a custom script, the role does not current have the ability to copy or create a script on the managed host.  You'll have to figure
+out some way to place the script on the host. Then you can point to the script using the full path, like `/usr/local/bin/myscript`.
+
+By default, Libreswan runs `ipsec_updown --route yes`. You can disable that by using `leftupdown: null`.
 
 ### policies
 
@@ -121,8 +161,10 @@ For each host key in this dictionary, the following host-specific parameters can
 | Parameter                         | Description                                                                                   | Type        | Required | Default                 | Libreswan Equivalent         |
 |-----------------------------------|-----------------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:----------------------------:|
 | [hostname](#hostname)             | Host name or IP address to use for setting up a VPN connection.                                            | str         | no       | -                       | left/right                   |
-| [cert_name](#cert_name)           | Certificate nickname of this host's certificate in the NSS database.                          | str         | no       | -                       | leftcert/rightcert           |
+| [cert_name](#cert_name)           | Certificate nickname of this host's certificate in the NSS database. (Only used when `auth_method` is `cert`) | str         | no       | -                       | leftcert/rightcert           |
 | subnets                           | A list of the subnets that should be available via the VPN connection.                        | list        | no       | -                       | leftsubnets/rightsubnets     |
+| leftid                            | How the left participant (local) should be identified for authentication.                     | str         | no       | the local host FQDN (not the controller)                      | leftid                   |
+| rightid                           | How the right participant (remote) should be identified for authentication.                   | str         | no       | the remote host FQDN                      | rightid                   |
 
 #### hostname
 
@@ -187,7 +229,8 @@ Note that for a couple of these use cases, you cannot use host-scoped settings (
 
 ### Host-to-host (multiple VPN tunnels with one externally managed host)
 
-This playbook sets up the tunnel `bastion_east-to-bastion_west` using pre-shared key authentication with keys auto-generated by the system role. Additionally, the local ends of two more tunnels are set up: `bastion_east-to-bastion_north` and `bastion_west-to-bastion_north`. In this case, one of the hosts, `bastion_north`, is external to the inventory e.g. in a remote datacenter, and only the local ends of the tunnels can be set up. The `hostname` field contains all the information necessary to ensure that the local ends of the tunnel are set up correctly.
+This playbook sets up the tunnel `bastion_east-to-bastion_west` using pre-shared key authentication with keys auto-generated by the system role. Additionally, the local ends of two more tunnels are set up: `bastion_east-to-bastion_north` and `bastion_west-to-bastion_north`. In this case, one of the hosts, `bastion_north`, is external to the inventory e.g. in a remote datacenter, and only the local ends of the tunnels can be set up. The `hostname` field contains all the information necessary to ensure that the local ends of the tunnel are set up correctly.  This also shows the
+optional parameters you can specify for the tunnel.
 
 ```yaml
 all:
@@ -198,7 +241,12 @@ all:
       ansible_host: bastion2.example.com
   vars:
     vpn_connections:
-      - hosts:
+      - ike: aes256-sha2;dh19
+        esp: aes-sha2_512+sha2_256
+        ikelifetime: 11h
+        salifetime: 9h
+        type: transport
+        hosts:
           bastion_east:
           bastion_west:
           bastion_north: # not in the hosts list
@@ -258,6 +306,26 @@ This playbook sets up host-to-host tunnels between each pair of hosts in the lis
             cert_name: bastion3cert
 ```
 
+### Host-to-managed-host (remote is an appliance, or not managed via Ansible)
+
+This playbook sets up a host-to-host tunnel between the current host in the inventory, and a remote host not managed by Ansible (like an appliance) which requires proper identification. In this example `this_host` should be manually set with the same name as `inventory_hostname`.  The shared key is the key shared between the hosts.
+
+```yaml
+  vars:
+    vpn_connections:
+      - auth_method: psk
+        auto: start
+        shared_key_content: !vault |
+          $ANSIBLE_VAULT;1.2;AES256;dev
+          ....
+        hosts:
+          this_host:
+            leftid: idoftheclient
+          nfsserver:
+            hostname: nfsserver.example.com
+            rightid: idoftheserver
+```
+
 ### Opportunistic Mesh VPN configuration
 
 This playbook sets up an opportunistic mesh VPN configuration on each host in the list of `hosts`, using certificates for authentication. In this example, the controller machine shares the same CIDR as both of the target machines (`192.168.110.0/24`) and has IP address `192.168.110.7`. Therefore the controller machine will fall under a `private` policy which will automatically be created for the CIDR `192.168.110.0/24`. To prevent an SSH connection loss during the play, a `clear` policy for the controller machine has been added to the list of  `policies`. Note that there is also an item in the `policies` list where the `cidr` is equal to `default`. This is because this playbook is overriding the default policy rule to make it `private` instead of `private-or-clear`.
@@ -294,29 +362,8 @@ The following global variables will be added. Additionally, `pubkey` will be add
 | vpn\_enc\_alg                        | VPN encryption algorithm to use. See [Algorithms section](#algorithms) for acceptable values. | str         | no       | -                       |
 | vpn\_auth\_alg                       | VPN authentication algorithm to use.                                                          | str         | no       | SHA-2                   |
 | vpn\_wait                            | If tasks should wait for the VPN tunnel to be started up.                                     | bool        | no       | false                   |
-| [vpn\_lifetime](#vpn_lifetime)       | How long a VPN instance should last before being renegotiated. Acceptable values are an integer optionally followed by **s** (a time in seconds) or a decimal number followed by **m**, **h**, or **d** (a time in minutes, hours, or days respectively). | int         | no       | -                       |
 | vpn\_public\_key\_src                | Path to file on the controller host containing public key used by default.                    | str         | no       | -                       |
 | vpn\_public\_key\_content            | Contains the public key used by default for public key authentication without certificates.   | str         | no       | -                       |
-
-Two dictionaries (`ike` and `ipsec`) will be added to the `vpn_connections` dictionary:
-
-| Parameter                                 | Description                                                                           | Type        | Required | Default                 | Libreswan Equivalent    |
-|-------------------------------------------|---------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|-------------------------|
-| ike                                       | Defines information specific to setting up the IKE protocol.                          | dict        | no       | -                       | -                       |
-| ike.enc_alg                               | Which encryption algorithm to use for IKE.                                            | str         | no       | vpn\_enc\_alg           | ike                     |
-| ike.enc_keysize                           | Size of encryption key to use for IKE.                                                | str         | no       | -                       | ike                     |
-| ike.auth_alg                              | Which authentication algorithm to use for IKE.                                        | str         | no       | vpn\_auth\_alg          | ike                     |
-| ike.dh_group                              | Which Diffie-Hellman group to use for IKE.                                            | str         | no       | -                       | ike                     |
-| ike.lifetime                              | How long keying channel of an IKE connection should last before being renegotiated.   | str         | no       | vpn\_lifetime           | ikelifetime             |
-| ipsec                                     | Defines information specific to setting up IPSec protocol.                            | dict        | no       | -                       | -                       |
-| ipsec.enc_alg                             | Which encryption algorithm to use for IPSec.                                          | str         | no       | vpn\_enc\_alg           | esp                     |
-| ipsec.enc_keysize                         | Size of the encryption key used for IPSec.                                            | str         | no       | -                       | esp                     |
-| ipsec.auth_alg                            | Which authentication algorithm to use for IPSec.                                      | str         | no       | vpn\_auth\_alg          | esp                     |
-| ipsec.dh_group                            | Which Diffie-Hellman group to use for IPSec.                                          | str         | no       | -                       | esp                     |
-| ipsec.lifetime                            | How long keying channel of an IPSec connection should last before being renegotiated. | str         | no       | vpn\_lifetime           | salifetime              |
-| ipsec.mode                                | The type of the connection. User can specify `tunnel` or `transport`, however Libreswan defaults this value to `tunnel` if not specified. If the hosts are behind NAT, the user should specify `transport`. | str         | no       | `tunnel`                | type                    |
-| [shared_key_src](#shared_key_src)         | **Not recommended.** Path to file on the controller host containing a PSK.            | str         | no       | -                       | From ipsec.secrets file |
-| [shared_key_content](#shared_key_content) | **Not recommended.** The actual PSK in a vault secret or base64 encoded string.       | str         | no       | -                       | From ipsec.secrets file |
 
 The following variables will be added under the [`hosts`](#hosts) dictionary:
 
@@ -329,15 +376,13 @@ The following variables will be added under the [`hosts`](#hosts) dictionary:
 
 `shared_key_src` indicates the path to a file on the controller host containing a PSK to be copied to the `ipsec.secrets` file on the managed node.
 
-`shared_key_content` contains the actual PSK in a vault secret or base64 encoded string. This will also be copied to the `ipsec.secrets` file on the managed node.
-
-**Notes: It is not recommended to populate either of these two fields, since the role will automatically generate a secure pre-shared key if none is provided by the user. If the user does wish to provide their own pre-shared key, the recommendation is to vault encrypt the value. See https://docs.ansible.com/ansible/latest/user_guide/vault.html. Also, since it is still unclear how the role will allow users to specific pre-shared keys for each pair of hosts in a tunnel, it is reiterated that users should rely on the role's abilty to generate secure pre-shared keys automatically.**
+**Notes: It is recommended to not specify a pre-shared key, since the role will automatically generate a secure pre-shared key if none is provided by the user. If the user does wish to provide their own pre-shared key, the recommendation is to vault encrypt the value. See https://docs.ansible.com/ansible/latest/user_guide/vault.html. Also, since it is still unclear how the role will allow users to specific pre-shared keys for each pair of hosts in a tunnel, it is reiterated that users should rely on the role's ability to generate secure pre-shared keys automatically.**
 
 ### public_key
 
 `public_key_src` specifies a path to a file on the controller host containing the public key used by this host for public key authentication without certificates. Otherwise, the user can directly specify the public key for this host by populating `public_key_content`. `public_key_content` can also accept a CKAID or nickname for a public key in the NSS database.
 
-Note that `public_key_src` and `public_key_content` may also be specified as host-scoped Ansible variables. The variable names in this case will be `vpn_public_key_src` and `vpn_public_key_content`..
+Note that `public_key_src` and `public_key_content` may also be specified as host-scoped Ansible variables. The variable names in this case will be `vpn_public_key_src` and `vpn_public_key_content`.
 
 If neither `public_key_src` nor `public_key_content` is populated, the role will generate key pairs for each host.
 
