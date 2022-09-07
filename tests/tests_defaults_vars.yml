@@ -15,3 +15,6 @@
             - vpn_auth_method
             - vpn_regen_keys
             - vpn_connections
+
+        - name: check the firewall and the selinux port status
+          include_tasks: tasks/check_firewall_selinux.yml

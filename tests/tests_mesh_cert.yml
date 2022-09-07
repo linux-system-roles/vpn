@@ -11,6 +11,8 @@
     # see RFC 5737, the following CIDRs are provided for documentation/testing use
     __vpn_private_host_cidr: "203.0.113.0/24"
     __vpn_clear_host_cidr: "198.51.100.0/24"
+    # test to set true to manage firewall only
+    vpn_manage_firewall: true
 
   tasks:
 
@@ -44,6 +46,7 @@
         - name: Use vpn role
           include_role:
             name: linux-system-roles.vpn
+            public: true
           ignore_errors: true
 
         - meta: flush_handlers
@@ -196,3 +199,6 @@
           assert:
             that: __vpn_success | d(false)
             msg: Found errors policies/clear file
+
+        - name: check the firewall and the selinux port status
+          include_tasks: tasks/check_firewall_selinux.yml

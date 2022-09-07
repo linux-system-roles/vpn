@@ -30,6 +30,7 @@
         - name: Use vpn role
           include_role:
             name: linux-system-roles.vpn
+            public: true
 
         - name: stat unmanaged host conf file path
           stat:
@@ -96,3 +97,6 @@
           assert:
             that: __vpn_success | d(false)
             msg: Found errors in .secrets file for unmanaged host
+
+        - name: check the firewall and the selinux port status
+          include_tasks: tasks/check_firewall_selinux.yml

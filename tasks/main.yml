@@ -9,6 +9,12 @@
     state: present
   tags: packages
 
+- name: Configure firewall
+  include_tasks: firewall.yml
+
+- name: Configure selinux
+  include_tasks: selinux.yml
+
 - name: Controller tasks
   block:
     # NOTE: Trying to accomplish this without using sudo on the controller
