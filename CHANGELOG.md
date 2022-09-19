@@ -1,6 +1,36 @@
 Changelog
 =========
 
+[1.4.0] - 2022-09-19
+--------------------
+
+### New Features
+
+- Various improvements required to connect to a managed remote host (#65)
+
+Add support for the parameters shared_key_content, leftid, rightid, ike, esp, type, ikelifetime, salifetime, retransmit_timeout, dpddelay, dpdtimeout, dpdaction, leftupdown
+
+### Bug Fixes
+
+- Check for /usr/bin/openssl on controller - do not use package_facts (#66)
+
+Check for existence of openssl without using sudo on the controller
+Basically, any task, even package_facts:, will use sudo if using
+become=true - so just use "exists" test to check for /usr/bin/openssl
+
+### Other Changes
+
+- Fix a bash bug in changelog_to_tag.yml, which unexpectedly expanded "*" (#62)
+
+- changelog_to_tag action - support other than "master" for the main branch name, as well (#63)
+
+- Use GITHUB_REF_NAME as name of push branch; fix error in branch detection [citest skip] (#64)
+
+We need to get the name of the branch to which CHANGELOG.md was pushed.
+For now, it looks as though `GITHUB_REF_NAME` is that name.  But don't
+trust it - first, check that it is `main` or `master`.  If not, then use
+a couple of other methods to determine what is the push branch.
+
 [1.3.5] - 2022-07-19
 --------------------
 
