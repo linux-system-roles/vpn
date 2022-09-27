@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Populate service facts
+  service_facts:
+
+- block:
+    - name: Get the ipsec tcp service ports
+      shell: |-
+        set -euo pipefail
+        firewall-cmd --info-service=ipsec | \
+          egrep "^ +ports: +" | sed -e "s/ *ports: //"
+      register: __ports
+      changed_when: false
+
+    - name: Initialize _vpn_selinux
+      set_fact:
+        _vpn_selinux: []
+
+    - name: Add the ipsec service ports to _vpn_selinux
+      set_fact:
+        _vpn_selinux: "{{ _vpn_selinux +
+            [{'ports': _pair[0], 'proto': _pair[1], 'setype': 'ipsecnat_port_t',
+              'state': 'present', 'local': true}] }}"
+      vars:
+        _pair: "{{ item.split('/') | list }}"
+      loop: "{{ __ports.stdout.split(' ') }}"
+
+    - name: Ensure the service and the ports status with the selinux role
+      include_role:
+        name: fedora.linux_system_roles.selinux
+      vars:
+        selinux_ports: "{{ _vpn_selinux }}"
+  when:
+    - '"firewalld.service" in ansible_facts.services'
+    - ansible_facts.services["firewalld.service"]["state"] == "running"
+    - vpn_manage_selinux | bool

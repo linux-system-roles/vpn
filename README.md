@@ -28,6 +28,20 @@ The Ansible controller requires the python `ipaddress` package on EL7 systems,
 or other systems that use python 2.7.  On python 3.x systems, the VPN role
 uses the python3 built-in `ipaddress` module.
 
+The role requires the `firewall` role and the `selinux` role from the
+`fedora.linux_system_roles` collection, if `vpn_manage_firewall`
+and `vpn_manage_selinux` is set to true, respectively.
+(Please see also the variables in the [`Firewall and Selinux`](#firewall-and-selinux) section.)
+
+If the `vpn` is a role from the `fedora.linux_system_roles`
+collection or from the Fedora RPM package, the requirement is already
+satisfied.
+
+Otherwise, please run the following command line to install the collection.
+```
+ansible-galaxy collection install -r meta/collection-requirements.yml
+```
+
 ## Top-level variables
 
 These global variables should be applied to the configuration for every tunnel (unless the user overrides them in the configuration of a particular tunnel).
@@ -200,19 +214,23 @@ ipsec auto --add <connectionname>
 
 Any errors that may have occurred during the process of loading and starting the connection are in the logs, which can be found in `/var/log/pluto.log` in RHEL 8, or by issuing the command `journalctl -u ipsec` in RHEL 7. Since these logs can be verbose and contain old entries, it is generally recommended to try to manually add the connection to obtain log messages from the standard output instead.
 
-## Firewall
+## Firewall and Selinux
 
-The firewall must be configured to allow traffic on 500 and 4500/UDP ports for the IKE, ESP, and AH protocols. In the future, the firewall system role may be used for this configuration, however in the meantime these settings will need to be manually configured.
+The firewall must be configured to allow traffic on 500/UDP, 4500/UDP, and 4500/TCP ports for the IKE, ESP, and AH protocols.
 
-### RHEL 8 and 9
+| Parameter           | Description                                                                    | Type | Required | Default |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----:|:--------:|---------|
+| vpn_manage_firewall | If true, enable the IPsec ports, 500/UDP, 4500/UDP, and 4500/TCP for the IKE, ESP, and AH protocols using the firewall role. If false, the `vpn role` does not manage the firewall.                | bool | no       | false    |
+| vpn_manage_selinux  | If true, manage the IPsec ports, 500/UDP, 4500/UDP, and 4500/TCP using the selinux role. If false, the `vpn role` does not manage the selinux.                                                     | bool | no       | false    |
 
-The following commands configure the firewall for RHEL 8 and 9 systems, and other systems which use `firewalld`:
+NOTE: The firewall configuration is prerequisite for managing selinux. If the
+firewall is not installed, managing selinux policy is skipped.
 
-```
-firewall-cmd --add-service="ipsec"
-firewall-cmd --runtime-to-permanent
-
-```
+NOTE: `vpn_manage_firewall` and `vpn_manage_selinux` are limited to
+*adding* ports and policy, respectively.
+It cannot be used for *removing* them.
+If you want to remove ports and/or, you will need to use the firewall system
+role and/or the selinux role directly.
 
 ## Use Cases
 

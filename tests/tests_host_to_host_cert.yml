@@ -37,6 +37,7 @@
         - name: Use vpn role
           include_role:
             name: linux-system-roles.vpn
+            public: true
 
         - name: Assert file existence
           include_tasks: tasks/assert_conf_secrets_files_exist.yml
@@ -104,3 +105,6 @@
           assert:
             that: __vpn_success | d(false)
             msg: Found errors in .secrets files
+
+        - name: check the firewall and the selinux port status
+          include_tasks: tasks/check_firewall_selinux.yml

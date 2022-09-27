@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Ensure the vpn ports status with the firewall role
+  include_role:
+    name: fedora.linux_system_roles.firewall
+  vars:
+    firewall:
+      - {'service': 'ipsec', 'state': 'enabled'}
+  when:
+    - vpn_manage_firewall | bool

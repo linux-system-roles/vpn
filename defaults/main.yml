@@ -5,3 +5,11 @@ vpn_regen_keys: false
 vpn_opportunistic: false
 vpn_connections: []
 vpn_default_policy: private-or-clear
+
+# If true, manage the IPsec ports, 500/UDP, 4500/UDP, and 4500/TCP
+# using# the firewall role.
+vpn_manage_firewall: false
+
+# If true, manage the IPsec ports, 500/UDP, 4500/UDP, and 4500/TCP
+# using# the selinux role.
+vpn_manage_selinux: false
