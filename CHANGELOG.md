@@ -1,6 +1,36 @@
 Changelog
 =========
 
+[1.5.0] - 2022-11-01
+--------------------
+
+### New Features
+
+- Use the firewall role and the selinux role from the vpn role (#70)
+
+- Introduce vpn_manage_firewall to enable the firewall role to manage
+  the ipsec service. vpn_manage_firewall is set to false, by default.
+  If the variable is set to false, the firewall configuration is
+  disabled.
+
+- Introduce vpn_manage_selinux to enable the selinux role to manage
+  the ports defined in the firewall ipsec service. vpn_manage_selinux
+  is set to false, by default. If the variable is set to false, the
+  selinux configuration is disabled.
+
+- Add the test check task check_firewall_selinux.yml for verify the
+  ports status.
+
+- Add meta/collection-requirements.yml
+
+### Bug Fixes
+
+- none
+
+### Other Changes
+
+- none
+
 [1.4.0] - 2022-09-19
 --------------------
 
