@@ -1,6 +1,26 @@
 Changelog
 =========
 
+[1.5.1] - 2022-11-14
+--------------------
+
+### New Features
+
+- none
+
+### Bug Fixes
+
+- none
+
+### Other Changes
+
+- fix markdown to adoc conversion (#73)
+
+long heading causes problems with md to adoc conversion
+
+The long heading causes problems with md to adoc conversion.  Shorten
+the length by using abbreviations.
+
 [1.5.0] - 2022-11-01
 --------------------
 
