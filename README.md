@@ -324,7 +324,7 @@ This playbook sets up host-to-host tunnels between each pair of hosts in the lis
             cert_name: bastion3cert
 ```
 
-### Host-to-managed-host (remote is an appliance, or not managed via Ansible)
+### Managed-host-to-unmanaged-host (e.g. remote is appliance)
 
 This playbook sets up a host-to-host tunnel between the current host in the inventory, and a remote host not managed by Ansible (like an appliance) which requires proper identification. In this example `this_host` should be manually set with the same name as `inventory_hostname`.  The shared key is the key shared between the hosts.
 
