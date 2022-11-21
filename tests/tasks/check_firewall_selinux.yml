@@ -31,5 +31,6 @@
       when: vpn_manage_selinux | bool
 
   when:
+    - vpn_manage_firewall or vpn_manage_selinux
     - '"firewalld.service" in ansible_facts.services'
     - ansible_facts.services["firewalld.service"]["state"] == "running"
