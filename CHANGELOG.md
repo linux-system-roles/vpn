@@ -1,6 +1,25 @@
 Changelog
 =========
 
+[1.5.2] - 2022-11-21
+--------------------
+
+### New Features
+
+- none
+
+### Bug Fixes
+
+- only check for firewall ipsec service if managing firewall (#76)
+
+Some systems use `firewalld` by default.  We should only expect the
+`ipsec` service is present if the test tells the vpn role to manage
+firewall or selinux.
+
+### Other Changes
+
+- none
+
 [1.5.1] - 2022-11-14
 --------------------
 
