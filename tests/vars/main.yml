@@ -3,7 +3,7 @@
 
 __vpn_main_hostname: "mainhost.local"
 
-# dummy vars to use for dynamically generated hosts
-__vpn_dynamic_hosts_dummy_ip: "169.254.1.1"
-__vpn_dynamic_hosts_dummy_cidr: "169.254.0.0/16"
-__vpn_dynamic_hosts_dummy_cert: "dyn_cert"
+# sample vars to use for dynamically generated hosts
+__vpn_dynamic_hosts_sample_ip: "169.254.1.1"
+__vpn_dynamic_hosts_sample_cidr: "169.254.0.0/16"
+__vpn_dynamic_hosts_sample_cert: "dyn_cert"

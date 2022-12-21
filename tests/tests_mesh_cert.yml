@@ -181,7 +181,7 @@
             __vpn_register_private_or_clear['content'] | b64decode
             is not search(current_subnet) or
             __vpn_register_private_or_clear['content'] | b64decode
-            is not search(__vpn_dynamic_hosts_dummy_cidr)
+            is not search(__vpn_dynamic_hosts_sample_cidr)
 
         - name: assert success for policy private or clear file
           assert:
