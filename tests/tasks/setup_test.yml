@@ -11,9 +11,9 @@
       set_fact:
         inventory_hostname: "{{ __vpn_main_hostname }}"
 
-    # Dummy main host is dynamically added to avoid error in VPN role
+    # Sample main host is dynamically added to avoid error in VPN role
     # that says hostvars[{{ main_hostname }}] is undefined
-    - name: add dummy main host
+    - name: add sample main host
       add_host:
         name: "{{ __vpn_main_hostname }}"
 
@@ -34,27 +34,27 @@
 - name: Dynamically add more hosts
   include_tasks: tasks/add_hosts.yml
 
-- name: create dummy policies directory
+- name: create sample policies directory
   block:
-    - name: Create dummy policies directory for testing
+    - name: Create sample policies directory for testing
       file:
         path: "/etc/ipsec.d/policies"
         state: directory
         mode: '0600'
 
-    - name: Create dummy policy files for testing
+    - name: Create sample policy files for testing
       file:
         path: "/etc/ipsec.d/policies/private"
         state: touch
         mode: "0600"
 
-    - name: Create dummy policy files for testing
+    - name: Create sample policy files for testing
       file:
         path: "/etc/ipsec.d/policies/private-or-clear"
         state: touch
         mode: "0600"
 
-    - name: Create dummy policy files for testing
+    - name: Create sample policy files for testing
       file:
         path: "/etc/ipsec.d/policies/clear"
         state: touch
