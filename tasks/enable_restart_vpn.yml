@@ -1,9 +1,9 @@
 ---
-- name: enable and restart vpn services
+- name: Enable and restart vpn services
   service:
     name: "{{ item }}"
     state: restarted
-    enabled: yes
+    enabled: true
   async: 1
   poll: 0
   loop: "{{ __vpn_services }}"

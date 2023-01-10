@@ -1,14 +1,14 @@
 ---
-- name: dynamically add multiple hosts for testing
+- name: Dynamically add multiple hosts for testing
   add_host:
     name: "{{ 'host%02x.local' | format(item) }}"
     groups: testing
     cert_name: "{{ __vpn_dynamic_hosts_sample_cert }}"
     current_ip: "{{ __vpn_dynamic_hosts_sample_ip }}"
     current_subnet: "{{ __vpn_dynamic_hosts_sample_cidr }}"
-  loop: "{{ range(1,__vpn_num_hosts+1)|list }}"
+  loop: "{{ range(1, __vpn_num_hosts + 1) | list }}"
 
-- name: create mock vpn_connections
+- name: Create mock vpn_connections
   set_fact:
     vpn_connections: |
       {% set vpn_connections = [] %}

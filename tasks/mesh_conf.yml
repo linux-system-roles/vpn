@@ -24,6 +24,7 @@
   delegate_to: localhost
   run_once: true
   vars:
+    # noqa jinja[spacing]
     pol_default: >-
       {% set pol = conn.policies | selectattr('cidr', 'match', '^default$') | map(attribute='policy') | join(',') %}
       {%- if pol | length == 0 -%}{{ vpn_default_policy }}{%- else -%}{{ pol }}{%- endif -%}

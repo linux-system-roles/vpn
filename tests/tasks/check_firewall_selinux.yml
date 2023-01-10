@@ -1,6 +1,11 @@
 # SPDX-License-Identifier: MIT
 ---
-- block:
+- name: Check firewall and SELinux
+  when:
+    - vpn_manage_firewall or vpn_manage_selinux
+    - '"firewalld.service" in ansible_facts.services'
+    - ansible_facts.services["firewalld.service"]["state"] == "running"
+  block:
     - name: Get firewall service
       command: firewall-cmd --list-services
       register: _result
@@ -29,8 +34,3 @@
         pair: "{{ item.split('/') }}"
       loop: "{{ __ports.stdout.split(' ') }}"
       when: vpn_manage_selinux | bool
-
-  when:
-    - vpn_manage_firewall or vpn_manage_selinux
-    - '"firewalld.service" in ansible_facts.services'
-    - ansible_facts.services["firewalld.service"]["state"] == "running"

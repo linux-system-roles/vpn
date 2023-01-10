@@ -1,6 +1,6 @@
 ---
 # yamllint disable rule:line-length
-- name: set platform/version specific variables
+- name: Set platform/version specific variables
   include_tasks: tasks/set_vars.yml
 
 - name: Ensure required packages are installed
@@ -16,6 +16,8 @@
   include_tasks: selinux.yml
 
 - name: Controller tasks
+  delegate_to: localhost
+  run_once: true
   block:
     # NOTE: Trying to accomplish this without using sudo on the controller
     # Basically, any task, even package_facts:, will use sudo if using
@@ -40,6 +42,7 @@
 
     - name: Make sure that the hosts list is not empty
       vars:
+        # noqa jinja[spacing]
         failure: >-
           {% for tunnel in vpn_connections %}
           {%-  if not tunnel.opportunistic | d(vpn_opportunistic) -%}
@@ -68,6 +71,7 @@
 
     - name: Ensure cert_names are populated when auth_method is cert
       vars:
+        # noqa jinja[spacing]
         failure: >-
           {% for tunnel in vpn_connections %}
           {%   if tunnel.auth_method == 'cert' %}
@@ -95,6 +99,7 @@
     - name: Generate PSKs or use provided shared_key_content
       no_log: true
       set_fact:
+        # noqa jinja[spacing]
         __vpn_psks: |
           {% set __vpn_psks = {} %}
           {% for tunnel in vpn_connections %}
@@ -123,22 +128,19 @@
           {% endfor %}
           {{ __vpn_psks }}
 
-  delegate_to: localhost
-  run_once: true
-
 # The run_once host might not be the first one in hostvars - we do not have
 # a good way to know which host in hostvars was the run_once, and it might
 # change (i.e. on python2 if a non-stable hash is used for the dict)
 # So, find the values for the first hostvars that has __vpn_psks set
 # and use that value.
-- name: set psks for hosts
+- name: Set psks for hosts
   no_log: true
   vars:
     __vpn_psk_hostvars: "{{ hostvars.values() | selectattr('__vpn_psks', 'defined') | first }}"
   set_fact:
     __vpn_psks: "{{ __vpn_psk_hostvars.__vpn_psks }}"
 
-- name: build host-to-host tunnels
+- name: Build host-to-host tunnels
   vars:
     tunnels: |
       {% set unique_tunnels = [] %}
@@ -155,7 +157,7 @@
       {% endfor %}
       {{ unique_tunnels | unique }}
   block:
-    - name: create ipsec.conf files
+    - name: Create ipsec.conf files
       template:
         src: "{{ vpn_provider }}-host-to-host.conf.j2"
         dest: "/etc/ipsec.d/{{ inventory_hostname }}-to-{{ item }}.conf"
@@ -163,13 +165,13 @@
       loop: "{{ tunnels }}"
       notify: __vpn_handler_enable_start_vpn
 
-    - name: check if secrets file already exists
+    - name: Check if secrets file already exists
       stat:
         path: "/etc/ipsec.d/{{ inventory_hostname }}-to-{{ item }}.secrets"
       register: secrets
       loop: "{{ tunnels }}"
 
-    - name: create ipsec.secrets files
+    - name: Create ipsec.secrets files
       template:
         src: "{{ vpn_provider }}-host-to-host.secrets.j2"
         dest: "/etc/ipsec.d/{{ inventory_hostname }}-to-{{ item.item }}.secrets"
@@ -179,7 +181,7 @@
         - not item.stat.exists or vpn_regen_keys
       notify: __vpn_handler_enable_start_vpn
 
-- name: build opportunistic configuration
+- name: Build opportunistic configuration
   include_tasks: tasks/mesh_conf.yml
   when: conn.opportunistic | d(vpn_opportunistic)
   loop: "{{ vpn_connections }}"
