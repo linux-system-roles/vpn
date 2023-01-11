@@ -1,12 +1,18 @@
-all:
-  hosts:
-    host1.example.com:
-    host2.example.com:
-  vars:
-    vpn_connections:
-      - hosts:
-          host1.example.com:
-            cert_name: certhost1
-          host2.example.com:
-            cert_name: certhost2
-        auth_method: cert
+---
+# The inventory yaml should look like this:
+# all:
+#   hosts:
+#     host1.example.com:
+#     host2.example.com:
+#   vars:
+#     vpn_connections:
+#       - hosts:
+#           host1.example.com:
+#             cert_name: certhost1
+#           host2.example.com:
+#             cert_name: certhost2
+#         auth_method: cert
+- name: Manage tunnel with X.509 certs
+  hosts: all
+  roles:
+    - linux-system-roles.vpn

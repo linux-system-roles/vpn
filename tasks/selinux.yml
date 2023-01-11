@@ -3,7 +3,12 @@
 - name: Populate service facts
   service_facts:
 
-- block:
+- name: Manage SELinux
+  when:
+    - '"firewalld.service" in ansible_facts.services'
+    - ansible_facts.services["firewalld.service"]["state"] == "running"
+    - vpn_manage_selinux | bool
+  block:
     - name: Get the ipsec tcp service ports
       shell: |-
         set -euo pipefail
@@ -30,7 +35,3 @@
         name: fedora.linux_system_roles.selinux
       vars:
         selinux_ports: "{{ _vpn_selinux }}"
-  when:
-    - '"firewalld.service" in ansible_facts.services'
-    - ansible_facts.services["firewalld.service"]["state"] == "running"
-    - vpn_manage_selinux | bool

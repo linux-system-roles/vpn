@@ -1,10 +1,9 @@
 ---
 # yamllint disable rule:line-length
-- hosts: all
-
+- name: Test subnet to subnet tunnels
+  hosts: all
   vars_files:
     - './vars/main.yml'
-
   vars:
     __vpn_num_hosts: 1
     # see RFC 5737, the following CIDRs are provided for documentation/testing use
@@ -14,56 +13,51 @@
       - '203.0.113.0/24'
     vpn_manage_firewall: true
     vpn_manage_selinux: true
-
   tasks:
-
     - name: Set up test environment
       include_tasks: tasks/setup_test.yml
 
-    - name: Run the test
-      block:
+    - name: Add subnets
+      set_fact:
+        vpn_connections: |
+          {% for tunnel in vpn_connections %}
+          {%   set temp_dict = {'subnets': __vpn_subnets} %}
+          {%   set _ = tunnel.hosts.__setitem__('host01.local', temp_dict) %}
+          {% endfor %}
+          {{ vpn_connections }}
 
-        - name: Add subnets
-          set_fact:
-            vpn_connections: |
-              {% for tunnel in vpn_connections %}
-              {%   set temp_dict = {'subnets': __vpn_subnets} %}
-              {%   set _ = tunnel.hosts.__setitem__('host01.local', temp_dict) %}
-              {% endfor %}
-              {{ vpn_connections }}
+    - name: Use vpn role
+      include_role:
+        name: linux-system-roles.vpn
+        public: true
 
-        - name: Use vpn role
-          include_role:
-            name: linux-system-roles.vpn
-            public: true
+    - name: Assert file existence
+      include_tasks: tasks/assert_conf_secrets_files_exist.yml
 
-        - name: Assert file existence
-          include_tasks: tasks/assert_conf_secrets_files_exist.yml
+    - name: Reset success flag
+      set_fact:
+        __vpn_success: true
 
-        - name: reset success flag
-          set_fact:
-            __vpn_success: true
+    - name: Get and store conf files
+      slurp:
+        src: "/etc/ipsec.d/{{ inventory_hostname }}-to-{{ item }}.conf"
+      register: __vpn_register_conf
+      loop: "{{ groups['testing'] }}"
 
-        - name: get and store conf files
-          slurp:
-            src: "/etc/ipsec.d/{{ inventory_hostname }}-to-{{ item }}.conf"
-          register: __vpn_register_conf
-          loop: "{{ groups['testing'] }}"
+    - name: Check that conf file contains correct information
+      set_fact:
+        __vpn_success: false
+      when: >-
+        item.content | b64decode is not
+        search('rightsubnets={' + __vpn_subnets[0] + ',' + __vpn_subnets[1] + ',' + __vpn_subnets[2] + '}')
+      loop: '{{ __vpn_register_conf.results }}'
+      loop_control:
+        index_var: idx
 
-        - name: check that conf file contains correct information
-          set_fact:
-            __vpn_success: false
-          when: >-
-            item.content | b64decode is not
-            search('rightsubnets={' + __vpn_subnets[0] + ',' + __vpn_subnets[1] + ',' + __vpn_subnets[2] + '}')
-          loop: '{{ __vpn_register_conf.results }}'
-          loop_control:
-            index_var: idx
+    - name: Assert success for conf files
+      assert:
+        that: __vpn_success | d(false)
+        msg: Found errors in .conf files
 
-        - name: assert success for conf files
-          assert:
-            that: __vpn_success | d(false)
-            msg: Found errors in .conf files
-
-        - name: check the firewall and the selinux port status
-          include_tasks: tasks/check_firewall_selinux.yml
+    - name: Check the firewall and the selinux port status
+      include_tasks: tasks/check_firewall_selinux.yml

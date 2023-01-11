@@ -1,5 +1,5 @@
 ---
-- name: stat mesh.conf file path
+- name: Stat mesh.conf file path
   stat:
     path: "/etc/ipsec.d/mesh.conf"
   register: conf
