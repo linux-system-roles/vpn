@@ -1,6 +1,24 @@
 Changelog
 =========
 
+[1.5.3] - 2023-01-20
+--------------------
+
+### New Features
+
+- none
+
+### Bug Fixes
+
+- Clean up non-inclusive words.
+- ansible-lint 6.x fixes (#86)
+
+### Other Changes
+
+- Add check for non-inclusive language (#82)
+- Add CodeQL workflow for GitHub code scanning (#83)
+- update ignore files for ansible-test 2.14 (#89)
+
 [1.5.2] - 2022-11-21
 --------------------
 
