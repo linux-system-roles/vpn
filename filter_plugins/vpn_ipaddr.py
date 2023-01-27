@@ -74,11 +74,17 @@ def _empty_ipaddr_query(v, vtype):
             return str(v.ip)
         elif vtype == "network":
             return str(v)
+        else:
+            return None
+    else:
+        return None
 
 
 def _bool_ipaddr_query(v):
     if v:
         return True
+    else:
+        return None
 
 
 def is_single_host(v):
@@ -202,6 +208,7 @@ def ipaddr(value, query="", version=False, alias="ipaddr"):
             net = ip_interface(query)
             query = "cidr_lookup"
     except Exception:
+        # We will check the query below.
         pass
 
     # This code checks if value maches the IP version the user wants, ie. if
