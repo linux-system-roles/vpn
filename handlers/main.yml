@@ -8,3 +8,4 @@
   loop: "{{ ansible_play_batch }}"
   when: item != inventory_hostname
   listen: __vpn_handler_init_mesh_conns
+  changed_when: false
