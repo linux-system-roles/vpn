@@ -197,3 +197,15 @@
 
     - name: Check the firewall and the selinux port status
       include_tasks: tasks/check_firewall_selinux.yml
+
+    - name: Check for ansible_managed, fingerprint in generated files
+      include_tasks: tasks/check_header.yml
+      loop:
+        - "{{ __vpn_register_conf }}"
+        - "{{ __vpn_register_private }}"
+        - "{{ __vpn_register_private_or_clear }}"
+        - "{{ __vpn_register_clear }}"
+      loop_control:
+        loop_var: __file_content
+      vars:
+        __fingerprint: "system_role:vpn"
