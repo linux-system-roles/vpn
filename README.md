@@ -28,6 +28,8 @@ The Ansible controller requires the python `ipaddress` package on EL7 systems,
 or other systems that use python 2.7.  On python 3.x systems, the VPN role
 uses the python3 built-in `ipaddress` module.
 
+### Collection requirements
+
 The role requires the `firewall` role and the `selinux` role from the
 `fedora.linux_system_roles` collection, if `vpn_manage_firewall`
 and `vpn_manage_selinux` is set to true, respectively.
@@ -38,6 +40,7 @@ collection or from the Fedora RPM package, the requirement is already
 satisfied.
 
 Otherwise, please run the following command line to install the collection.
+
 ```
 ansible-galaxy collection install -r meta/collection-requirements.yml
 ```
@@ -60,6 +63,7 @@ These global variables should be applied to the configuration for every tunnel (
 
 The value specified in this variable will determine the value of the `authby` field for the Libreswan tunnels opened.
 Acceptable values:
+
 * `psk` for pre-shared key (PSK) authentication
 * `cert` for authentication using certificates
 
@@ -111,6 +115,7 @@ By default, the role generates a descriptive name for each tunnel it creates fro
 ### auth_method
 
 Optionally, you can define an authentication method to use at the connection level. If `auth_method` is not defined, the role uses the global variable `vpn_auth_method`. The value of `auth_method`, or `vpn_auth_method`, determines the value of the `authby` field for the Libreswan tunnel opened for this connection. Acceptable values:
+
 * `psk` for pre-shared key (PSK) authentication
 * `cert` for authentication using certificates
 
@@ -128,21 +133,29 @@ By default, the VPN System Role creates a host-to-host tunnel between each pair 
 
 It is best to keep it simple - no arguments with spaces, shell metacharacters, or other characters which require quoting or escaping - it will be
 difficult to pass them through the various layers of yaml, ansible, jinja, and shell.  Example:
+
 ```yaml
   leftupdown: ipsec_updown --route yes
 ```
+
 will result in the config file
+
 ```
 leftupdown="ipsec_updown --route yes"
 ```
+
 If you need to pass an argument which requires quoting, use single quotes:
+
 ```
   leftupdown: ipsec_updown --route 'a quoted route value'
 ```
+
 will result in the config file
+
 ```
 leftupdown="ipsec_updown --route 'a quoted route value'"
 ```
+
 If you need a custom script, the role does not current have the ability to copy or create a script on the managed host.  You'll have to figure
 out some way to place the script on the host. Then you can point to the script using the full path, like `/usr/local/bin/myscript`.
 
@@ -166,11 +179,12 @@ Valid values are `private`, `private-or-clear`, and `clear`.
 In addition to any valid CIDR value, you may specify `default` in this field to apply the corresponding policy to all hosts that do not fit into one of the other specified policy groups, thereby overriding the default private-or-clear policy rule.
 
 ### hosts
+
 Each key in this dictionary is the unique name of a host. If a host is listed in `hosts` and not in the inventory file, the host will not be managed by the inventory. In such case, the `hostname` parameter is required because it is necessary for setting up the local ends of such a tunnel.
 
-If the host key in the hosts list of your inventory is not the fully qualified domain name (FQDN) you want to use, you must use the `hostname` field under each host in this `vpn_connections` hosts dictionary to specify the actual FQDN or IP address you want the VPN role to use for setting up the tunnel. If you do not specify `hostname`, then the role will use `ansible_host` if defined, or the host key in your hosts list if neither `ansible_host` nor `hostname` is defined. 
+If the host key in the hosts list of your inventory is not the fully qualified domain name (FQDN) you want to use, you must use the `hostname` field under each host in this `vpn_connections` hosts dictionary to specify the actual FQDN or IP address you want the VPN role to use for setting up the tunnel. If you do not specify `hostname`, then the role will use `ansible_host` if defined, or the host key in your hosts list if neither `ansible_host` nor `hostname` is defined.
 
-For each host key in this dictionary, the following host-specific parameters can be specified.  
+For each host key in this dictionary, the following host-specific parameters can be specified.
 
 | Parameter                         | Description                                                                                   | Type        | Required | Default                 | Libreswan Equivalent         |
 |-----------------------------------|-----------------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:----------------------------:|
@@ -185,23 +199,27 @@ For each host key in this dictionary, the following host-specific parameters can
 Can hold a host name or IP address. Specified only when overriding host names used by Ansible for SSH. Note that if a host name is specified, it must be fully qualified to ensure that DNS resolution works correctly on host machines. This parameter is required when the host is not part of the inventory list of hosts.
 
 #### cert_name
+
 It is assumed that the `cert_name` provided by the user exists in the IPSec NSS cert database. Users may use the certificate system role to issue these certificates.
 
 ## Verifying a successful startup
 
-### Libreswan
+### Verifying Libreswan
 
 To confirm that a connection is successfully loaded:
+
 ```
 ipsec status | grep <connectionname>
 ```
 
 To confirm that a connection is successfully started:
+
 ```
 ipsec trafficstatus | grep <connectionname>
 ```
 
 To verify that a certificate has been imported (requires that the connection has loaded successfully). Note that if the same certificate is used for multiple connections, it may show up in the output for this command, even though there was an error on the connection being checked:
+
 ```
 ipsec whack --listcerts
 ```
@@ -234,12 +252,12 @@ role and/or the selinux role directly.
 
 ## Use Cases
 
-- Host-to-Host (openstack): Specific nodes connecting to each other. Use IPsec for IP failover between these nodes (so all other nodes don't need to be aware of anything happening). Keys are FreeIPA certificates, and pre-shared keys
-- Host-to-Host (data centers): Two systems in different data centers communicate encrypted with each other using FreeIPA certificates, and pre-shared keys
-- Host-to-Host (one host): One system communicating with an existing system (e.g., cisco) in an other organization that uses pre-shared keys
-- Network-to-Network (two routers): One organization router connecting to a second one bringing together two distinct networks. Keys are FreeIPA certificates, and pre-shared keys.
-- VPN Remote Access Server / Roadwarrior: One organization router accepting connections from multiple clients. Clients connect to a single router using FreeIPA certificates.
-- MESH: node independent configurations. When adding/removing a node, you don't need to reconfigure all other nodes. They all attempt to setup individual host-to-host connections. A PKI is used to authenticate nodes (FreeIPA, potentially in the future DNSSEC)
+* Host-to-Host (openstack): Specific nodes connecting to each other. Use IPsec for IP failover between these nodes (so all other nodes don't need to be aware of anything happening). Keys are FreeIPA certificates, and pre-shared keys
+* Host-to-Host (data centers): Two systems in different data centers communicate encrypted with each other using FreeIPA certificates, and pre-shared keys
+* Host-to-Host (one host): One system communicating with an existing system (e.g., cisco) in an other organization that uses pre-shared keys
+* Network-to-Network (two routers): One organization router connecting to a second one bringing together two distinct networks. Keys are FreeIPA certificates, and pre-shared keys.
+* VPN Remote Access Server / Roadwarrior: One organization router accepting connections from multiple clients. Clients connect to a single router using FreeIPA certificates.
+* MESH: node independent configurations. When adding/removing a node, you don't need to reconfigure all other nodes. They all attempt to setup individual host-to-host connections. A PKI is used to authenticate nodes (FreeIPA, potentially in the future DNSSEC)
 
 Note that for a couple of these use cases, you cannot use host-scoped settings (e.g. global settings specified in `all.hosts`).
 
@@ -368,7 +386,7 @@ This playbook sets up an opportunistic mesh VPN configuration on each host in th
           - policy: private
             cidr: 192.168.110.0/24
           - policy: clear
-            cidr: 192.168.110.7/32         
+            cidr: 192.168.110.7/32
 ```
 
 ## To be added in a future release
@@ -406,7 +424,8 @@ If neither `public_key_src` nor `public_key_content` is populated, the role will
 
 ### Algorithms
 
-#### Libreswan
+#### Libreswan algorithms
+
 Minimum acceptable algorithms are AES, MODP2048 and SHA2.
 
 ## License
