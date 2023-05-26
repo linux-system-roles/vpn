@@ -1,6 +1,14 @@
 Changelog
 =========
 
+[1.5.7] - 2023-05-26
+--------------------
+
+### Other Changes
+
+- docs: Consistent contributing.md for all roles - allow role specific contributing.md section
+- docs: add Collection requirements section to README
+
 [1.5.6] - 2023-04-27
 --------------------
 
