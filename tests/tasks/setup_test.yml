@@ -10,6 +10,7 @@
   block:
     - name: Change inventory_hostname
       set_fact:
+        # noqa var-naming[read-only]
         inventory_hostname: "{{ __vpn_main_hostname }}"
 
     # Sample main host is dynamically added to avoid error in VPN role
