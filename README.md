@@ -41,7 +41,7 @@ satisfied.
 
 Otherwise, please run the following command line to install the collection.
 
-```
+```bash
 ansible-galaxy collection install -r meta/collection-requirements.yml
 ```
 
@@ -88,7 +88,7 @@ In addition to the global variables, you may provide a number of other variables
 
 | Parameter                                 | Description                                                                           | Type        | Required | Default                 | Libreswan Equivalent    |
 |-------------------------------------------|---------------------------------------------------------------------------------------|:-----------:|:--------:|-------------------------|:-----------------------:|
-| [name](#name)                             | A unique, arbitrary name used to prefix the connection name.                      | str         | no       | See [name](#name).      | conn `<name>`           |
+| [name](#name)                             | A unique, arbitrary name used to prefix the connection name.                      | str         | no       | See [name](#name)       | conn `<name>`           |
 | [hosts](#hosts)                           | A VPN tunnel will be constructed between each pair of hosts in this dictionary.       | dict        | yes      | -                       | -                       |
 | [auth_method](#auth_method)               | Authentication method to be used for this connection.                                 | str         | no       | vpn\_auth\_method       | authby                  |
 | [auto](#auto)                             | What operation, if any, should be done automatically at startup.                      | str         | no       | -                       | auto                    |
@@ -140,19 +140,19 @@ difficult to pass them through the various layers of yaml, ansible, jinja, and s
 
 will result in the config file
 
-```
+```bash
 leftupdown="ipsec_updown --route yes"
 ```
 
 If you need to pass an argument which requires quoting, use single quotes:
 
-```
+```yaml
   leftupdown: ipsec_updown --route 'a quoted route value'
 ```
 
 will result in the config file
 
-```
+```bash
 leftupdown="ipsec_updown --route 'a quoted route value'"
 ```
 
@@ -208,25 +208,25 @@ It is assumed that the `cert_name` provided by the user exists in the IPSec NSS 
 
 To confirm that a connection is successfully loaded:
 
-```
+```bash
 ipsec status | grep <connectionname>
 ```
 
 To confirm that a connection is successfully started:
 
-```
+```bash
 ipsec trafficstatus | grep <connectionname>
 ```
 
 To verify that a certificate has been imported (requires that the connection has loaded successfully). Note that if the same certificate is used for multiple connections, it may show up in the output for this command, even though there was an error on the connection being checked:
 
-```
+```bash
 ipsec whack --listcerts
 ```
 
 If a connection did not successfully load, it is recommended to run the following command to manually try to add the connection. This will give more specific information indicating why the connection failed to establish:
 
-```
+```bash
 ipsec auto --add <connectionname>
 ```
 
@@ -412,7 +412,7 @@ The following variables will be added under the [`hosts`](#hosts) dictionary:
 
 `shared_key_src` indicates the path to a file on the controller host containing a PSK to be copied to the `ipsec.secrets` file on the managed node.
 
-**Notes: It is recommended to not specify a pre-shared key, since the role will automatically generate a secure pre-shared key if none is provided by the user. If the user does wish to provide their own pre-shared key, the recommendation is to vault encrypt the value. See https://docs.ansible.com/ansible/latest/user_guide/vault.html. Also, since it is still unclear how the role will allow users to specific pre-shared keys for each pair of hosts in a tunnel, it is reiterated that users should rely on the role's ability to generate secure pre-shared keys automatically.**
+**Notes: It is recommended to not specify a pre-shared key, since the role will automatically generate a secure pre-shared key if none is provided by the user. If the user does wish to provide their own pre-shared key, the recommendation is to vault encrypt the value. See <https://docs.ansible.com/ansible/latest/user_guide/vault.html>. Also, since it is still unclear how the role will allow users to specific pre-shared keys for each pair of hosts in a tunnel, it is reiterated that users should rely on the role's ability to generate secure pre-shared keys automatically.**
 
 ### public_key
 
