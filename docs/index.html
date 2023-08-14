@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<!--
+==============================================================================
+           "GitHub HTML5 Pandoc Template" v2.2 — by Tristano Ajmone
+==============================================================================
+Copyright © Tristano Ajmone, 2017-2020, MIT License (MIT). Project's home:
+
+- https://github.com/tajmone/pandoc-goodies
+
+The CSS in this template reuses source code taken from the following projects:
+
+- GitHub Markdown CSS: Copyright © Sindre Sorhus, MIT License (MIT):
+  https://github.com/sindresorhus/github-markdown-css
+
+- Primer CSS: Copyright © 2016-2017 GitHub Inc., MIT License (MIT):
+  http://primercss.io/
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The MIT License
+
+Copyright (c) Tristano Ajmone, 2017-2020 (github.com/tajmone/pandoc-goodies)
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+Copyright (c) 2017 GitHub Inc.
+
+"GitHub Pandoc HTML5 Template" is Copyright (c) Tristano Ajmone, 2017-2020,
+released under the MIT License (MIT); it contains readaptations of substantial
+portions of the following third party softwares:
+
+(1) "GitHub Markdown CSS", Copyright (c) Sindre Sorhus, MIT License (MIT).
+(2) "Primer CSS", Copyright (c) 2016 GitHub Inc., MIT License (MIT).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+==============================================================================-->
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>VPN System Role</title>
+  <style type="text/css">
+@charset "UTF-8";.markdown-body{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;color:#24292e;font-family:-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:16px;line-height:1.5;word-wrap:break-word;box-sizing:border-box;min-width:200px;margin:0 auto;padding:45px}.markdown-body a{color:#0366d6;background-color:transparent;text-decoration:none;-webkit-text-decoration-skip:objects}.markdown-body a:active,.markdown-body a:hover{outline-width:0}.markdown-body a:hover{text-decoration:underline}.markdown-body a:not([href]){color:inherit;text-decoration:none}.markdown-body strong{font-weight:600}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}.markdown-body h1{font-size:2em;margin:.67em 0;padding-bottom:.3em;border-bottom:1px solid #eaecef}.markdown-body h2{padding-bottom:.3em;font-size:1.5em;border-bottom:1px solid #eaecef}.markdown-body h3{font-size:1.25em}.markdown-body h4{font-size:1em}.markdown-body h5{font-size:.875em}.markdown-body h6{font-size:.85em;color:#6a737d}.markdown-body img{border-style:none}.markdown-body svg:not(:root){overflow:hidden}.markdown-body hr{box-sizing:content-box;height:.25em;margin:24px 0;padding:0;overflow:hidden;background-color:#e1e4e8;border:0}.markdown-body hr::before{display:table;content:""}.markdown-body hr::after{display:table;clear:both;content:""}.markdown-body input{margin:0;overflow:visible;font:inherit;font-family:inherit;font-size:inherit;line-height:inherit}.markdown-body [type=checkbox]{box-sizing:border-box;padding:0}.markdown-body *{box-sizing:border-box}.markdown-body blockquote{margin:0}.markdown-body ol,.markdown-body ul{padding-left:2em}.markdown-body ol ol,.markdown-body ul ol{list-style-type:lower-roman}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:0;margin-bottom:0}.markdown-body ol ol ol,.markdown-body ol ul ol,.markdown-body ul ol ol,.markdown-body ul ul ol{list-style-type:lower-alpha}.markdown-body li>p{margin-top:16px}.markdown-body li+li{margin-top:.25em}.markdown-body dd{margin-left:0}.markdown-body dl{padding:0}.markdown-body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:600}.markdown-body dl dd{padding:0 16px;margin-bottom:16px}.markdown-body code{font-family:SFMono-Regular,Consolas,"Liberation Mono",Menlo,Courier,monospace}.markdown-body pre{font:12px SFMono-Regular,Consolas,"Liberation Mono",Menlo,Courier,monospace;word-wrap:normal}.markdown-body blockquote,.markdown-body dl,.markdown-body ol,.markdown-body p,.markdown-body pre,.markdown-body table,.markdown-body ul{margin-top:0;margin-bottom:16px}.markdown-body blockquote{padding:0 1em;color:#6a737d;border-left:.25em solid #dfe2e5}.markdown-body blockquote>:first-child{margin-top:0}.markdown-body blockquote>:last-child{margin-bottom:0}.markdown-body table{display:block;width:100%;overflow:auto;border-spacing:0;border-collapse:collapse}.markdown-body table th{font-weight:600}.markdown-body table td,.markdown-body table th{padding:6px 13px;border:1px solid #dfe2e5}.markdown-body table tr{background-color:#fff;border-top:1px solid #c6cbd1}.markdown-body table tr:nth-child(2n){background-color:#f6f8fa}.markdown-body img{max-width:100%;box-sizing:content-box;background-color:#fff}.markdown-body code{padding:.2em 0;margin:0;font-size:85%;background-color:rgba(27,31,35,.05);border-radius:3px}.markdown-body code::after,.markdown-body code::before{letter-spacing:-.2em;content:" "}.markdown-body pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:0 0;border:0}.markdown-body .highlight{margin-bottom:16px}.markdown-body .highlight pre{margin-bottom:0;word-break:normal}.markdown-body .highlight pre,.markdown-body pre{padding:16px;overflow:auto;font-size:85%;line-height:1.45;background-color:#f6f8fa;border-radius:3px}.markdown-body pre code{display:inline;max-width:auto;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}.markdown-body pre code::after,.markdown-body pre code::before{content:normal}.markdown-body .full-commit .btn-outline:not(:disabled):hover{color:#005cc5;border-color:#005cc5}.markdown-body kbd{box-shadow:inset 0 -1px 0 #959da5;display:inline-block;padding:3px 5px;font:11px/10px SFMono-Regular,Consolas,"Liberation Mono",Menlo,Courier,monospace;color:#444d56;vertical-align:middle;background-color:#fcfcfc;border:1px solid #c6cbd1;border-bottom-color:#959da5;border-radius:3px;box-shadow:inset 0 -1px 0 #959da5}.markdown-body :checked+.radio-label{position:relative;z-index:1;border-color:#0366d6}.markdown-body .task-list-item{list-style-type:none}.markdown-body .task-list-item+.task-list-item{margin-top:3px}.markdown-body .task-list-item input{margin:0 .2em .25em -1.6em;vertical-align:middle}.markdown-body::before{display:table;content:""}.markdown-body::after{display:table;clear:both;content:""}.markdown-body>:first-child{margin-top:0!important}.markdown-body>:last-child{margin-bottom:0!important}.Alert,.Error,.Note,.Success,.Warning{padding:11px;margin-bottom:24px;border-style:solid;border-width:1px;border-radius:4px}.Alert p,.Error p,.Note p,.Success p,.Warning p{margin-top:0}.Alert p:last-child,.Error p:last-child,.Note p:last-child,.Success p:last-child,.Warning p:last-child{margin-bottom:0}.Alert{color:#246;background-color:#e2eef9;border-color:#bac6d3}.Warning{color:#4c4a42;background-color:#fff9ea;border-color:#dfd8c2}.Error{color:#911;background-color:#fcdede;border-color:#d2b2b2}.Success{color:#22662c;background-color:#e2f9e5;border-color:#bad3be}.Note{color:#2f363d;background-color:#f6f8fa;border-color:#d5d8da}.Alert h1,.Alert h2,.Alert h3,.Alert h4,.Alert h5,.Alert h6{color:#246;margin-bottom:0}.Warning h1,.Warning h2,.Warning h3,.Warning h4,.Warning h5,.Warning h6{color:#4c4a42;margin-bottom:0}.Error h1,.Error h2,.Error h3,.Error h4,.Error h5,.Error h6{color:#911;margin-bottom:0}.Success h1,.Success h2,.Success h3,.Success h4,.Success h5,.Success h6{color:#22662c;margin-bottom:0}.Note h1,.Note h2,.Note h3,.Note h4,.Note h5,.Note h6{color:#2f363d;margin-bottom:0}.Alert h1:first-child,.Alert h2:first-child,.Alert h3:first-child,.Alert h4:first-child,.Alert h5:first-child,.Alert h6:first-child,.Error h1:first-child,.Error h2:first-child,.Error h3:first-child,.Error h4:first-child,.Error h5:first-child,.Error h6:first-child,.Note h1:first-child,.Note h2:first-child,.Note h3:first-child,.Note h4:first-child,.Note h5:first-child,.Note h6:first-child,.Success h1:first-child,.Success h2:first-child,.Success h3:first-child,.Success h4:first-child,.Success h5:first-child,.Success h6:first-child,.Warning h1:first-child,.Warning h2:first-child,.Warning h3:first-child,.Warning h4:first-child,.Warning h5:first-child,.Warning h6:first-child{margin-top:0}h1.title,p.subtitle{text-align:center}h1.title.followed-by-subtitle{margin-bottom:0}p.subtitle{font-size:1.5em;font-weight:600;line-height:1.25;margin-top:0;margin-bottom:16px;padding-bottom:.3em}div.line-block{white-space:pre-line}
+  </style>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<article class="markdown-body">
+<header>
+<h1 class="title">VPN System Role</h1>
+</header>
+<hr>
+<nav id="TOC">
+<h1 class="toc-title">Contents</h1>
+<ul>
+<li><a href="#requirements" id="toc-requirements">Requirements</a>
+<ul>
+<li><a href="#collection-requirements"
+id="toc-collection-requirements">Collection requirements</a></li>
+</ul></li>
+<li><a href="#top-level-variables"
+id="toc-top-level-variables">Top-level variables</a>
+<ul>
+<li><a href="#vpn_auth_method"
+id="toc-vpn_auth_method">vpn_auth_method</a></li>
+<li><a href="#vpn_ensure_openssl"
+id="toc-vpn_ensure_openssl">vpn_ensure_openssl</a></li>
+<li><a href="#vpn_connections"
+id="toc-vpn_connections">vpn_connections</a></li>
+</ul></li>
+<li><a href="#connection-specific-variables"
+id="toc-connection-specific-variables">Connection-specific variables</a>
+<ul>
+<li><a href="#name" id="toc-name">name</a></li>
+<li><a href="#auth_method" id="toc-auth_method">auth_method</a></li>
+<li><a href="#auto" id="toc-auto">auto</a></li>
+<li><a href="#opportunistic"
+id="toc-opportunistic">opportunistic</a></li>
+<li><a href="#leftupdown" id="toc-leftupdown">leftupdown</a></li>
+<li><a href="#policies" id="toc-policies">policies</a>
+<ul>
+<li><a href="#policy" id="toc-policy">policy</a></li>
+<li><a href="#cidr" id="toc-cidr">cidr</a></li>
+</ul></li>
+<li><a href="#hosts" id="toc-hosts">hosts</a>
+<ul>
+<li><a href="#hostname" id="toc-hostname">hostname</a></li>
+<li><a href="#cert_name" id="toc-cert_name">cert_name</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#verifying-a-successful-startup"
+id="toc-verifying-a-successful-startup">Verifying a successful
+startup</a>
+<ul>
+<li><a href="#verifying-libreswan"
+id="toc-verifying-libreswan">Verifying Libreswan</a></li>
+</ul></li>
+<li><a href="#firewall-and-selinux"
+id="toc-firewall-and-selinux">Firewall and Selinux</a></li>
+<li><a href="#use-cases" id="toc-use-cases">Use Cases</a></li>
+<li><a href="#examples" id="toc-examples">Examples</a>
+<ul>
+<li><a
+href="#host-to-host-multiple-vpn-tunnels-with-one-externally-managed-host"
+id="toc-host-to-host-multiple-vpn-tunnels-with-one-externally-managed-host">Host-to-host
+(multiple VPN tunnels with one externally managed host)</a></li>
+<li><a href="#host-to-host-multiple-vpn-tunnels-with-multiple-nics"
+id="toc-host-to-host-multiple-vpn-tunnels-with-multiple-nics">Host-to-host
+(multiple VPN tunnels with multiple NICS)</a></li>
+<li><a href="#host-to-host-multiple-vpn-tunnels-using-certificates"
+id="toc-host-to-host-multiple-vpn-tunnels-using-certificates">Host-to-host
+(multiple VPN tunnels using certificates)</a></li>
+<li><a href="#managed-host-to-unmanaged-host-eg-remote-is-appliance"
+id="toc-managed-host-to-unmanaged-host-eg-remote-is-appliance">Managed-host-to-unmanaged-host
+(e.g. remote is appliance)</a></li>
+<li><a href="#opportunistic-mesh-vpn-configuration"
+id="toc-opportunistic-mesh-vpn-configuration">Opportunistic Mesh VPN
+configuration</a></li>
+</ul></li>
+<li><a href="#to-be-added-in-a-future-release"
+id="toc-to-be-added-in-a-future-release">To be added in a future
+release</a>
+<ul>
+<li><a href="#shared_key" id="toc-shared_key">shared_key</a></li>
+<li><a href="#public_key" id="toc-public_key">public_key</a></li>
+<li><a href="#algorithms" id="toc-algorithms">Algorithms</a>
+<ul>
+<li><a href="#libreswan-algorithms"
+id="toc-libreswan-algorithms">Libreswan algorithms</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#license" id="toc-license">License</a></li>
+</ul>
+</nav>
+<hr>
+<p>A Role for managing setup and configuration of VPN tunnels.</p>
+<p>Basic usage:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion1.example.com</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at">...</span><span class="kw">}</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion2.example.com</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at">...</span><span class="kw">}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion3.example.com</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at">...</span><span class="kw">}</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">vars</span><span class="kw">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">vpn_connections</span><span class="kw">:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion1.example.com</span><span class="kw">:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion2.example.com</span><span class="kw">:</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion3.example.com</span><span class="kw">:</span></span></code></pre></div>
+<p>The role will set up a vpn tunnel between each pair of hosts in the
+list of <code>vpn_connections</code>, using the default parameters,
+including generating keys as needed. This role assumes that the names of
+the hosts under <code>hosts</code> are the same as the names of the
+hosts used in the Ansible inventory, and that you can use those names to
+configure the tunnels (i.e. they are real FQDNs that resolve
+correctly).</p>
+<p>The exception to the above is when you define a <code>hostname</code>
+variable under any given host, containing an FQDN, in which case the
+role will assume this is a managed host and won't attempt to make any
+changes to it (more details in <a href="#hosts">hosts</a>)</p>
+<h1 id="requirements">Requirements</h1>
+<p>The Ansible controller requires the python <code>ipaddress</code>
+package on EL7 systems, or other systems that use python 2.7. On python
+3.x systems, the VPN role uses the python3 built-in
+<code>ipaddress</code> module.</p>
+<h2 id="collection-requirements">Collection requirements</h2>
+<p>The role requires the <code>firewall</code> role and the
+<code>selinux</code> role from the
+<code>fedora.linux_system_roles</code> collection, if
+<code>vpn_manage_firewall</code> and <code>vpn_manage_selinux</code> is
+set to true, respectively. (Please see also the variables in the <a
+href="#firewall-and-selinux"><code>Firewall and Selinux</code></a>
+section.)</p>
+<p>If the <code>vpn</code> is a role from the
+<code>fedora.linux_system_roles</code> collection or from the Fedora RPM
+package, the requirement is already satisfied.</p>
+<p>Otherwise, please run the following command line to install the
+collection.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ansible-galaxy</span> collection install <span class="at">-r</span> meta/collection-requirements.yml</span></code></pre></div>
+<h1 id="top-level-variables">Top-level variables</h1>
+<p>These global variables should be applied to the configuration for
+every tunnel (unless the user overrides them in the configuration of a
+particular tunnel).</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>vpn_provider</td>
+<td>VPN provider used (e.g. libreswan, wireguard, etc.)</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>libreswan</td>
+</tr>
+<tr class="even">
+<td><a href="#vpn_auth_method">vpn_auth_method</a></td>
+<td>VPN authentication method used.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>psk</td>
+</tr>
+<tr class="odd">
+<td>vpn_regen_keys</td>
+<td>Whether pre-shared keys should be regenerated for sets of hosts with
+existing keys.</td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">no</td>
+<td>false</td>
+</tr>
+<tr class="even">
+<td>vpn_opportunistic</td>
+<td>Whether an opportunistic mesh configuration should be used.</td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">no</td>
+<td>false</td>
+</tr>
+<tr class="odd">
+<td>vpn_default_policy</td>
+<td>The default policy group to add target machines to under a mesh
+configuration.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td><code>private-or-clear</code></td>
+</tr>
+<tr class="even">
+<td><a href="#vpn_ensure_openssl">vpn_ensure_openssl</a></td>
+<td>Ensure the <code>openssl</code> package is installed on the
+controller.</td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">no</td>
+<td>true</td>
+</tr>
+<tr class="odd">
+<td><a href="#vpn_connections">vpn_connections</a></td>
+<td>List of VPN connections to make.</td>
+<td style="text-align: center;">list</td>
+<td style="text-align: center;">yes</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vpn_auth_method">vpn_auth_method</h2>
+<p>The value specified in this variable will determine the value of the
+<code>authby</code> field for the Libreswan tunnels opened. Acceptable
+values:</p>
+<ul>
+<li><code>psk</code> for pre-shared key (PSK) authentication</li>
+<li><code>cert</code> for authentication using certificates</li>
+</ul>
+<h2 id="vpn_ensure_openssl">vpn_ensure_openssl</h2>
+<p>The role uses <code>openssl</code> to generate PSKs. It requires this
+to be installed on the controller node. The default value is
+<code>true</code>. If you have pre-generated your PSKs, or you are not
+using PSKs, then set <code>vpn_ensure_openssl: false</code>. You can
+also define the PSKs using the <code>shared_key_content</code> variable
+in a host in any given tunnel.</p>
+<h2 id="vpn_connections">vpn_connections</h2>
+<p><code>vpn_connections</code> is a list of connections. Each
+connection is either:</p>
+<ul>
+<li><p>A list of hosts specified by <code>hosts</code>. In this
+host-to-host use case, the role creates tunnels between each pair of
+hosts. At least one tunnel must be defined in this list. If a single
+tunnel is required, you only need to specify the remote side.</p></li>
+<li><p>A mesh configuration consisting of one or more subnets and
+profiles. In this mesh use case, the role deploys an opportunistic mesh
+configuration using the <code>policy</code>/<code>cidr</code> pairs that
+you define in the <code>policies</code>.</p></li>
+</ul>
+<h1 id="connection-specific-variables">Connection-specific
+variables</h1>
+<p>In addition to the global variables, you may provide a number of
+other variables that will be applied to the configuration for each
+tunnel. <strong>NOTE</strong> All time fields (for example
+<code>ikelifetime</code> and others) accept the time as a number + unit
+e.g. <code>13h</code> for 13 hours, <code>10s</code> for 10 seconds.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th style="text-align: center;">Libreswan Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#name">name</a></td>
+<td>A unique, arbitrary name used to prefix the connection name.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>See <a href="#name">name</a></td>
+<td style="text-align: center;">conn <code>&lt;name&gt;</code></td>
+</tr>
+<tr class="even">
+<td><a href="#hosts">hosts</a></td>
+<td>A VPN tunnel will be constructed between each pair of hosts in this
+dictionary.</td>
+<td style="text-align: center;">dict</td>
+<td style="text-align: center;">yes</td>
+<td>-</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr class="odd">
+<td><a href="#auth_method">auth_method</a></td>
+<td>Authentication method to be used for this connection.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>vpn_auth_method</td>
+<td style="text-align: center;">authby</td>
+</tr>
+<tr class="even">
+<td><a href="#auto">auto</a></td>
+<td>What operation, if any, should be done automatically at
+startup.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">auto</td>
+</tr>
+<tr class="odd">
+<td><a href="#opportunistic">opportunistic</a></td>
+<td>Whether an opportunistic mesh configuration should be used.</td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">no</td>
+<td>vpn_opportunistic</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr class="even">
+<td><a href="#policies">policies</a></td>
+<td>List of policy settings to use for an opportunistic mesh
+configuration.</td>
+<td style="text-align: center;">list</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr class="odd">
+<td>shared_key_content</td>
+<td>A pre-defined PSK. If not defined, the role will generate one using
+<code>openssl</code>. <strong>IMPORTANT:</strong> It is strongly
+suggested that you do not use this parameter, and instead let the role
+generate the values. If you must use this, do not set a string in your
+inventory, but instead read this from a Vault. Also, the PSK will be
+visible while running in verbose or debug mode.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">PSK from ipsec.secrets file</td>
+</tr>
+<tr class="even">
+<td>ike</td>
+<td>IKE encryption/authentication algorithm to be used for the
+connection (phase 1 aka ISAKMP SA). <strong>NOTE</strong> Do not set
+this unless you must, or really know what you are doing</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">ike</td>
+</tr>
+<tr class="odd">
+<td>esp</td>
+<td>Specifies the algorithms that will be offered/accepted for a Child
+SA negotiation. <strong>NOTE</strong> Do not set this unless you must,
+or really know what you are doing</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">esp</td>
+</tr>
+<tr class="even">
+<td>type</td>
+<td>The type of the connection. See the libreswan docs for the possible
+values</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>tunnel</td>
+<td style="text-align: center;">type</td>
+</tr>
+<tr class="odd">
+<td>ikelifetime</td>
+<td>How long the keying channel of a connection (buzzphrase: "IKE SA" or
+"Parent SA") should last before being renegotiated.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">ikelifetime</td>
+</tr>
+<tr class="even">
+<td>salifetime</td>
+<td>How long a particular instance of a connection (a set of
+encryption/authentication keys for user packets) should last, from
+successful negotiation to expiry.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">salifetime</td>
+</tr>
+<tr class="odd">
+<td>retransmit_timeout</td>
+<td>How long a single packet, including retransmits of that packet, may
+take before the IKE attempt is aborted.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">retransmit-timeout</td>
+</tr>
+<tr class="even">
+<td>dpddelay</td>
+<td>Set the delay time between Dead Peer Detection (IKEv1 RFC 3706) or
+IKEv2 Liveness keepalives that are sent for this connection. If this is
+set, dpdtimeout also needs to be set</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">dpddelay</td>
+</tr>
+<tr class="odd">
+<td>dpdtimeout</td>
+<td>Set the length of time that we will idle without hearing back from
+our peer. After this period has elapsed with no response and no traffic,
+we will declare the peer dead, and remove the SA. Set value bigger than
+dpddelay to enable. If dpdtimeout is set, dpddelay also needs to be
+set.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">dpdtimeout</td>
+</tr>
+<tr class="even">
+<td>dpdaction</td>
+<td>When a DPD enabled peer is declared dead, what action should be
+taken. See libreswan docs for values.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">dpdaction</td>
+</tr>
+<tr class="odd">
+<td><a href="#leftupdown">leftupdown</a></td>
+<td>The "updown" script to run to adjust routing and/or firewalling when
+the status of the connection changes (default
+<code>ipsec _updown</code>). See below.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">leftupdown</td>
+</tr>
+</tbody>
+</table>
+<p>For the default values, and possible values, of <code>ike</code>,
+<code>esp</code>, <code>type</code>, et. al., please consult the <a
+href="https://libreswan.org/man/ipsec.conf.5.html">libreswan
+documentation</a>. You will usually not need to set these.</p>
+<h2 id="name">name</h2>
+<p>By default, the role generates a descriptive name for each tunnel it
+creates from the perspective of each system. For example, when creating
+a tunnel between <code>bastion1</code> and <code>bastion2</code>, the
+descriptive name of this connection on <code>bastion1</code> is
+<code>bastion1-to-bastion2</code> but on <code>bastion2</code> the
+connection is named <code>bastion2-to-bastion1</code>. You may add a
+prefix to these auto-generated names by specifying a value in the
+<code>name</code> field.</p>
+<h2 id="auth_method">auth_method</h2>
+<p>Optionally, you can define an authentication method to use at the
+connection level. If <code>auth_method</code> is not defined, the role
+uses the global variable <code>vpn_auth_method</code>. The value of
+<code>auth_method</code>, or <code>vpn_auth_method</code>, determines
+the value of the <code>authby</code> field for the Libreswan tunnel
+opened for this connection. Acceptable values:</p>
+<ul>
+<li><code>psk</code> for pre-shared key (PSK) authentication</li>
+<li><code>cert</code> for authentication using certificates</li>
+</ul>
+<h2 id="auto">auto</h2>
+<p>What operation, if any, should be done automatically at IPsec
+startup. Currently accepted values are <strong>add</strong>,
+<strong>ondemand</strong>, <strong>start</strong>, and
+<strong>ignore</strong>. The default value is null, which means no
+automatic startup operation.</p>
+<h2 id="opportunistic">opportunistic</h2>
+<p>By default, the VPN System Role creates a host-to-host tunnel between
+each pair of nodes specified within a <code>vpn_connection</code>. You
+can instead configure an opportunistic mesh VPN by setting
+<code>opportunistic</code> to <code>true</code>, which will include all
+hosts in the Ansible inventory in the opportunistic mesh
+configuration.</p>
+<p><strong>Note:</strong> When configuring an opportunistic mesh VPN
+using a control node that shares the same CIDR as one or more of mesh
+CIDRs used for encryption, add a clear policy entry for the control node
+CIDR in order to prevent an SSH connection loss during the play. See <a
+href="#opportunistic-mesh-vpn-configuration">example</a>.</p>
+<h2 id="leftupdown">leftupdown</h2>
+<p>It is best to keep it simple - no arguments with spaces, shell
+metacharacters, or other characters which require quoting or escaping -
+it will be difficult to pass them through the various layers of yaml,
+ansible, jinja, and shell. Example:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">leftupdown</span><span class="kw">:</span><span class="at"> ipsec_updown --route yes</span></span></code></pre></div>
+<p>will result in the config file</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">leftupdown</span><span class="op">=</span><span class="st">&quot;ipsec_updown --route yes&quot;</span></span></code></pre></div>
+<p>If you need to pass an argument which requires quoting, use single
+quotes:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">leftupdown</span><span class="kw">:</span><span class="at"> ipsec_updown --route &#39;a quoted route value&#39;</span></span></code></pre></div>
+<p>will result in the config file</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">leftupdown</span><span class="op">=</span><span class="st">&quot;ipsec_updown --route &#39;a quoted route value&#39;&quot;</span></span></code></pre></div>
+<p>If you need a custom script, the role does not current have the
+ability to copy or create a script on the managed host. You'll have to
+figure out some way to place the script on the host. Then you can point
+to the script using the full path, like
+<code>/usr/local/bin/myscript</code>.</p>
+<p>By default, Libreswan runs <code>ipsec_updown --route yes</code>. You
+can disable that by using <code>leftupdown: null</code>.</p>
+<h2 id="policies">policies</h2>
+<p>In this dictionary, you can set policy rules related to opportunistic
+encryption. If no policy rules are set, the default policy rule is
+<code>private-or-clear</code>. To override this default policy rule, see
+<a href="#cidr">cidr</a>. Note that the default policy does not add a
+<code>0.0.0.0/0</code> entry into a policy file. Instead, individual
+classless inter-domain routing (CIDR) values are added to policy files
+based on the CIDRs of the managed nodes. The default policy rule will be
+applied to CIDRs of all the hosts over which this role is run, unless
+you specify in this section a different policy rule for the CIDR of a
+particular managed node or group of managed nodes. If users wish to add
+a <code>0.0.0.0/0</code> entry to a particular policy file, they may add
+an item to this list where the policy value is the desired policy to be
+applied, and the CIDR value is <code>0.0.0.0/0</code>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#policy">policy</a></td>
+<td>A valid policy connection group.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+</tr>
+<tr class="even">
+<td><a href="#cidr">cidr</a></td>
+<td>A valid CIDR to which this policy rule is applied.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+</tr>
+</tbody>
+</table>
+<h3 id="policy">policy</h3>
+<p>Valid values are <code>private</code>, <code>private-or-clear</code>,
+and <code>clear</code>.</p>
+<h3 id="cidr">cidr</h3>
+<p>In addition to any valid CIDR value, you may specify
+<code>default</code> in this field to apply the corresponding policy to
+all hosts that do not fit into one of the other specified policy groups,
+thereby overriding the default private-or-clear policy rule.</p>
+<h2 id="hosts">hosts</h2>
+<p>Each key in this dictionary is the unique name of a host. If a host
+is listed in <code>hosts</code> and not in the inventory file, the host
+will not be managed by the inventory. In such case, the
+<code>hostname</code> parameter is required because it is necessary for
+setting up the local ends of such a tunnel.</p>
+<p>If the host key in the hosts list of your inventory is not the fully
+qualified domain name (FQDN) you want to use, you must use the
+<code>hostname</code> field under each host in this
+<code>vpn_connections</code> hosts dictionary to specify the actual FQDN
+or IP address you want the VPN role to use for setting up the tunnel. If
+you do not specify <code>hostname</code>, then the role will use
+<code>ansible_host</code> if defined, or the host key in your hosts list
+if neither <code>ansible_host</code> nor <code>hostname</code> is
+defined.</p>
+<p>For each host key in this dictionary, the following host-specific
+parameters can be specified.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th style="text-align: center;">Libreswan Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#hostname">hostname</a></td>
+<td>Host name or IP address to use for setting up a VPN connection.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">left/right</td>
+</tr>
+<tr class="even">
+<td><a href="#cert_name">cert_name</a></td>
+<td>Certificate nickname of this host's certificate in the NSS database.
+(Only used when <code>auth_method</code> is <code>cert</code>)</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">leftcert/rightcert</td>
+</tr>
+<tr class="odd">
+<td>subnets</td>
+<td>A list of the subnets that should be available via the VPN
+connection.</td>
+<td style="text-align: center;">list</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">leftsubnets/rightsubnets</td>
+</tr>
+<tr class="even">
+<td>leftid</td>
+<td>How the left participant (local) should be identified for
+authentication.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>the local host FQDN (not the controller)</td>
+<td style="text-align: center;">leftid</td>
+</tr>
+<tr class="odd">
+<td>rightid</td>
+<td>How the right participant (remote) should be identified for
+authentication.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>the remote host FQDN</td>
+<td style="text-align: center;">rightid</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hostname">hostname</h3>
+<p>Can hold a host name or IP address. Specified only when overriding
+host names used by Ansible for SSH. Note that if a host name is
+specified, it must be fully qualified to ensure that DNS resolution
+works correctly on host machines. This parameter is required when the
+host is not part of the inventory list of hosts.</p>
+<h3 id="cert_name">cert_name</h3>
+<p>It is assumed that the <code>cert_name</code> provided by the user
+exists in the IPSec NSS cert database. Users may use the certificate
+system role to issue these certificates.</p>
+<h1 id="verifying-a-successful-startup">Verifying a successful
+startup</h1>
+<h2 id="verifying-libreswan">Verifying Libreswan</h2>
+<p>To confirm that a connection is successfully loaded:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ipsec</span> status <span class="kw">|</span> <span class="fu">grep</span> <span class="op">&lt;</span>connectionname<span class="op">&gt;</span></span></code></pre></div>
+<p>To confirm that a connection is successfully started:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ipsec</span> trafficstatus <span class="kw">|</span> <span class="fu">grep</span> <span class="op">&lt;</span>connectionname<span class="op">&gt;</span></span></code></pre></div>
+<p>To verify that a certificate has been imported (requires that the
+connection has loaded successfully). Note that if the same certificate
+is used for multiple connections, it may show up in the output for this
+command, even though there was an error on the connection being
+checked:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ipsec</span> whack <span class="at">--listcerts</span></span></code></pre></div>
+<p>If a connection did not successfully load, it is recommended to run
+the following command to manually try to add the connection. This will
+give more specific information indicating why the connection failed to
+establish:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ipsec</span> auto <span class="at">--add</span> <span class="op">&lt;</span>connectionname<span class="op">&gt;</span></span></code></pre></div>
+<p>Any errors that may have occurred during the process of loading and
+starting the connection are in the logs, which can be found in
+<code>/var/log/pluto.log</code> in RHEL 8, or by issuing the command
+<code>journalctl -u ipsec</code> in RHEL 7. Since these logs can be
+verbose and contain old entries, it is generally recommended to try to
+manually add the connection to obtain log messages from the standard
+output instead.</p>
+<h1 id="firewall-and-selinux">Firewall and Selinux</h1>
+<p>The firewall must be configured to allow traffic on 500/UDP,
+4500/UDP, and 4500/TCP ports for the IKE, ESP, and AH protocols.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>vpn_manage_firewall</td>
+<td>If true, enable the IPsec ports, 500/UDP, 4500/UDP, and 4500/TCP for
+the IKE, ESP, and AH protocols using the firewall role. If false, the
+<code>vpn role</code> does not manage the firewall.</td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">no</td>
+<td>false</td>
+</tr>
+<tr class="even">
+<td>vpn_manage_selinux</td>
+<td>If true, manage the IPsec ports, 500/UDP, 4500/UDP, and 4500/TCP
+using the selinux role. If false, the <code>vpn role</code> does not
+manage the selinux.</td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">no</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<p>NOTE: The firewall configuration is prerequisite for managing
+selinux. If the firewall is not installed, managing selinux policy is
+skipped.</p>
+<p>NOTE: <code>vpn_manage_firewall</code> and
+<code>vpn_manage_selinux</code> are limited to <em>adding</em> ports and
+policy, respectively. It cannot be used for <em>removing</em> them. If
+you want to remove ports and/or, you will need to use the firewall
+system role and/or the selinux role directly.</p>
+<h1 id="use-cases">Use Cases</h1>
+<ul>
+<li>Host-to-Host (openstack): Specific nodes connecting to each other.
+Use IPsec for IP failover between these nodes (so all other nodes don't
+need to be aware of anything happening). Keys are FreeIPA certificates,
+and pre-shared keys</li>
+<li>Host-to-Host (data centers): Two systems in different data centers
+communicate encrypted with each other using FreeIPA certificates, and
+pre-shared keys</li>
+<li>Host-to-Host (one host): One system communicating with an existing
+system (e.g., cisco) in an other organization that uses pre-shared
+keys</li>
+<li>Network-to-Network (two routers): One organization router connecting
+to a second one bringing together two distinct networks. Keys are
+FreeIPA certificates, and pre-shared keys.</li>
+<li>VPN Remote Access Server / Roadwarrior: One organization router
+accepting connections from multiple clients. Clients connect to a single
+router using FreeIPA certificates.</li>
+<li>MESH: node independent configurations. When adding/removing a node,
+you don't need to reconfigure all other nodes. They all attempt to setup
+individual host-to-host connections. A PKI is used to authenticate nodes
+(FreeIPA, potentially in the future DNSSEC)</li>
+</ul>
+<p>Note that for a couple of these use cases, you cannot use host-scoped
+settings (e.g. global settings specified in <code>all.hosts</code>).</p>
+<h1 id="examples">Examples</h1>
+<h2
+id="host-to-host-multiple-vpn-tunnels-with-one-externally-managed-host">Host-to-host
+(multiple VPN tunnels with one externally managed host)</h2>
+<p>This playbook sets up the tunnel
+<code>bastion_east-to-bastion_west</code> using pre-shared key
+authentication with keys auto-generated by the system role.
+Additionally, the local ends of two more tunnels are set up:
+<code>bastion_east-to-bastion_north</code> and
+<code>bastion_west-to-bastion_north</code>. In this case, one of the
+hosts, <code>bastion_north</code>, is external to the inventory e.g. in
+a remote datacenter, and only the local ends of the tunnels can be set
+up. The <code>hostname</code> field contains all the information
+necessary to ensure that the local ends of the tunnel are set up
+correctly. This also shows the optional parameters you can specify for
+the tunnel.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span><span class="kw">:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion_east</span><span class="kw">:</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">ansible_host</span><span class="kw">:</span><span class="at"> bastion1.example.com</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion_west</span><span class="kw">:</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">ansible_host</span><span class="kw">:</span><span class="at"> bastion2.example.com</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">vars</span><span class="kw">:</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">vpn_connections</span><span class="kw">:</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">ike</span><span class="kw">:</span><span class="at"> aes256-sha2;dh19</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">esp</span><span class="kw">:</span><span class="at"> aes-sha2_512+sha2_256</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ikelifetime</span><span class="kw">:</span><span class="at"> 11h</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">salifetime</span><span class="kw">:</span><span class="at"> 9h</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">type</span><span class="kw">:</span><span class="at"> transport</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion_east</span><span class="kw">:</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion_west</span><span class="kw">:</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion_north</span><span class="kw">:</span><span class="co"> # not in the hosts list</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">hostname</span><span class="kw">:</span><span class="at"> </span><span class="fl">192.168.122.103</span></span></code></pre></div>
+<h2
+id="host-to-host-multiple-vpn-tunnels-with-multiple-nics">Host-to-host
+(multiple VPN tunnels with multiple NICS)</h2>
+<p>In this case, the hosts have multiple vpn connections associated with
+multiple NICs e.g. some OpenStack and OpenShift use cases.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span><span class="kw">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion_east</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at">...</span><span class="kw">}</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion_west</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at">...</span><span class="kw">}</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion_north</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at">...</span><span class="kw">}</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">vars</span><span class="kw">:</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">vpn_connections</span><span class="kw">:</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> control_plane_vpn</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion_east</span><span class="kw">:</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">hostname</span><span class="kw">:</span><span class="at"> </span><span class="fl">192.168.122.101</span><span class="co"> # IP for control plane</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion_west</span><span class="kw">:</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">hostname</span><span class="kw">:</span><span class="at"> </span><span class="fl">192.168.122.102</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion_north</span><span class="kw">:</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">hostname</span><span class="kw">:</span><span class="at"> </span><span class="fl">192.168.122.103</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> data_plane_vpn</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion_east</span><span class="kw">:</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">hostname</span><span class="kw">:</span><span class="at"> </span><span class="fl">10.0.0.1</span><span class="co"> # IP for data plane</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion_west</span><span class="kw">:</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">hostname</span><span class="kw">:</span><span class="at"> </span><span class="fl">10.0.0.2</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion_north</span><span class="kw">:</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">hostname</span><span class="kw">:</span><span class="at"> </span><span class="fl">10.0.0.3</span></span></code></pre></div>
+<h2
+id="host-to-host-multiple-vpn-tunnels-using-certificates">Host-to-host
+(multiple VPN tunnels using certificates)</h2>
+<p>This playbook sets up host-to-host tunnels between each pair of hosts
+in the list of <code>hosts</code> using certificates for
+authentication.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion1.example.com</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at">...</span><span class="kw">}</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion2.example.com</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at">...</span><span class="kw">}</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion3.example.com</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at">...</span><span class="kw">}</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">vars</span><span class="kw">:</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">vpn_connections</span><span class="kw">:</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> vpn-tunnel-x</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">auth_method</span><span class="kw">:</span><span class="at"> cert</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">auto</span><span class="kw">:</span><span class="at"> start</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion1.example.com</span><span class="kw">:</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cert_name</span><span class="kw">:</span><span class="at"> bastion1cert</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion2.example.com</span><span class="kw">:</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cert_name</span><span class="kw">:</span><span class="at"> bastion2cert</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">bastion3.example.com</span><span class="kw">:</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cert_name</span><span class="kw">:</span><span class="at"> bastion3cert</span></span></code></pre></div>
+<h2
+id="managed-host-to-unmanaged-host-eg-remote-is-appliance">Managed-host-to-unmanaged-host
+(e.g. remote is appliance)</h2>
+<p>This playbook sets up a host-to-host tunnel between the current host
+in the inventory, and a remote host not managed by Ansible (like an
+appliance) which requires proper identification. In this example
+<code>this_host</code> should be manually set with the same name as
+<code>inventory_hostname</code>. The shared key is the key shared
+between the hosts.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">vars</span><span class="kw">:</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">vpn_connections</span><span class="kw">:</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">auth_method</span><span class="kw">:</span><span class="at"> psk</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">auto</span><span class="kw">:</span><span class="at"> start</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">        shared_key_content</span><span class="kw">: </span><span class="at">!vault </span><span class="ch">|</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>          $ANSIBLE_VAULT;1.2;AES256;dev</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>          ....</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">this_host</span><span class="kw">:</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">leftid</span><span class="kw">:</span><span class="at"> idoftheclient</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">nfsserver</span><span class="kw">:</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">hostname</span><span class="kw">:</span><span class="at"> nfsserver.example.com</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">rightid</span><span class="kw">:</span><span class="at"> idoftheserver</span></span></code></pre></div>
+<h2 id="opportunistic-mesh-vpn-configuration">Opportunistic Mesh VPN
+configuration</h2>
+<p>This playbook sets up an opportunistic mesh VPN configuration on each
+host in the list of <code>hosts</code>, using certificates for
+authentication. In this example, the controller machine shares the same
+CIDR as both of the target machines (<code>192.168.110.0/24</code>) and
+has IP address <code>192.168.110.7</code>. Therefore the controller
+machine will fall under a <code>private</code> policy which will
+automatically be created for the CIDR <code>192.168.110.0/24</code>. To
+prevent an SSH connection loss during the play, a <code>clear</code>
+policy for the controller machine has been added to the list of
+<code>policies</code>. Note that there is also an item in the
+<code>policies</code> list where the <code>cidr</code> is equal to
+<code>default</code>. This is because this playbook is overriding the
+default policy rule to make it <code>private</code> instead of
+<code>private-or-clear</code>.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion1.example.com</span><span class="kw">:</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cert_name</span><span class="kw">:</span><span class="at"> bastion1cert</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion2.example.com</span><span class="kw">:</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cert_name</span><span class="kw">:</span><span class="at"> bastion2cert</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bastion3.example.com</span><span class="kw">:</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cert_name</span><span class="kw">:</span><span class="at"> bastion3cert</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">vars</span><span class="kw">:</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">vpn_connections</span><span class="kw">:</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">opportunistic</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">auth_method</span><span class="kw">:</span><span class="at"> cert</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">policies</span><span class="kw">:</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="kw">-</span><span class="at"> </span><span class="fu">policy</span><span class="kw">:</span><span class="at"> private</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cidr</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="kw">-</span><span class="at"> </span><span class="fu">policy</span><span class="kw">:</span><span class="at"> private-or-clear</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cidr</span><span class="kw">:</span><span class="at"> 192.168.122.0/24</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="kw">-</span><span class="at"> </span><span class="fu">policy</span><span class="kw">:</span><span class="at"> private</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cidr</span><span class="kw">:</span><span class="at"> 192.168.110.0/24</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="kw">-</span><span class="at"> </span><span class="fu">policy</span><span class="kw">:</span><span class="at"> clear</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cidr</span><span class="kw">:</span><span class="at"> 192.168.110.7/32</span></span></code></pre></div>
+<h1 id="to-be-added-in-a-future-release">To be added in a future
+release</h1>
+<p>The following global variables will be added. Additionally,
+<code>pubkey</code> will be added as a valid option under
+<code>vpn_auth_method</code> to perform public key authentication
+without certificates (enforces SHA-2).</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>vpn_enc_alg</td>
+<td>VPN encryption algorithm to use. See <a
+href="#algorithms">Algorithms section</a> for acceptable values.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>vpn_auth_alg</td>
+<td>VPN authentication algorithm to use.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>SHA-2</td>
+</tr>
+<tr class="odd">
+<td>vpn_wait</td>
+<td>If tasks should wait for the VPN tunnel to be started up.</td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">no</td>
+<td>false</td>
+</tr>
+<tr class="even">
+<td>vpn_public_key_src</td>
+<td>Path to file on the controller host containing public key used by
+default.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>vpn_public_key_content</td>
+<td>Contains the public key used by default for public key
+authentication without certificates.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>The following variables will be added under the <a
+href="#hosts"><code>hosts</code></a> dictionary:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Required</th>
+<th>Default</th>
+<th style="text-align: center;">Libreswan Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#public_key">public_key_src</a></td>
+<td>Path to file on the controller host containing public key used by
+this host.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">leftrsasigkey/rightrsasigkey</td>
+</tr>
+<tr class="even">
+<td><a href="#public_key">public_key_content</a></td>
+<td>Contains the public key used by this host for public key
+authentication without certificates.</td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">no</td>
+<td>-</td>
+<td style="text-align: center;">leftrsasigkey/rightrsasigkey</td>
+</tr>
+</tbody>
+</table>
+<h2 id="shared_key">shared_key</h2>
+<p><code>shared_key_src</code> indicates the path to a file on the
+controller host containing a PSK to be copied to the
+<code>ipsec.secrets</code> file on the managed node.</p>
+<p><strong>Notes: It is recommended to not specify a pre-shared key,
+since the role will automatically generate a secure pre-shared key if
+none is provided by the user. If the user does wish to provide their own
+pre-shared key, the recommendation is to vault encrypt the value. See <a
+href="https://docs.ansible.com/ansible/latest/user_guide/vault.html">https://docs.ansible.com/ansible/latest/user_guide/vault.html</a>.
+Also, since it is still unclear how the role will allow users to
+specific pre-shared keys for each pair of hosts in a tunnel, it is
+reiterated that users should rely on the role's ability to generate
+secure pre-shared keys automatically.</strong></p>
+<h2 id="public_key">public_key</h2>
+<p><code>public_key_src</code> specifies a path to a file on the
+controller host containing the public key used by this host for public
+key authentication without certificates. Otherwise, the user can
+directly specify the public key for this host by populating
+<code>public_key_content</code>. <code>public_key_content</code> can
+also accept a CKAID or nickname for a public key in the NSS
+database.</p>
+<p>Note that <code>public_key_src</code> and
+<code>public_key_content</code> may also be specified as host-scoped
+Ansible variables. The variable names in this case will be
+<code>vpn_public_key_src</code> and
+<code>vpn_public_key_content</code>.</p>
+<p>If neither <code>public_key_src</code> nor
+<code>public_key_content</code> is populated, the role will generate key
+pairs for each host.</p>
+<h2 id="algorithms">Algorithms</h2>
+<h3 id="libreswan-algorithms">Libreswan algorithms</h3>
+<p>Minimum acceptable algorithms are AES, MODP2048 and SHA2.</p>
+<h1 id="license">License</h1>
+<p>MIT.</p>
+</article>
+</body>
+</html>
