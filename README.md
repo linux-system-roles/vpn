@@ -1,5 +1,9 @@
 # VPN System Role
 
+[![ansible-lint.yml](https://github.com/linux-system-roles/vpn/actions/workflows/ansible-lint.yml/badge.svg)](https://github.com/linux-system-roles/vpn/actions/workflows/ansible-lint.yml) [![ansible-test.yml](https://github.com/linux-system-roles/vpn/actions/workflows/ansible-test.yml/badge.svg)](https://github.com/linux-system-roles/vpn/actions/workflows/ansible-test.yml) [![codeql.yml](https://github.com/linux-system-roles/vpn/actions/workflows/codeql.yml/badge.svg)](https://github.com/linux-system-roles/vpn/actions/workflows/codeql.yml) [![python-unit-test.yml](https://github.com/linux-system-roles/vpn/actions/workflows/python-unit-test.yml/badge.svg)](https://github.com/linux-system-roles/vpn/actions/workflows/python-unit-test.yml) [![shellcheck.yml](https://github.com/linux-system-roles/vpn/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/linux-system-roles/vpn/actions/workflows/shellcheck.yml) [![markdownlint.yml](https://github.com/linux-system-roles/vpn/actions/workflows/markdownlint.yml/badge.svg)](https://github.com/linux-system-roles/vpn/actions/workflows/markdownlint.yml) [![woke.yml](https://github.com/linux-system-roles/vpn/actions/workflows/woke.yml/badge.svg)](https://github.com/linux-system-roles/vpn/actions/workflows/woke.yml)
+
+---
+
 A Role for managing setup and configuration of VPN tunnels.
 
 Basic usage:
