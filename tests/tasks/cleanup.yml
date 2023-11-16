@@ -20,6 +20,7 @@
     name: "{{ item }}"
     state: absent
   loop: "{{ __vpn_packages | d([]) }}"
+  when: not __vpn_is_ostree | d(false)
 
 - name: Clean up files
   vars:

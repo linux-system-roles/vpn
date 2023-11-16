@@ -33,15 +33,15 @@ uses the python3 built-in `ipaddress` module.
 ### Collection requirements
 
 The role requires the `firewall` role and the `selinux` role from the
-`fedora.linux_system_roles` collection, if `vpn_manage_firewall`
-and `vpn_manage_selinux` is set to true, respectively.
-(Please see also the variables in the [`Firewall and Selinux`](#firewall-and-selinux) section.)
+`fedora.linux_system_roles` collection, if `vpn_manage_firewall` and
+`vpn_manage_selinux` are set to true, respectively. (Please see also the
+variables in the [`Firewall and Selinux`](#firewall-and-selinux) section.) The
+role requires additional collections to manage `rpm-ostree` systems.
 
-If the `vpn` is a role from the `fedora.linux_system_roles`
-collection or from the Fedora RPM package, the requirement is already
-satisfied.
+If using the `vpn` role from the `fedora.linux_system_roles` collection or from
+the Fedora RPM package, the requirements are already satisfied.
 
-Otherwise, please run the following command line to install the collection.
+Otherwise, please run the following command line to install the collections.
 
 ```bash
 ansible-galaxy collection install -r meta/collection-requirements.yml
@@ -429,6 +429,10 @@ If neither `public_key_src` nor `public_key_content` is populated, the role will
 #### Libreswan algorithms
 
 Minimum acceptable algorithms are AES, MODP2048 and SHA2.
+
+## rpm-ostree
+
+See README-ostree.md
 
 ## License
 

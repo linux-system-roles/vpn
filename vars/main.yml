@@ -1,5 +1,6 @@
 ---
 __vpn_packages:
+  - iproute  # for default_ipvX facts
   - libreswan
 
 __vpn_services:

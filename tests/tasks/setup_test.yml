@@ -60,3 +60,20 @@
         path: "/etc/ipsec.d/policies/clear"
         state: touch
         mode: "0600"
+
+# ostree installs firewall by default because the image must
+# have all packages used by all tests - but for some tests
+# we need to ensure firewall isn't running
+- name: Ensure firewalld not running if not testing firewall
+  service:
+    name: firewalld
+    state: stopped
+    enabled: false
+  register: __firewalld_status
+  failed_when:
+    - __firewalld_status is failed
+    - not __no_such_service in __firewalld_status.msg
+  vars:
+    __no_such_service: >-
+      Could not find the requested service firewalld:
+  when: not vpn_manage_firewall | d(false)
