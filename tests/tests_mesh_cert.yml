@@ -209,3 +209,8 @@
         loop_var: __file_content
       vars:
         __fingerprint: "system_role:vpn"
+
+    - name: Cleanup
+      include_tasks: tasks/cleanup.yml
+      tags:
+        - tests::cleanup
