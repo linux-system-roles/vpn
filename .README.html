@@ -211,6 +211,7 @@ release</a>
 id="toc-libreswan-algorithms">Libreswan algorithms</a></li>
 </ul></li>
 </ul></li>
+<li><a href="#rpm-ostree" id="toc-rpm-ostree">rpm-ostree</a></li>
 <li><a href="#license" id="toc-license">License</a></li>
 </ul>
 </nav>
@@ -249,15 +250,16 @@ package on EL7 systems, or other systems that use python 2.7. On python
 <p>The role requires the <code>firewall</code> role and the
 <code>selinux</code> role from the
 <code>fedora.linux_system_roles</code> collection, if
-<code>vpn_manage_firewall</code> and <code>vpn_manage_selinux</code> is
+<code>vpn_manage_firewall</code> and <code>vpn_manage_selinux</code> are
 set to true, respectively. (Please see also the variables in the <a
 href="#firewall-and-selinux"><code>Firewall and Selinux</code></a>
-section.)</p>
-<p>If the <code>vpn</code> is a role from the
+section.) The role requires additional collections to manage
+<code>rpm-ostree</code> systems.</p>
+<p>If using the <code>vpn</code> role from the
 <code>fedora.linux_system_roles</code> collection or from the Fedora RPM
-package, the requirement is already satisfied.</p>
+package, the requirements are already satisfied.</p>
 <p>Otherwise, please run the following command line to install the
-collection.</p>
+collections.</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ansible-galaxy</span> collection install <span class="at">-r</span> meta/collection-requirements.yml</span></code></pre></div>
 <h1 id="top-level-variables">Top-level variables</h1>
@@ -1103,6 +1105,8 @@ pairs for each host.</p>
 <h2 id="algorithms">Algorithms</h2>
 <h3 id="libreswan-algorithms">Libreswan algorithms</h3>
 <p>Minimum acceptable algorithms are AES, MODP2048 and SHA2.</p>
+<h1 id="rpm-ostree">rpm-ostree</h1>
+<p>See README-ostree.md</p>
 <h1 id="license">License</h1>
 <p>MIT.</p>
 </article>
