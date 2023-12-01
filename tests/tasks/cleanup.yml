@@ -19,7 +19,10 @@
   package:
     name: "{{ item }}"
     state: absent
-  loop: "{{ __vpn_packages | d([]) }}"
+  loop: "{{ __vpn_packages | d([]) | difference(do_not_remove) | list }}"
+  vars:
+    # many packages depend on iproute - cannot remove
+    do_not_remove: [iproute]
   when: not __vpn_is_ostree | d(false)
 
 - name: Clean up files
