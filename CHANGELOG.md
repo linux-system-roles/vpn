@@ -1,6 +1,13 @@
 Changelog
 =========
 
+[1.6.1] - 2023-11-30
+--------------------
+
+### Other Changes
+
+- tests: do not remove iproute when cleaning up (#137)
+
 [1.6.0] - 2023-11-29
 --------------------
 
