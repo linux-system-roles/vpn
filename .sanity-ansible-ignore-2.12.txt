@@ -1,3 +1,2 @@
 plugins/filter/vpn_ipaddr.py no-unicode-literals!skip
 tests/vpn/unit/test_vpn_ipaddr.py no-unicode-literals!skip
-lsr_role2coll_extra_script-vpn shebang!skip
