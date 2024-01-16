@@ -1,6 +1,15 @@
 Changelog
 =========
 
+[1.6.3] - 2024-01-16
+--------------------
+
+### Other Changes
+
+- ci: Bump actions/setup-python from 4 to 5 (#142)
+- ci: support ansible-lint and ansible-test 2.16 (#144)
+- ci: Use supported ansible-lint action; run ansible-lint against the collection (#145)
+
 [1.6.2] - 2023-12-08
 --------------------
 
