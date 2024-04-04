@@ -1,6 +1,16 @@
 Changelog
 =========
 
+[1.6.4] - 2024-04-04
+--------------------
+
+### Other Changes
+
+- ci: Bump codecov/codecov-action from 3 to 4 (#147)
+- ci: fix python unit test - copy pytest config to tests/unit (#148)
+- ci: Bump ansible/ansible-lint from 6 to 24 (#149)
+- ci: Bump mathieudutour/github-tag-action from 6.1 to 6.2 (#151)
+
 [1.6.3] - 2024-01-16
 --------------------
 
@@ -77,7 +87,6 @@ Changelog
   - Add Postgresql version 15 into README
   
 - ci: fix mode of vars/main.yml for ansible-test (#50)
-
 
 [1.5.8] - 2023-07-19
 --------------------
