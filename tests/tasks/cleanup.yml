@@ -51,3 +51,9 @@
         state: absent
         path: "/etc/ipsec.d/{{ inventory_hostname }}-to-{{ item }}.secrets"
       with_items: "{{ tunnels }}"
+
+- name: Stop firewall
+  service:
+    name: firewalld
+    state: stopped
+  when: vpn_manage_firewall | bool
