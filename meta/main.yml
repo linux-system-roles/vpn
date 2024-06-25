@@ -17,6 +17,10 @@ galaxy_info:
         - "9"
   galaxy_tags:
     - centos
+    - el7
+    - el8
+    - el9
+    - el10
     - fedora
     - network
     - networking
