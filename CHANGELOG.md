@@ -1,6 +1,18 @@
 Changelog
 =========
 
+[1.6.6] - 2024-07-02
+--------------------
+
+### Bug Fixes
+
+- fix: add support for EL10 (#160)
+
+### Other Changes
+
+- test: stop firewall after tests that use firewall (#158)
+- ci: ansible-lint action now requires absolute directory (#159)
+
 [1.6.5] - 2024-06-11
 --------------------
 
