@@ -1,0 +1,26 @@
+DOCUMENTATION:
+  name: vpn_ipaddr
+  author: system roles team
+  version_added: 'historical'
+  short_description: Works like the regular ipaddr filter but limited to vpn use cases
+  description:
+    - IP address manipulations.
+    - Like ansible.netcommon.ipaddr but tailored to vpn use cases
+  positional: _input
+  options:
+    _input:
+      description: An IP address
+      type: string
+      required: true
+
+EXAMPLES: |
+  # Extract subnet from ip address
+  subnet: "{{ ip_with_prefix | vpn_ipaddr('subnet') }}"
+
+  # Check if given value is an IP address
+  is_ip_address: "{{ maybe_ip_value | vpn_ipaddr }}"
+
+RETURN:
+  _value:
+    description: The requested value.
+    type: string
