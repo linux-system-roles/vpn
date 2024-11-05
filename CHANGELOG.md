@@ -1,6 +1,13 @@
 Changelog
 =========
 
+[1.6.8] - 2024-11-05
+--------------------
+
+### Other Changes
+
+- docs: vpn_ipaddr filter requires vpn_ipaddr.yml for docs (#176)
+
 [1.6.7] - 2024-10-30
 --------------------
 
