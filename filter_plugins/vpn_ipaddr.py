@@ -211,7 +211,7 @@ def ipaddr(value, query="", version=False, alias="ipaddr"):
         # We will check the query below.
         pass
 
-    # This code checks if value maches the IP version the user wants, ie. if
+    # This code checks if value matches the IP version the user wants, ie. if
     # it's any version ("ipaddr()"), IPv4 ("ipv4()") or IPv6 ("ipv6()")
     # If version does not match, return False
     if version and v.version != version:
