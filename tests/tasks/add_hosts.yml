@@ -13,7 +13,7 @@
     vpn_connections: |
       {% set vpn_connections = [] %}
       {% set myhosts = {} %}
-      {% for host in groups['all'] %}
+      {% for host in (ansible_play_batch + groups['testing'] + [inventory_hostname]) | unique %}
       {%   if '/' in host %}
       {%     set _ = myhosts.__setitem__(__vpn_main_hostname, "") %}
       {%   else %}
