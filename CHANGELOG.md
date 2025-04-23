@@ -1,6 +1,22 @@
 Changelog
 =========
 
+[1.6.10] - 2025-04-23
+--------------------
+
+### Other Changes
+
+- ci: ansible-plugin-scan is disabled for now (#182)
+- ci: bump ansible-lint to v25; provide collection requirements for ansible-lint (#185)
+- ci: Check spelling with codespell (#186)
+- ci: Add test plan that runs CI tests and customize it for each role (#187)
+- ci: In test plans, prefix all relate variables with SR_ (#188)
+- ci: Fix bug with ARTIFACTS_URL after prefixing with SR_ (#189)
+- tests: for vpn_connections, use specific nodes instead of all (#190)
+- ci: several changes related to new qemu test, ansible-lint, python versions, ubuntu versions (#191)
+- ci: use tox-lsr 3.6.0; improve qemu test logging (#192)
+- ci: skip storage scsi, nvme tests in github qemu ci (#193)
+
 [1.6.9] - 2025-01-09
 --------------------
 
