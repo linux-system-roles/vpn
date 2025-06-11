@@ -20,18 +20,21 @@
 
     - name: Add extra options to check
       set_fact:
-        vpn_connections: |
-          {% for tunnel in vpn_connections %}
-          {%   set pols = [] %}
-          {%   set private_pol = {"policy": "private", "cidr": __vpn_private_host_cidr} %}
-          {%   set clear_pol = {"policy": "clear", "cidr": __vpn_clear_host_cidr} %}
-          {%   set _ = pols.append(private_pol) %}
-          {%   set _ = pols.append(clear_pol) %}
-          {%   set _ = tunnel.__setitem__("auth_method", "cert") %}
-          {%   set _ = tunnel.__setitem__("opportunistic", true) %}
-          {%   set _ = tunnel.__setitem__("policies", pols) %}
-          {% endfor %}
-          {{ vpn_connections }}
+        __new_vpn_connections: "{{ __new_vpn_connections | d([]) + [item | combine(new_tunnel)] | list }}"
+      loop: "{{ vpn_connections }}"
+      vars:
+        new_tunnel:
+          policies:
+            - policy: private
+              cidr: "{{ __vpn_private_host_cidr }}"
+            - policy: clear
+              cidr: "{{ __vpn_clear_host_cidr }}"
+          auth_method: cert
+          opportunistic: true
+
+    - name: Reset vpn_connections
+      set_fact:
+        vpn_connections: "{{ __new_vpn_connections }}"
 
     - name: Add cert_name fact to controller
       set_fact:
@@ -174,7 +177,7 @@
         __vpn_success: false
       when: >-
         __vpn_register_private_or_clear['content'] | b64decode
-        is not search(current_subnet) or
+        is not search(__vpn_current_subnet) or
         __vpn_register_private_or_clear['content'] | b64decode
         is not search(__vpn_dynamic_hosts_sample_cidr)
 

@@ -1,6 +1,6 @@
 {{ ansible_managed | comment }}
 {{ "system_role:vpn" | comment(prefix="", postfix="") }}
-{% for policy in policies %}
+{% for policy in __vpn_policies %}
 {%   if policy.policy == item %}
 {{ policy.cidr }}
 {%   endif %}
