@@ -32,50 +32,45 @@
         - vpn_ensure_openssl | d(true)
         - not "/usr/bin/openssl" is exists
 
-    - name: Enforce default auth method as needed
+    - name: Ensure __vpn_connections_fixed is defined and empty
       set_fact:
-        vpn_connections: |
-          {% for tunnel in vpn_connections %}
-          {%   set _ = tunnel.__setitem__(
-            "auth_method", tunnel.auth_method | d(vpn_auth_method)
-            ) %}
-          {% endfor %}
-          {{ vpn_connections }}
+        __vpn_connections_fixed: []
 
+    - name: Add missing fields to tunnel items
+      set_fact:
+        __vpn_connections_fixed: "{{ __vpn_connections_fixed |
+          union([item | combine(fixed_item) | combine(_host_item)]) | list }}"
+      loop: "{{ vpn_connections }}"
+      vars:
+        fixed_item:
+          auth_method: "{{ item.auth_method | d(vpn_auth_method) }}"
+          opportunistic: "{{ item.opportunistic | d(vpn_opportunistic) }}"
+        _hosts: "{{ item.hosts if item.hosts | d({}) | length > 1
+            else (item.hosts | combine(_host)) if item.hosts | d({}) | length == 1
+            else {} }}"
+        _host_item: "{{ {'hosts': _hosts} if _hosts | length > 0 else {} }}"
+        _host: "{{ {inventory_hostname: ''} }}"
+      no_log: true
+
+    # any tunnel definition that is not an opportunistic tunnel should have
+    # hosts defined and not be empty
     - name: Make sure that the hosts list is not empty
       vars:
-        # noqa jinja[spacing]
-        failure: >-
-          {% for tunnel in vpn_connections %}
-          {%-  if not tunnel.opportunistic | d(vpn_opportunistic) -%}
-          {%-    if not 'hosts' in tunnel or not tunnel.hosts -%}
-          True
-          {%-    endif -%}
-          {%-  endif -%}
-          {% endfor %}
+        count_not_opps: "{{ __vpn_connections_fixed | selectattr('opportunistic') |
+          list | length }}"
+        count_has_hosts: "{{ __vpn_connections_fixed | rejectattr('opportunistic') |
+          selectattr('hosts', 'defined') | selectattr('hosts') | list | length }}"
       fail:
         msg: list of hosts is empty for one or more tunnels
-      when: '"True" in failure'
-
-    - name: Make sure there is at least one pair of hosts in each connection
-      set_fact:
-        vpn_connections: |
-          {% set new_vpn_connections = [] %}
-          {% for tunnel in vpn_connections %}
-          {%   if not tunnel.opportunistic | d(vpn_opportunistic) %}
-          {%     if tunnel.hosts | length == 1 %}
-          {%       set _ = tunnel.hosts.update({inventory_hostname: null}) %}
-          {%     endif %}
-          {%   endif %}
-          {%   set _ = new_vpn_connections.append(tunnel) %}
-          {% endfor %}
-          {{ new_vpn_connections }}
+      when:
+        - __vpn_connections_fixed | length > 0
+        - count_not_opps == count_has_hosts
 
     - name: Ensure cert_names are populated when auth_method is cert
       vars:
         # noqa jinja[spacing]
         failure: >-
-          {% for tunnel in vpn_connections %}
+          {% for tunnel in __vpn_connections_fixed %}
           {%   if tunnel.auth_method == 'cert' %}
           {%     if tunnel.opportunistic | d(vpn_opportunistic) %}
           {%       for host in ansible_play_hosts %}
@@ -93,42 +88,24 @@
           {%       endfor %}
           {%     endif %}
           {%   endif %}
+          {% else %}
+          False
           {% endfor %}
       fail:
         msg: cert_name is missing or empty for one or more hosts in a tunnel
       when: '"True" in failure'
 
-    - name: Generate PSKs or use provided shared_key_content
-      no_log: true
+    - name: Reset __vpn_psks
       set_fact:
-        # noqa jinja[spacing]
-        __vpn_psks: |
-          {% set __vpn_psks = {} %}
-          {% for tunnel in vpn_connections %}
-          {%   if not tunnel.opportunistic | d(vpn_opportunistic) %}
-          {%     set __vpn_idx = loop.index0 %}
-          {%     if tunnel.auth_method == 'psk' %}
-          {%       set _ = __vpn_psks.__setitem__(__vpn_idx, {}) %}
-          {%       for host1, host2 in tunnel.hosts.keys() | combinations(2) %}
-          {%         if not host1 in __vpn_psks[__vpn_idx] %}
-          {%           set _ = __vpn_psks[__vpn_idx].__setitem__(host1, {}) %}
-          {%         endif %}
-          {%         if not host2 in __vpn_psks[__vpn_idx] %}
-          {%           set _ = __vpn_psks[__vpn_idx].__setitem__(host2, {}) %}
-          {%         endif %}
-          {%         if 'shared_key_content' in tunnel %}
-          {%           set val = {'pre_shared_key':tunnel['shared_key_content']} %}
-          {%         else %}
-          {%           set psk = lookup('lines', 'openssl rand -base64 48') %}
-          {%           set val = {'pre_shared_key':psk} %}
-          {%-        endif -%}
-          {%         set _ = __vpn_psks[__vpn_idx][host1].__setitem__(host2, val) %}
-          {%         set _ = __vpn_psks[__vpn_idx][host2].__setitem__(host1, val) %}
-          {%       endfor %}
-          {%     endif %}
-          {%   endif %}
-          {% endfor %}
-          {{ __vpn_psks }}
+        __vpn_psks: []
+
+    - name: Get PSKs for each tunnel
+      include_tasks: vpn_get_psks_for_tunnel.yml
+      loop: "{{ __vpn_connections_fixed }}"
+      loop_control:
+        loop_var: tunnel
+        index_var: tunnel_idx
+      no_log: true
 
 # The run_once host might not be the first one in hostvars - we do not have
 # a good way to know which host in hostvars was the run_once, and it might
@@ -144,20 +121,10 @@
 
 - name: Build host-to-host tunnels
   vars:
-    tunnels: |
-      {% set unique_tunnels = [] %}
-      {% for tunnel in vpn_connections %}
-      {%   if not tunnel.opportunistic | d(vpn_opportunistic) %}
-      {%     if inventory_hostname in tunnel.hosts %}
-      {%       for node in tunnel.hosts %}
-      {%         if node != inventory_hostname %}
-      {%           set _ = unique_tunnels.append(node) %}
-      {%         endif %}
-      {%       endfor %}
-      {%     endif %}
-      {%   endif %}
-      {% endfor %}
-      {{ unique_tunnels | unique }}
+    tunnels: "{{ __vpn_connections_fixed | rejectattr('opportunistic') |
+      selectattr('hosts', 'contains', inventory_hostname) | map(attribute='hosts') |
+      map('dict2items') | flatten | map(attribute='key') |
+      flatten | reject('match', '^' ~ inventory_hostname ~ '$') | unique | list }}"
   block:
     - name: Create ipsec.conf files
       template:
@@ -174,6 +141,7 @@
       loop: "{{ tunnels }}"
 
     - name: Create ipsec.secrets files
+      no_log: true
       template:
         src: "{{ vpn_provider }}-host-to-host.secrets.j2"
         dest: "/etc/ipsec.d/{{ inventory_hostname }}-to-{{ item.item }}.secrets"
@@ -186,7 +154,7 @@
 - name: Build opportunistic configuration
   include_tasks: tasks/mesh_conf.yml
   when: conn.opportunistic | d(vpn_opportunistic)
-  loop: "{{ vpn_connections }}"
+  loop: "{{ __vpn_connections_fixed }}"
   loop_control:
     loop_var: conn
   no_log: true

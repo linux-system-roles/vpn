@@ -1,0 +1,21 @@
+- name: Generate PSKs when not opportunistic and using psk
+  when:
+    - not tunnel.opportunistic
+    - tunnel.auth_method == "psk"
+  block:
+    - name: Reset __vpn_host_pairs
+      set_fact:
+        __vpn_host_pairs: []
+
+    - name: Generate host list for PSKs
+      set_fact:
+        __vpn_host_pairs: "{{ __vpn_host_pairs | d([]) + [{'host_pairs': item, 'pre_shared_key': pre_shared_key}] | list }}"
+      loop: "{{ tunnel.hosts | d({}) | dict2items | flatten | map(attribute='key') | combinations(2) | list }}"
+      vars:
+        pre_shared_key: "{{ tunnel.shared_key_content | d(lookup('lines', 'openssl rand -base64 48')) }}"
+      no_log: true
+
+    - name: Generate PSKs or use provided shared_key_content
+      set_fact:
+        __vpn_psks: "{{ __vpn_psks | d({}) | combine({tunnel_idx: __vpn_host_pairs}) }}"
+      no_log: true
