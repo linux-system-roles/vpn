@@ -1,0 +1,18 @@
+---
+- name: Init __hosts
+  set_fact:
+    __hosts: "{{ tunnel.hosts }}"
+
+- name: Set __tunnel_hosts
+  set_fact:
+    __hosts: "{{ __hosts | combine({item.key: __cert}) }}"
+  loop: "{{ tunnel.hosts | dict2items | list }}"
+  loop_control:
+    index_var: host_idx
+  vars:
+    __cert:
+      cert_name: "{{ 'cert%d' | format(host_idx) }}"
+
+- name: Update __tunnel_hosts
+  set_fact:
+    __tunnel_hosts: "{{ __tunnel_hosts | combine({tunnel_idx: __hosts}) }}"

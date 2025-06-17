@@ -14,12 +14,16 @@
 
     - name: Add extra options and unmanaged host
       set_fact:
-        vpn_connections: |
-          {% for tunnel in vpn_connections %}
-          {%   set temp_dict = {'hostname': __vpn_unmanaged_hostname} %}
-          {%   set _ = tunnel.hosts.__setitem__(__vpn_unmanaged_host, temp_dict) %}
-          {% endfor %}
-          {{ vpn_connections }}
+        __new_vpn_connections: "{{ __new_vpn_connections | d([]) + [new_tunnel] | list }}"
+      loop: "{{ vpn_connections }}"
+      vars:
+        new_hosts: "{{ item.hosts |
+          combine({__vpn_unmanaged_host: {'hostname': __vpn_unmanaged_hostname}}) }}"
+        new_tunnel: "{{ item | combine({'hosts': new_hosts}) }}"
+
+    - name: Reset vpn_connections
+      set_fact:
+        vpn_connections: "{{ __new_vpn_connections }}"
 
     - name: Use vpn role
       include_role:

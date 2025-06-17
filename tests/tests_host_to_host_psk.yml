@@ -15,11 +15,10 @@
 
     - name: Add extra options to check
       set_fact:
-        vpn_connections: |
-          {% for tunnel in vpn_connections %}
-          {%   set _ = tunnel.__setitem__("auto", "start") %}
-          {% endfor %}
-          {{ vpn_connections }}
+        vpn_connections: "{{ vpn_connections | map('combine', fixed_item) | list }}"
+      vars:
+        fixed_item:
+          auto: start
 
     - name: Use vpn role
       include_role:

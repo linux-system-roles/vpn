@@ -6,14 +6,21 @@
       include_role:
         name: linux-system-roles.vpn
         public: true
+
     - name: Assert that the role declares all parameters in defaults
       assert:
-        that: "{{ item }} is defined"
-      loop:
-        - vpn_provider
-        - vpn_auth_method
-        - vpn_regen_keys
-        - vpn_connections
+        that: vpn_vars_vals | length == vpn_vars | length
+      vars:
+        vpn_vars:
+          - vpn_provider
+          - vpn_auth_method
+          - vpn_regen_keys
+          - vpn_connections
+          - vpn_opportunistic
+          - vpn_default_policy
+          - vpn_manage_firewall
+          - vpn_manage_selinux
+        vpn_vars_vals: "{{ lookup('vars', *vpn_vars) }}"
 
     - name: Check the firewall and the selinux port status
       include_tasks: tasks/check_firewall_selinux.yml

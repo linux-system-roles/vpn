@@ -27,18 +27,10 @@
 
 - name: Clean up files
   vars:
-    tunnels: |
-      {% set unique_tunnels = [] %}
-      {% for connection in vpn_connections | d([]) %}
-      {%   if inventory_hostname in connection.hosts %}
-      {%     for node in connection.hosts %}
-      {%       if node != inventory_hostname %}
-      {%         set _ = unique_tunnels.append(node) %}
-      {%       endif %}
-      {%     endfor %}
-      {%   endif %}
-      {% endfor %}
-      {{ unique_tunnels | unique }}
+    tunnels: "{{ __vpn_connections_fixed | rejectattr('opportunistic') |
+      selectattr('hosts', 'contains', inventory_hostname) | map(attribute='hosts') |
+      map('dict2items') | flatten | map(attribute='key') |
+      flatten | reject('match', '^' ~ inventory_hostname ~ '$') | unique | list }}"
   block:
     - name: Remove ipsec.conf files
       file:

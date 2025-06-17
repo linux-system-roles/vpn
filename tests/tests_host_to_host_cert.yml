@@ -10,19 +10,35 @@
     - name: Set up test environment
       include_tasks: tasks/setup_test.yml
 
+    - name: Reset __tunnel_hosts
+      set_fact:
+        __tunnel_hosts: {}
+
+    # sets __tunnel_hosts - the hosts element in each tunnel
+    - name: Fixup hosts
+      include_tasks: tasks/fixup_hosts.yml
+      loop: "{{ vpn_connections }}"
+      loop_control:
+        loop_var: tunnel
+        index_var: tunnel_idx
+
+    # need extra task file to iterate over hosts per tunnel
     - name: Add cert options to check
       set_fact:
-        vpn_connections: |
-          {% for tunnel in vpn_connections %}
-          {%   set _ = tunnel.__setitem__("auth_method", "cert") %}
-          {%   set _ = tunnel.__setitem__("auto", "start") %}
-          {%   set _ = tunnel.__setitem__("name", "tunnel%d" | format(loop.index)) %}
-          {%   for host in tunnel.hosts %}
-          {%     set temp_dict = {'cert_name': 'cert' + loop.index | string} %}
-          {%     set _ = tunnel.hosts.__setitem__(host, temp_dict) %}
-          {%   endfor %}
-          {% endfor %}
-          {{ vpn_connections }}
+        __new_vpn_connections: "{{ __new_vpn_connections | d([]) + [item | combine(fixed_item)] | list }}"
+      loop: "{{ vpn_connections }}"
+      loop_control:
+        index_var: loop_idx
+      vars:
+        fixed_item:
+          auth_method: cert
+          auto: start
+          name: "{{ 'tunnel%d' | format(loop_idx) }}"
+          hosts: "{{ item.hosts | combine(__tunnel_hosts[loop_idx]) }}"
+
+    - name: Reset vpn_connections
+      set_fact:
+        vpn_connections: "{{ __new_vpn_connections }}"
 
     - name: Save certname for main host
       set_fact:

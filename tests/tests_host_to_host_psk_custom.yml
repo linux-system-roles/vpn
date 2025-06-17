@@ -28,14 +28,8 @@
 
     - name: Add extra options to check
       set_fact:
-        vpn_connections: |
-          {% for tunnel in vpn_connections %}
-          {%   set _ = tunnel.update(__tunnel_params) %}
-          {%   set _ = tunnel["hosts"].__setitem__(__hostmain, __dict) %}
-          {%   set _ = tunnel["hosts"].__setitem__(__host1, __dict) %}
-          {%   set _ = tunnel["hosts"].__setitem__(__host2, __dict) %}
-          {% endfor %}
-          {{ vpn_connections }}
+        __new_vpn_connections: "{{ __new_vpn_connections | d([]) + [new_tunnel] | list }}"
+      loop: "{{ vpn_connections }}"
       vars:
         __tunnel_params:
           auto: start
@@ -50,12 +44,18 @@
           dpdtimeout: "{{ __vpn_dpdtimeout }}"
           dpdaction: "{{ __vpn_dpdaction }}"
           leftupdown: "{{ __vpn_leftupdown }}"
-        __hostmain: mainhost.local
-        __host1: host01.local
-        __host2: host02.local
+        new_hosts:
+          mainhost.local: "{{ __dict }}"
+          host01.local: "{{ __dict }}"
+          host02.local: "{{ __dict }}"
+        new_tunnel: "{{ item | combine(__tunnel_params) | combine({'hosts': new_hosts}) }}"
         __dict:
           leftid: "{{ __vpn_leftid }}"
           rightid: "{{ __vpn_rightid }}"
+
+    - name: Reset vpn_connections
+      set_fact:
+        vpn_connections: "{{ __new_vpn_connections }}"
 
     - name: Use vpn role
       include_role:

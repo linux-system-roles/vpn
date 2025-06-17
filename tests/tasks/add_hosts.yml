@@ -4,23 +4,15 @@
     name: "{{ 'host%02x.local' | format(item) }}"
     groups: testing
     cert_name: "{{ __vpn_dynamic_hosts_sample_cert }}"
-    current_ip: "{{ __vpn_dynamic_hosts_sample_ip }}"
-    current_subnet: "{{ __vpn_dynamic_hosts_sample_cidr }}"
+    __vpn_current_ip: "{{ __vpn_dynamic_hosts_sample_ip }}"
+    __vpn_current_subnet: "{{ __vpn_dynamic_hosts_sample_cidr }}"
   loop: "{{ range(1, __vpn_num_hosts + 1) | list }}"
 
 - name: Create mock vpn_connections
   set_fact:
-    vpn_connections: |
-      {% set vpn_connections = [] %}
-      {% set myhosts = {} %}
-      {% for host in (ansible_play_batch + groups['testing'] + [inventory_hostname]) | unique %}
-      {%   if '/' in host %}
-      {%     set _ = myhosts.__setitem__(__vpn_main_hostname, "") %}
-      {%   else %}
-      {%     set _ = myhosts.__setitem__(host, "") %}
-      {%   endif %}
-      {% endfor %}
-      {% set empty_host = {} %}
-      {% set _ = empty_host.__setitem__('hosts', myhosts) %}
-      {% set _ = vpn_connections.append(empty_host) %}
-      {{ vpn_connections }}
+    vpn_connections:
+      - hosts: "{{ myhosts }}"
+  vars:
+    myhosts: "{{ dict(hostlist | product(['']) | list) }}"
+    hostlist: "{{ (ansible_play_batch + groups['testing'] + [inventory_hostname]) | unique |
+      map('regex_replace', '^.*/.*', __vpn_main_hostname) | list }}"
