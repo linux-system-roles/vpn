@@ -25,6 +25,8 @@
     # need extra task file to iterate over hosts per tunnel
     - name: Add cert options to check
       set_fact:
+        # not really invalid - see https://github.com/ansible/ansible-lint/issues/4702
+        # noqa jinja[invalid]
         __new_vpn_connections: "{{ __new_vpn_connections | d([]) + [item | combine(fixed_item)] | list }}"
       loop: "{{ vpn_connections }}"
       loop_control:
