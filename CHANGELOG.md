@@ -1,6 +1,21 @@
 Changelog
 =========
 
+[1.6.12] - 2025-10-21
+--------------------
+
+### Other Changes
+
+- ci: Bump actions/checkout from 4 to 5 (#202)
+- ci: rollout several recent changes to CI testing (#204)
+- ci: support openSUSE Leap in qemu/kvm test matrix (#205)
+- ci: use the new epel feature to enable EPEL for testing farm (#206)
+- refactor: disable ansible-lint invalid jinja error (#207)
+- ci: use tox-lsr 3.12.0 for osbuild_config.yml feature (#209)
+- ci: use JSON format for __bootc_validation (#210)
+- ci: Bump actions/github-script from 7 to 8 (#211)
+- ci: Bump actions/setup-python from 5 to 6 (#212)
+
 [1.6.11] - 2025-07-02
 --------------------
 
