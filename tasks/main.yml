@@ -24,6 +24,8 @@
     # NOTE: Trying to accomplish this without using sudo on the controller
     # Basically, any task, even package_facts:, will use sudo if using
     # become=true - so just use "exists" test to check for /usr/bin/openssl
+    # If you really want the role to install openssl on the controller, you must run
+    # ansible with become=true e.g. ansible-playbook --become ...
     - name: Ensure OpenSSL is installed on the controller
       package:
         name: openssl

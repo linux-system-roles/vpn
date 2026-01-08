@@ -6,7 +6,7 @@
   block:
     - name: Set current IP fact for each host
       set_fact:
-        __vpn_current_ip: "{{ ansible_default_ipv4.address | d(ansible_default_ipv6.address) }}"
+        __vpn_current_ip: "{{ ansible_facts['default_ipv4'].address | d(ansible_facts['default_ipv6'].address) }}"
 
     - name: Set IP with prefix register
       shell: |-
