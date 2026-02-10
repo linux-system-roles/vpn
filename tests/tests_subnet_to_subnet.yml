@@ -5,7 +5,7 @@
   vars_files:
     - './vars/main.yml'
   vars:
-    __vpn_num_hosts: 1
+    __vpn_num_hosts: 2
     # see RFC 5737, the following CIDRs are provided for documentation/testing use
     __vpn_subnets:
       - '192.0.2.0/24'
@@ -24,7 +24,16 @@
       vars:
         new_tunnel:
           hosts:
+            mainhost.local:
+              hostname: 1.1.1.0
+              leftid: leftidmainhost
             host01.local:
+              hostname: 1.1.1.1
+              rightid: rightidhost01
+              subnets: "{{ __vpn_subnets }}"
+            host02.local:
+              hostname: 1.1.1.2
+              rightid: rightidhost02
               subnets: "{{ __vpn_subnets }}"
 
     - name: Reset vpn_connections

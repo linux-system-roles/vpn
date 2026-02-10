@@ -13,9 +13,9 @@
 conn {{ tunnel.name ~ '-' if 'name' in tunnel and tunnel.name else '' }}{{ host }}-to-{{ otherhost }}
   left={{ host }}
   leftid={{ host | vpn_ipaddr | ternary('','@') }}{{ leftid }}
-{%         if tunnel.hosts[host] is mapping and 'subnets' in tunnel.hosts[host] %}
+{%         if tunnel.hosts[thishost] is mapping and 'subnets' in tunnel.hosts[thishost] %}
   leftsubnets={
-{%-          for subnet in tunnel.hosts[host].subnets -%}
+{%-          for subnet in tunnel.hosts[thishost].subnets -%}
 {{ subnet }}
 {%- if not loop.last -%},{%- endif -%}
 {%-          endfor -%}
