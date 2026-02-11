@@ -1,6 +1,20 @@
 Changelog
 =========
 
+[1.6.16] - 2026-02-11
+--------------------
+
+### Bug Fixes
+
+- fix: use host for dict key in tunnel - hostname is not a dict key (#236)
+
+### Other Changes
+
+- ci: Bump ansible/ansible-lint from 25 to 26 (#231)
+- ci: skip most CI checks if title contains citest skip [citest_skip] (#232)
+- ci: ansible-lint - remove .collection directory from converted collection [citest_skip] (#234)
+- ci: tox-lsr version 3.15.0 [citest_skip] (#235)
+
 [1.6.15] - 2026-01-13
 --------------------
 
