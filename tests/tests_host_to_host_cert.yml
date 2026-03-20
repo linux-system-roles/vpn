@@ -47,9 +47,9 @@
         __vpn_main_certname: "{{ vpn_connections[0]['hosts'][__vpn_main_hostname]['cert_name'] }}"
 
     - name: Use vpn role
-      include_role:
-        name: linux-system-roles.vpn
-        public: true
+      include_tasks: tasks/run_role_with_clear_facts.yml
+      vars:
+        __sr_public: true
 
     - name: Assert file existence
       include_tasks: tasks/assert_conf_secrets_files_exist.yml

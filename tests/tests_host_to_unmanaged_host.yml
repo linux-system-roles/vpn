@@ -26,9 +26,9 @@
         vpn_connections: "{{ __new_vpn_connections }}"
 
     - name: Use vpn role
-      include_role:
-        name: linux-system-roles.vpn
-        public: true
+      include_tasks: tasks/run_role_with_clear_facts.yml
+      vars:
+        __sr_public: true
 
     - name: Stat unmanaged host conf file path
       stat:
