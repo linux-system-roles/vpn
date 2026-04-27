@@ -1,2 +1,3 @@
 plugins/filter/vpn_ipaddr.py no-unicode-literals!skip
 tests/vpn/unit/test_vpn_ipaddr.py no-unicode-literals!skip
+plugins/modules/sr_fingerprint.py validate-modules:missing-gplv3-license
