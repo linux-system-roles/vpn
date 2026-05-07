@@ -242,6 +242,7 @@ The firewall must be configured to allow traffic on 500/UDP, 4500/UDP, and 4500/
 |---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----:|:--------:|---------|
 | vpn_manage_firewall | If true, enable the IPsec ports, 500/UDP, 4500/UDP, and 4500/TCP for the IKE, ESP, and AH protocols using the firewall role. If false, the `vpn role` does not manage the firewall.                | bool | no       | false    |
 | vpn_manage_selinux  | If true, manage the IPsec ports, 500/UDP, 4500/UDP, and 4500/TCP using the selinux role. If false, the `vpn role` does not manage the selinux.                                                     | bool | no       | false    |
+| vpn_secure_logging  | If true, suppress potentially sensitive output from tasks that handle credentials, secrets, and other sensitive data. Set to false for debugging issues with credential handling or secret management, but be aware this may expose sensitive information in logs. | bool | no       | true     |
 
 NOTE: The firewall configuration is prerequisite for managing selinux. If the
 firewall is not installed, managing selinux policy is skipped.

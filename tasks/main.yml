@@ -52,7 +52,7 @@
             else {} }}"
         _host_item: "{{ {'hosts': _hosts} if _hosts | length > 0 else {} }}"
         _host: "{{ {inventory_hostname: ''} }}"
-      no_log: true
+      no_log: "{{ vpn_secure_logging }}"
 
     # any tunnel definition that is not an opportunistic tunnel should have
     # hosts defined and not be empty
@@ -107,7 +107,7 @@
       loop_control:
         loop_var: tunnel
         index_var: tunnel_idx
-      no_log: true
+      no_log: "{{ vpn_secure_logging }}"
 
 # The run_once host might not be the first one in hostvars - we do not have
 # a good way to know which host in hostvars was the run_once, and it might
@@ -115,7 +115,7 @@
 # So, find the values for the first hostvars that has __vpn_psks set
 # and use that value.
 - name: Set psks for hosts
-  no_log: true
+  no_log: "{{ vpn_secure_logging }}"
   vars:
     __vpn_psk_hostvars: "{{ hostvars.values() | selectattr('__vpn_psks', 'defined') | first }}"
   set_fact:
@@ -143,7 +143,7 @@
       loop: "{{ tunnels }}"
 
     - name: Create ipsec.secrets files
-      no_log: true
+      no_log: "{{ vpn_secure_logging }}"
       template:
         src: "{{ vpn_provider }}-host-to-host.secrets.j2"
         dest: "/etc/ipsec.d/{{ inventory_hostname }}-to-{{ item.item }}.secrets"
@@ -159,7 +159,7 @@
   loop: "{{ __vpn_connections_fixed }}"
   loop_control:
     loop_var: conn
-  no_log: true
+  no_log: "{{ vpn_secure_logging }}"
 
 - name: Record role success fingerprint
   sr_fingerprint:
