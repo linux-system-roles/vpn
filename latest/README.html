@@ -801,6 +801,16 @@ manage the selinux.</td>
 <td style="text-align: center;">no</td>
 <td>false</td>
 </tr>
+<tr>
+<td>vpn_secure_logging</td>
+<td>If true, suppress potentially sensitive output from tasks that
+handle credentials, secrets, and other sensitive data. Set to false for
+debugging issues with credential handling or secret management, but be
+aware this may expose sensitive information in logs.</td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">no</td>
+<td>true</td>
+</tr>
 </tbody>
 </table>
 <p>NOTE: The firewall configuration is prerequisite for managing
