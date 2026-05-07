@@ -1,6 +1,17 @@
 Changelog
 =========
 
+[1.8.0] - 2026-05-07
+--------------------
+
+### New Features
+
+- feat: new variable `vpn_secure_logging` defaulting to `true` (#253)
+
+### Other Changes
+
+- ci: Bump actions/github-script from 8 to 9 (#252)
+
 [1.7.0] - 2026-04-28
 --------------------
 
