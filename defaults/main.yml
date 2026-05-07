@@ -13,3 +13,7 @@ vpn_manage_firewall: false
 # If true, manage the IPsec ports, 500/UDP, 4500/UDP, and 4500/TCP
 # using# the selinux role.
 vpn_manage_selinux: false
+
+# If true, suppress potentially sensitive output from tasks that
+# handle credentials, secrets, and other sensitive data.
+vpn_secure_logging: true

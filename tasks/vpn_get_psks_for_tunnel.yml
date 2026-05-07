@@ -13,9 +13,9 @@
       loop: "{{ tunnel.hosts | d({}) | dict2items | flatten | map(attribute='key') | combinations(2) | list }}"
       vars:
         pre_shared_key: "{{ tunnel.shared_key_content | d(lookup('lines', 'openssl rand -base64 48')) }}"
-      no_log: true
+      no_log: "{{ vpn_secure_logging }}"
 
     - name: Generate PSKs or use provided shared_key_content
       set_fact:
         __vpn_psks: "{{ __vpn_psks | d({}) | combine({tunnel_idx: __vpn_host_pairs}) }}"
-      no_log: true
+      no_log: "{{ vpn_secure_logging }}"
