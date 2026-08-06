@@ -1,6 +1,24 @@
 Changelog
 =========
 
+[1.9.0] - 2026-08-06
+--------------------
+
+### New Features
+
+- feat: Write roles fingerprints to /var/log/sysroles.jsonl [citest_skip] (#269)
+
+### Other Changes
+
+- ci: use gha checkout v7, codecov v7 [citest_skip] (#260)
+- ci: Use our own pr_title_lint.py instead of NPM commitlint [citest_skip] (#261)
+- ci: bump tox-lsr version to 3.20.0 to fix tox 4.58 api breakage [citest_skip] (#262)
+- ci: Add support for Fedora 44 and drop Fedora 42 - use ansible-core 2.21 [citest_skip] (#264)
+- ci: Bump github/codeql-action from 4 to 4.37.3 (#265)
+- ci: Bump actions/setup-python from 6 to 7 (#266)
+- ci: ensure dependabot updates do not invoke ci tests [citest_skip] (#267)
+- ci: [citest_skip] Bump github/codeql-action from 4.37.3 to 4.37.4 (#268)
+
 [1.8.1] - 2026-06-24
 --------------------
 
