@@ -27,10 +27,12 @@ jobs:
             .pandoc_template.html5
           sparse-checkout-cone-mode: false
       - name: Set RELEASE_VERSION based on whether run on release or on push
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           set -euxo pipefail
           if [ ${{ github.event_name }} = release ]; then
-            tag_name="${{ github.event.release.tag_name }}"
+            tag_name="$RELEASE_TAG"
             if [[ "$tag_name" =~ ^[0-9][.][0-9][.][0-9]$ ]]; then
               echo "RELEASE_VERSION=$tag_name" >> $GITHUB_ENV
             else
@@ -105,10 +107,12 @@ jobs:
           ref: docs
           persist-credentials: true  # needed for commit and push
       - name: Set RELEASE_VERSION based on whether run on release or on push
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           set -euxo pipefail
           if [ ${{ github.event_name }} = release ]; then
-            tag_name="${{ github.event.release.tag_name }}"
+            tag_name="$RELEASE_TAG"
             if [[ "$tag_name" =~ ^[0-9][.][0-9][.][0-9]$ ]]; then
               echo "RELEASE_VERSION=$tag_name" >> $GITHUB_ENV
             else
