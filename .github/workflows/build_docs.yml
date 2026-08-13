@@ -30,7 +30,12 @@ jobs:
         run: |
           set -euxo pipefail
           if [ ${{ github.event_name }} = release ]; then
-            echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+            tag_name="${{ github.event.release.tag_name }}"
+            if [[ "$tag_name" =~ ^[0-9][.][0-9][.][0-9]$ ]]; then
+              echo "RELEASE_VERSION=$tag_name" >> $GITHUB_ENV
+            else
+              echo "RELEASE_VERSION=${{ github.event.release.id }}" >> $GITHUB_ENV
+            fi
           elif [ ${{ github.event_name }} = push ]; then
             echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
           else
@@ -103,7 +108,12 @@ jobs:
         run: |
           set -euxo pipefail
           if [ ${{ github.event_name }} = release ]; then
-            echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+            tag_name="${{ github.event.release.tag_name }}"
+            if [[ "$tag_name" =~ ^[0-9][.][0-9][.][0-9]$ ]]; then
+              echo "RELEASE_VERSION=$tag_name" >> $GITHUB_ENV
+            else
+              echo "RELEASE_VERSION=${{ github.event.release.id }}" >> $GITHUB_ENV
+            fi
           elif [ ${{ github.event_name }} = push ]; then
             echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
           else
