@@ -33,7 +33,7 @@ jobs:
           set -euxo pipefail
           if [ ${{ github.event_name }} = release ]; then
             tag_name="$RELEASE_TAG"
-            if [[ "$tag_name" =~ ^[0-9][.][0-9][.][0-9]$ ]]; then
+            if [[ "$tag_name" =~ ^[0-9]+[.][0-9]+[.][0-9]+$ ]]; then
               echo "RELEASE_VERSION=$tag_name" >> $GITHUB_ENV
             else
               echo "RELEASE_VERSION=${{ github.event.release.id }}" >> $GITHUB_ENV
@@ -113,7 +113,7 @@ jobs:
           set -euxo pipefail
           if [ ${{ github.event_name }} = release ]; then
             tag_name="$RELEASE_TAG"
-            if [[ "$tag_name" =~ ^[0-9][.][0-9][.][0-9]$ ]]; then
+            if [[ "$tag_name" =~ ^[0-9]+[.][0-9]+[.][0-9]+$ ]]; then
               echo "RELEASE_VERSION=$tag_name" >> $GITHUB_ENV
             else
               echo "RELEASE_VERSION=${{ github.event.release.id }}" >> $GITHUB_ENV
@@ -129,6 +129,7 @@ jobs:
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131  # v7
         with:
           name: docs-html
+          path: ${{ env.RELEASE_VERSION }}
 
       - name: Copy latest README.html to docs/index.html for GitHub pages
         if: env.RELEASE_VERSION == 'latest'
