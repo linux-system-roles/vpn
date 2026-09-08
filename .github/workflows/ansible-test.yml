@@ -63,6 +63,7 @@ jobs:
             || github.event.sender.login == 'systemroller')
       )
     runs-on: ubuntu-latest
+    environment: citest
     strategy:
       fail-fast: false  # get all results, not just the first failure
       matrix:

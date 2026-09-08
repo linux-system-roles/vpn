@@ -63,6 +63,7 @@ jobs:
             || github.event.sender.login == 'systemroller')
       )
     runs-on: ubuntu-latest
+    environment: citest
     outputs:
       supported_platforms: ${{ steps.supported_platforms.outputs.supported_platforms }}
       head_sha: ${{ steps.head_sha.outputs.head_sha || github.sha }}
@@ -155,6 +156,7 @@ jobs:
           - platform: CentOS-Stream-10
             ansible_version: "2.17"
     runs-on: ubuntu-latest
+    environment: citest
     env:
       ARTIFACTS_DIR_NAME: "tf_${{ github.event.repository.name }}-${{ github.event.issue.number || github.event.number }}_\
         ${{ matrix.platform }}-${{ matrix.ansible_version }}_\

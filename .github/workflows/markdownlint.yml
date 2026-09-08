@@ -61,6 +61,7 @@ jobs:
             || github.event.sender.login == 'systemroller')
       )
     runs-on: ubuntu-latest
+    environment: citest
     steps:
       - name: Get PR head SHA and context
         if: github.event_name == 'issue_comment'

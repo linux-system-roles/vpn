@@ -62,6 +62,7 @@ jobs:
       )
     name: Analyze
     runs-on: ubuntu-latest
+    environment: citest
     permissions:
       pull-requests: read
       actions: read

@@ -61,6 +61,7 @@ jobs:
             || github.event.sender.login == 'systemroller')
       )
     runs-on: ubuntu-latest
+    environment: citest
 
     strategy:
       fail-fast: false

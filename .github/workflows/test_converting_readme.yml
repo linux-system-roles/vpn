@@ -60,6 +60,7 @@ jobs:
             || github.event.sender.login == 'systemroller')
       )
     runs-on: ubuntu-latest
+    environment: citest
     permissions:
       pull-requests: read
       contents: write
