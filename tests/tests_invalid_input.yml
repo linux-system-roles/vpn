@@ -1,0 +1,194 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Verify invalid parameters are rejected
+  hosts: all
+  tasks:
+    - name: Run invalid input tests
+      block:
+        - name: Run role with valid defaults
+          ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+          vars:
+            vpn_ensure_openssl: false
+
+        - name: Run argument specs validation tests
+          when: ansible_version.full is version("2.11", ">=")
+          block:
+            - name: Argument specs reject invalid vpn_auth_method choice
+              block:
+                - name: Run role with invalid vpn_auth_method
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    vpn_auth_method: invalid_auth_method
+              rescue:
+                - name: Mark invalid vpn_auth_method rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_auth_method_choice_failed: true
+
+            - name: Assert invalid vpn_auth_method was rejected
+              ansible.builtin.assert:
+                that:
+                  - >-
+                    __invalid_input_auth_method_choice_failed
+                    | default(false)
+                fail_msg: >-
+                  argument_specs should reject vpn_auth_method values
+                  outside the allowed set
+
+            - name: Argument specs reject non-boolean vpn_regen_keys
+              block:
+                - name: Run role with non-boolean vpn_regen_keys
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    vpn_regen_keys: not_a_bool
+              rescue:
+                - name: Mark invalid vpn_regen_keys type rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_regen_keys_type_failed: true
+
+            - name: Assert invalid vpn_regen_keys type was rejected
+              ansible.builtin.assert:
+                that:
+                  - __invalid_input_regen_keys_type_failed | default(false)
+                fail_msg: >-
+                  argument_specs should reject vpn_regen_keys values that
+                  are not booleans
+
+            - name: Argument specs reject invalid vpn_default_policy choice
+              block:
+                - name: Run role with invalid vpn_default_policy
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    vpn_default_policy: invalid_policy
+              rescue:
+                - name: Mark invalid vpn_default_policy rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_default_policy_choice_failed: true
+
+            - name: Assert invalid vpn_default_policy was rejected
+              ansible.builtin.assert:
+                that:
+                  - >-
+                    __invalid_input_default_policy_choice_failed
+                    | default(false)
+                fail_msg: >-
+                  argument_specs should reject vpn_default_policy values
+                  outside the allowed set
+
+            - name: Argument specs reject non-list vpn_connections
+              block:
+                - name: Run role with non-list vpn_connections
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    vpn_connections: not_a_list
+              rescue:
+                - name: Mark invalid vpn_connections type rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_connections_type_failed: true
+
+            - name: Assert invalid vpn_connections type was rejected
+              ansible.builtin.assert:
+                that:
+                  - __invalid_input_connections_type_failed | default(false)
+                fail_msg: >-
+                  argument_specs should reject vpn_connections values that
+                  are not lists
+
+        - name: Assert rejects leftupdown as an integer
+          block:
+            - name: Run role with integer leftupdown
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                vpn_connections:
+                  - hosts:
+                      host1.example.com:
+                    leftupdown: 123
+          rescue:
+            - name: Mark leftupdown integer rejected
+              ansible.builtin.set_fact:
+                __invalid_input_leftupdown_int_failed: true
+
+        - name: Assert leftupdown as integer failed validation
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_leftupdown_int_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject vpn_connections entries with
+              a non-string leftupdown value
+
+        - name: Assert rejects auto as an integer
+          block:
+            - name: Run role with integer auto
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                vpn_connections:
+                  - hosts:
+                      host1.example.com:
+                    auto: 123
+          rescue:
+            - name: Mark auto integer rejected
+              ansible.builtin.set_fact:
+                __invalid_input_auto_int_failed: true
+
+        - name: Assert auto as integer failed validation
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_auto_int_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject vpn_connections entries with
+              a non-string auto value
+
+        - name: Assert rejects invalid auto choice
+          block:
+            - name: Run role with invalid auto value
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                vpn_connections:
+                  - hosts:
+                      host1.example.com:
+                    auto: invalid_auto
+          rescue:
+            - name: Mark invalid auto choice rejected
+              ansible.builtin.set_fact:
+                __invalid_input_auto_choice_failed: true
+
+        - name: Assert invalid auto choice failed validation
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_auto_choice_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject vpn_connections entries with
+              auto values outside the allowed set
+
+        - name: Assert rejects list as host entry
+          block:
+            - name: Run role with list as host entry
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                vpn_connections:
+                  - hosts:
+                      host1.example.com: [invalid, list]
+          rescue:
+            - name: Mark invalid host entry rejected
+              ansible.builtin.set_fact:
+                __invalid_input_hosts_entry_failed: true
+
+        - name: Assert invalid host entry failed validation
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_hosts_entry_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject vpn_connections host entries
+              that are lists
+
+      always:
+        - name: Clear test facts
+          ansible.builtin.set_fact:
+            __invalid_input_auth_method_choice_failed:
+            __invalid_input_regen_keys_type_failed:
+            __invalid_input_default_policy_choice_failed:
+            __invalid_input_connections_type_failed:
+            __invalid_input_leftupdown_int_failed:
+            __invalid_input_auto_int_failed:
+            __invalid_input_auto_choice_failed:
+            __invalid_input_hosts_entry_failed:
+          tags: tests::cleanup
