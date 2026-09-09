@@ -1,0 +1,192 @@
+# SPDX-License-Identifier: MIT
+---
+argument_specs:
+  main:
+    short_description: The vpn role.
+    description: >
+      The vpn role allows you to configure VPN tunnels using Libreswan.
+      It supports host-to-host tunnels between inventory hosts and
+      opportunistic mesh configurations with policy-based encryption.
+
+      The role can generate pre-shared keys, manage firewall and SELinux
+      settings for IPsec ports, and configure certificates for tunnel
+      authentication.
+    options:
+      vpn_provider:
+        type: str
+        default: libreswan
+        choices:
+          - libreswan
+        description: >
+          The VPN software provider used to configure tunnels. Currently
+          only `libreswan` is supported.
+      vpn_auth_method:
+        type: str
+        default: psk
+        choices:
+          - psk
+          - cert
+        description: >
+          The default VPN authentication method for tunnels. Use `psk` for
+          pre-shared key authentication or `cert` for certificate-based
+          authentication.
+      vpn_regen_keys:
+        type: bool
+        default: false
+        description: >
+          Whether pre-shared keys should be regenerated for host pairs that
+          already have secrets files.
+      vpn_opportunistic:
+        type: bool
+        default: false
+        description: >
+          Whether opportunistic mesh configuration should be used by default
+          for connections that do not override this setting.
+      vpn_connections:
+        type: list
+        elements: dict
+        default: []
+        description: >
+          List of VPN connection specifications. Each item defines either a
+          host-to-host tunnel between named hosts or an opportunistic mesh
+          configuration.
+        options:
+          name:
+            type: str
+            description: >
+              An optional prefix added to auto-generated connection names.
+          hosts:
+            type: dict
+            description: >
+              Dictionary of hosts participating in a host-to-host tunnel.
+              Each key is an inventory host name. Each value is an optional
+              dictionary of host-specific settings, or a scalar value such as
+              an empty string or null when no host-specific options are needed.
+          auth_method:
+            type: str
+            choices:
+              - psk
+              - cert
+            description: >
+              Authentication method for this connection. Overrides
+              `vpn_auth_method` when set. Use `psk` for pre-shared key
+              authentication or `cert` for certificate-based authentication.
+          auto:
+            type: raw
+            description: >
+              The Libreswan `auto` setting for this connection. Accepts
+              `add`, `ondemand`, `start`, or `ignore`, or null when no
+              automatic startup operation should be configured.
+          opportunistic:
+            type: bool
+            description: >
+              Whether this connection uses an opportunistic mesh
+              configuration instead of explicit host-to-host tunnels.
+          policies:
+            type: list
+            elements: dict
+            description: >
+              List of opportunistic mesh policy rules for this connection.
+            options:
+              policy:
+                type: str
+                choices:
+                  - private
+                  - private-or-clear
+                  - clear
+                description: >
+                  The policy group applied to the corresponding CIDR. Use
+                  `private` for encrypted traffic, `private-or-clear` for
+                  opportunistic encryption, or `clear` for unencrypted
+                  traffic.
+              cidr:
+                type: str
+                description: >
+                  The CIDR to which the policy applies. Use `default` to
+                  apply the policy to hosts not matched by other rules.
+          shared_key_content:
+            type: str
+            description: >
+              A pre-defined pre-shared key for this connection. When not
+              set, the role generates a key using `openssl`.
+          ike:
+            type: str
+            description: >
+              IKE encryption and authentication algorithms for phase 1 of
+              this connection.
+          esp:
+            type: str
+            description: >
+              ESP algorithms offered or accepted for Child SA negotiation
+              on this connection.
+          type:
+            type: str
+            description: >
+              The Libreswan connection type, such as `tunnel` or `transport`.
+          ikelifetime:
+            type: str
+            description: >
+              How long the IKE SA should remain valid before renegotiation,
+              using Libreswan time notation such as `8h` or `28800s`.
+          salifetime:
+            type: str
+            description: >
+              How long a Child SA instance should remain valid before
+              expiry, using Libreswan time notation such as `8h` or
+              `28800s`.
+          retransmit_timeout:
+            type: str
+            description: >
+              Maximum time allowed for a packet and its retransmits before
+              the IKE attempt is aborted, using Libreswan time notation.
+          dpddelay:
+            type: str
+            description: >
+              Delay between Dead Peer Detection or IKEv2 liveness
+              keepalives, using Libreswan time notation. Requires
+              `dpdtimeout` when set.
+          dpdtimeout:
+            type: str
+            description: >
+              Idle time after which a DPD-enabled peer is declared dead.
+              Requires `dpddelay` when set.
+          dpdaction:
+            type: str
+            description: >
+              Action taken when a DPD-enabled peer is declared dead.
+          leftupdown:
+            type: raw
+            description: >
+              The updown script executed when connection status changes.
+              Accepts a command string or null to disable the default
+              Libreswan updown script.
+      vpn_default_policy:
+        type: str
+        default: private-or-clear
+        choices:
+          - private
+          - private-or-clear
+          - clear
+        description: >
+          Default opportunistic mesh policy group applied to target
+          machines. Use `private` for encrypted traffic,
+          `private-or-clear` for opportunistic encryption, or `clear` for
+          unencrypted traffic.
+      vpn_manage_firewall:
+        type: bool
+        default: false
+        description: >
+          Whether the role should manage IPsec firewall ports 500/UDP,
+          4500/UDP, and 4500/TCP using the firewall role.
+      vpn_manage_selinux:
+        type: bool
+        default: false
+        description: >
+          Whether the role should manage IPsec port SELinux settings using
+          the selinux role.
+      vpn_secure_logging:
+        type: bool
+        default: true
+        description: >
+          Whether to suppress potentially sensitive output from tasks that
+          handle credentials, secrets, and other sensitive data.

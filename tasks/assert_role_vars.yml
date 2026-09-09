@@ -1,0 +1,51 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Assert auto in vpn_connections is null or a valid string
+  ansible.builtin.assert:
+    that:
+      - >-
+        item.auto is none
+        or (item.auto is string
+            and item.auto in ['add', 'ondemand', 'start', 'ignore'])
+    fail_msg: >-
+      vpn_connections[{{ idx }}].auto must be null or one of add, ondemand,
+      start, ignore, got {{ item.auto | type_debug }}
+  loop: "{{ vpn_connections }}"
+  loop_control:
+    index_var: idx
+    label: "{{ idx }}"
+  when: item.auto is defined
+
+- name: Assert leftupdown in vpn_connections is null or a string
+  ansible.builtin.assert:
+    that:
+      - >-
+        item.leftupdown is none
+        or item.leftupdown is string
+    fail_msg: >-
+      vpn_connections[{{ idx }}].leftupdown must be null or a string,
+      got {{ item.leftupdown | type_debug }}
+  loop: "{{ vpn_connections }}"
+  loop_control:
+    index_var: idx
+    label: "{{ idx }}"
+  when: item.leftupdown is defined
+
+- name: Assert host entries in vpn_connections are null, scalars, or dicts
+  ansible.builtin.assert:
+    that:
+      - >-
+        item.hosts | default({}) | dict2items |
+        rejectattr('value', 'none') |
+        rejectattr('value', 'string') |
+        rejectattr('value', 'number') |
+        rejectattr('value', 'boolean') |
+        rejectattr('value', 'mapping') | list | length == 0
+    fail_msg: >-
+      vpn_connections[{{ idx }}].hosts contains entries that are not
+      null, scalars, or dictionaries (got {{ item.hosts | type_debug }})
+  loop: "{{ vpn_connections }}"
+  loop_control:
+    index_var: idx
+    label: "{{ idx }}"
+  when: item.hosts is defined
