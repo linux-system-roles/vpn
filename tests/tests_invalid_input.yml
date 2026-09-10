@@ -6,9 +6,39 @@
     - name: Run invalid input tests
       block:
         - name: Run role with valid defaults
-          ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
-          vars:
-            vpn_ensure_openssl: false
+          block:
+            - name: Run role with empty vpn_connections
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                vpn_ensure_openssl: false
+
+            - name: Run role validation with valid vpn_connections
+              block:
+                - name: Set platform/version specific variables
+                  ansible.builtin.include_role:
+                    name: linux-system-roles.vpn
+                    tasks_from: set_vars.yml
+                    public: true
+
+                - name: Validate valid vpn_connections parameters
+                  ansible.builtin.include_role:
+                    name: linux-system-roles.vpn
+                    tasks_from: assert_role_vars.yml
+                  vars:
+                    vpn_connections:
+                      - auto: start
+                        leftupdown: null
+                        hosts:
+                          host1.example.com:
+                          host2.example.com:
+                            hostname: host2.example.com
+
+                - name: Assert valid vpn_connections passed validation
+                  ansible.builtin.assert:
+                    that: true
+                    fail_msg: >-
+                      assert_role_vars should accept valid auto,
+                      leftupdown, and hosts values in vpn_connections
 
         - name: Run argument specs validation tests
           when: ansible_version.full is version("2.11", ">=")
@@ -23,6 +53,11 @@
                 - name: Mark invalid vpn_auth_method rejected
                   ansible.builtin.set_fact:
                     __invalid_input_auth_method_choice_failed: true
+                  when: >-
+                    'Validation of arguments failed' in
+                    (ansible_failed_result | default({}) | to_json)
+                    and 'vpn_auth_method' in
+                    (ansible_failed_result | default({}) | to_json)
 
             - name: Assert invalid vpn_auth_method was rejected
               ansible.builtin.assert:
@@ -44,6 +79,11 @@
                 - name: Mark invalid vpn_regen_keys type rejected
                   ansible.builtin.set_fact:
                     __invalid_input_regen_keys_type_failed: true
+                  when: >-
+                    'Validation of arguments failed' in
+                    (ansible_failed_result | default({}) | to_json)
+                    and 'vpn_regen_keys' in
+                    (ansible_failed_result | default({}) | to_json)
 
             - name: Assert invalid vpn_regen_keys type was rejected
               ansible.builtin.assert:
@@ -63,6 +103,11 @@
                 - name: Mark invalid vpn_default_policy rejected
                   ansible.builtin.set_fact:
                     __invalid_input_default_policy_choice_failed: true
+                  when: >-
+                    'Validation of arguments failed' in
+                    (ansible_failed_result | default({}) | to_json)
+                    and 'vpn_default_policy' in
+                    (ansible_failed_result | default({}) | to_json)
 
             - name: Assert invalid vpn_default_policy was rejected
               ansible.builtin.assert:
@@ -84,6 +129,11 @@
                 - name: Mark invalid vpn_connections type rejected
                   ansible.builtin.set_fact:
                     __invalid_input_connections_type_failed: true
+                  when: >-
+                    'Validation of arguments failed' in
+                    (ansible_failed_result | default({}) | to_json)
+                    and 'vpn_connections' in
+                    (ansible_failed_result | default({}) | to_json)
 
             - name: Assert invalid vpn_connections type was rejected
               ansible.builtin.assert:
@@ -106,6 +156,9 @@
             - name: Mark leftupdown integer rejected
               ansible.builtin.set_fact:
                 __invalid_input_leftupdown_int_failed: true
+              when: >-
+                'leftupdown must be null or a string' in
+                (ansible_failed_result | default({}) | to_json)
 
         - name: Assert leftupdown as integer failed validation
           ansible.builtin.assert:
@@ -128,6 +181,9 @@
             - name: Mark auto integer rejected
               ansible.builtin.set_fact:
                 __invalid_input_auto_int_failed: true
+              when: >-
+                'auto must be null or one of' in
+                (ansible_failed_result | default({}) | to_json)
 
         - name: Assert auto as integer failed validation
           ansible.builtin.assert:
@@ -150,6 +206,9 @@
             - name: Mark invalid auto choice rejected
               ansible.builtin.set_fact:
                 __invalid_input_auto_choice_failed: true
+              when: >-
+                'auto must be null or one of' in
+                (ansible_failed_result | default({}) | to_json)
 
         - name: Assert invalid auto choice failed validation
           ansible.builtin.assert:
@@ -171,6 +230,9 @@
             - name: Mark invalid host entry rejected
               ansible.builtin.set_fact:
                 __invalid_input_hosts_entry_failed: true
+              when: >-
+                'hosts contains entries' in
+                (ansible_failed_result | default({}) | to_json)
 
         - name: Assert invalid host entry failed validation
           ansible.builtin.assert:
