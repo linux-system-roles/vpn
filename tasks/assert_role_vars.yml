@@ -31,19 +31,18 @@
     label: "{{ idx }}"
   when: item.leftupdown is defined
 
-- name: Assert host entries in vpn_connections are null, scalars, or dicts
+- name: Assert host entries in vpn_connections are not lists
   ansible.builtin.assert:
     that:
       - >-
         item.hosts | default({}) | dict2items |
         rejectattr('value', 'none') |
+        selectattr('value', 'sequence') |
         rejectattr('value', 'string') |
-        rejectattr('value', 'number') |
-        rejectattr('value', 'boolean') |
         rejectattr('value', 'mapping') | list | length == 0
     fail_msg: >-
-      vpn_connections[{{ idx }}].hosts contains entries that are not
-      null, scalars, or dictionaries (got {{ item.hosts | type_debug }})
+      vpn_connections[{{ idx }}].hosts contains list entries,
+      got {{ item.hosts | type_debug }}
   loop: "{{ vpn_connections }}"
   loop_control:
     index_var: idx

@@ -231,7 +231,7 @@
               ansible.builtin.set_fact:
                 __invalid_input_hosts_entry_failed: true
               when: >-
-                'hosts contains entries' in
+                'hosts contains list entries' in
                 (ansible_failed_result | default({}) | to_json)
 
         - name: Assert invalid host entry failed validation
