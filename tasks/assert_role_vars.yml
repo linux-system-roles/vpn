@@ -9,7 +9,7 @@
             and item.auto in ['add', 'ondemand', 'start', 'ignore'])
     fail_msg: >-
       vpn_connections[{{ idx }}].auto must be null or one of add, ondemand,
-      start, ignore, got {{ item.auto | type_debug }}
+      start, ignore, got {{ item.auto }}
   loop: "{{ vpn_connections }}"
   loop_control:
     index_var: idx
@@ -24,7 +24,7 @@
         or item.leftupdown is string
     fail_msg: >-
       vpn_connections[{{ idx }}].leftupdown must be null or a string,
-      got {{ item.leftupdown | type_debug }}
+      got {{ item.leftupdown }}
   loop: "{{ vpn_connections }}"
   loop_control:
     index_var: idx
@@ -42,7 +42,7 @@
         rejectattr('value', 'mapping') | list | length == 0
     fail_msg: >-
       vpn_connections[{{ idx }}].hosts contains list entries,
-      got {{ item.hosts | type_debug }}
+      got {{ item.hosts }} of type {{ item.hosts | type_debug }}
   loop: "{{ vpn_connections }}"
   loop_control:
     index_var: idx
