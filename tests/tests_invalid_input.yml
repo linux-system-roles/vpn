@@ -2,6 +2,13 @@
 ---
 - name: Verify invalid parameters are rejected
   hosts: all
+  vars:
+    __invalid_input_failure_messages: >-
+      {{ ([ansible_failed_result.msg | default('') | string,
+           ansible_failed_result.msg.msg | default('') | string]
+          + (ansible_failed_result.results | default([])
+             | map(attribute='msg') | map('default', '') | list))
+         | join(' ') }}
   tasks:
     - name: Run invalid input tests
       block:
@@ -54,10 +61,10 @@
                   ansible.builtin.set_fact:
                     __invalid_input_auth_method_choice_failed: true
                   when: >-
-                    'Validation of arguments failed' in
-                    (ansible_failed_result | default({}) | to_json)
-                    and 'vpn_auth_method' in
-                    (ansible_failed_result | default({}) | to_json)
+                    'value of vpn_auth_method must be one of' in
+                    __invalid_input_failure_messages and
+                    'got: invalid_auth_method' in
+                    __invalid_input_failure_messages
 
             - name: Assert invalid vpn_auth_method was rejected
               ansible.builtin.assert:
@@ -80,10 +87,9 @@
                   ansible.builtin.set_fact:
                     __invalid_input_regen_keys_type_failed: true
                   when: >-
-                    'Validation of arguments failed' in
-                    (ansible_failed_result | default({}) | to_json)
-                    and 'vpn_regen_keys' in
-                    (ansible_failed_result | default({}) | to_json)
+                    "argument 'vpn_regen_keys'" in
+                    __invalid_input_failure_messages and
+                    'convert to bool' in __invalid_input_failure_messages
 
             - name: Assert invalid vpn_regen_keys type was rejected
               ansible.builtin.assert:
@@ -104,10 +110,9 @@
                   ansible.builtin.set_fact:
                     __invalid_input_default_policy_choice_failed: true
                   when: >-
-                    'Validation of arguments failed' in
-                    (ansible_failed_result | default({}) | to_json)
-                    and 'vpn_default_policy' in
-                    (ansible_failed_result | default({}) | to_json)
+                    'value of vpn_default_policy must be one of' in
+                    __invalid_input_failure_messages and
+                    'got: invalid_policy' in __invalid_input_failure_messages
 
             - name: Assert invalid vpn_default_policy was rejected
               ansible.builtin.assert:
@@ -130,10 +135,9 @@
                   ansible.builtin.set_fact:
                     __invalid_input_connections_type_failed: true
                   when: >-
-                    'Validation of arguments failed' in
-                    (ansible_failed_result | default({}) | to_json)
-                    and 'vpn_connections' in
-                    (ansible_failed_result | default({}) | to_json)
+                    "Elements value for option 'vpn_connections'" in
+                    __invalid_input_failure_messages and
+                    'convert to dict' in __invalid_input_failure_messages
 
             - name: Assert invalid vpn_connections type was rejected
               ansible.builtin.assert:
@@ -157,8 +161,8 @@
               ansible.builtin.set_fact:
                 __invalid_input_leftupdown_int_failed: true
               when: >-
-                'leftupdown must be null or a string' in
-                (ansible_failed_result | default({}) | to_json)
+                'vpn_connections[0].leftupdown must be null or a string, got 123'
+                in __invalid_input_failure_messages
 
         - name: Assert leftupdown as integer failed validation
           ansible.builtin.assert:
@@ -182,8 +186,9 @@
               ansible.builtin.set_fact:
                 __invalid_input_auto_int_failed: true
               when: >-
-                'auto must be null or one of' in
-                (ansible_failed_result | default({}) | to_json)
+                'vpn_connections[0].auto must be null or one of' in
+                __invalid_input_failure_messages and
+                'got 123' in __invalid_input_failure_messages
 
         - name: Assert auto as integer failed validation
           ansible.builtin.assert:
@@ -207,8 +212,9 @@
               ansible.builtin.set_fact:
                 __invalid_input_auto_choice_failed: true
               when: >-
-                'auto must be null or one of' in
-                (ansible_failed_result | default({}) | to_json)
+                'vpn_connections[0].auto must be null or one of' in
+                __invalid_input_failure_messages and
+                'got invalid_auto' in __invalid_input_failure_messages
 
         - name: Assert invalid auto choice failed validation
           ansible.builtin.assert:
@@ -231,8 +237,12 @@
               ansible.builtin.set_fact:
                 __invalid_input_hosts_entry_failed: true
               when: >-
-                'hosts contains list entries' in
-                (ansible_failed_result | default({}) | to_json)
+                'vpn_connections[0].hosts contains list entries' in
+                __invalid_input_failure_messages and
+                ("'host1.example.com': ['invalid', 'list']" in
+                 __invalid_input_failure_messages or
+                 "u'host1.example.com': [u'invalid', u'list']" in
+                 __invalid_input_failure_messages)
 
         - name: Assert invalid host entry failed validation
           ansible.builtin.assert:
