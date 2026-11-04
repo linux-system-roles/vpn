@@ -1,0 +1,234 @@
+# SPDX-License-Identifier: MIT
+---
+extra_requirements:
+  title: Additional Requirements
+  content: |
+    The Ansible controller requires the python `ipaddress` package on EL7 systems, or other systems that use python 2.7.
+    On python 3.x systems, the VPN role uses the python3 built-in `ipaddress` module.
+
+    The role requires the `firewall` role and the `selinux` role from the `fedora.linux_system_roles` collection, if `vpn_manage_firewall` and `vpn_manage_selinux` are set to `true`, respectively.
+
+doc_sections:
+  - type: scenario
+    title: Configuring General VPN Settings
+    description: |
+      These global variables apply to every tunnel unless overridden in a specific connection definition.
+    include_tags:
+      - general
+    examples:
+      - title: Basic VPN Mesh Between Hosts
+        description: |
+          This example sets up VPN tunnels between each pair of hosts using pre-shared key authentication with auto-generated keys.
+        playbook: |
+          all:
+            hosts:
+              bastion1.example.com: {}
+              bastion2.example.com: {}
+              bastion3.example.com: {}
+            vars:
+              vpn_connections:
+                - hosts:
+                    bastion1.example.com:
+                    bastion2.example.com:
+                    bastion3.example.com:
+
+  - type: scenario
+    title: Configuring VPN Connections
+    description: |
+      The `vpn_connections` variable is a list of connection specifications.
+      Each connection defines either a host-to-host tunnel between named hosts or an opportunistic mesh configuration.
+
+      In addition to the global variables, you may provide a number of connection-specific variables.
+      All time fields (for example `ikelifetime` and others) accept the time as a number + unit e.g. `13h` for 13 hours, `10s` for 10 seconds.
+    include_tags:
+      - connections
+    examples:
+      - title: Host-to-Host with One Externally Managed Host
+        description: |
+          Sets up tunnels between inventory hosts and an external host not managed by Ansible.
+          The `hostname` field provides the IP for the unmanaged host.
+        playbook: |
+          all:
+            hosts:
+              bastion_east:
+                ansible_host: bastion1.example.com
+              bastion_west:
+                ansible_host: bastion2.example.com
+            vars:
+              vpn_connections:
+                - ike: aes256-sha2;dh19
+                  esp: aes-sha2_512+sha2_256
+                  ikelifetime: 11h
+                  salifetime: 9h
+                  type: transport
+                  hosts:
+                    bastion_east:
+                    bastion_west:
+                    bastion_north:
+                      hostname: 192.168.122.103
+      - title: Host-to-Host with Multiple NICs
+        description: |
+          Hosts with multiple VPN connections associated with multiple NICs, e.g. separate control plane and data plane networks.
+        playbook: |
+          all:
+            hosts:
+              bastion_east: {}
+              bastion_west: {}
+              bastion_north: {}
+            vars:
+              vpn_connections:
+                - name: control_plane_vpn
+                  hosts:
+                    bastion_east:
+                      hostname: 192.168.122.101
+                    bastion_west:
+                      hostname: 192.168.122.102
+                    bastion_north:
+                      hostname: 192.168.122.103
+                - name: data_plane_vpn
+                  hosts:
+                    bastion_east:
+                      hostname: 10.0.0.1
+                    bastion_west:
+                      hostname: 10.0.0.2
+                    bastion_north:
+                      hostname: 10.0.0.3
+      - title: Host-to-Host Using Certificates
+        description: |
+          Sets up tunnels using certificate-based authentication between all hosts.
+        playbook: |
+          all:
+            hosts:
+              bastion1.example.com: {}
+              bastion2.example.com: {}
+              bastion3.example.com: {}
+            vars:
+              vpn_connections:
+                - name: vpn-tunnel-x
+                  auth_method: cert
+                  auto: start
+                  hosts:
+                    bastion1.example.com:
+                      cert_name: bastion1cert
+                    bastion2.example.com:
+                      cert_name: bastion2cert
+                    bastion3.example.com:
+                      cert_name: bastion3cert
+      - title: Managed Host to Unmanaged Host
+        description: |
+          Sets up a tunnel to a remote host not managed by Ansible, like an appliance.
+          The shared key should come from Vault.
+        playbook: |
+          all:
+            vars:
+              vpn_connections:
+                - auth_method: psk
+                  auto: start
+                  shared_key_content: !vault |
+                    $ANSIBLE_VAULT;1.2;AES256;dev
+                    ....
+                  hosts:
+                    this_host:
+                      leftid: idoftheclient
+                    nfsserver:
+                      hostname: nfsserver.example.com
+                      rightid: idoftheserver
+
+  - type: scenario
+    title: Configuring Opportunistic Mesh VPN
+    description: |
+      You can configure an opportunistic mesh VPN by setting `opportunistic` to `true` on a connection.
+      This includes all hosts in the Ansible inventory in the mesh configuration.
+
+      **Note:** When configuring an opportunistic mesh VPN using a control node that shares the same CIDR as one or more mesh CIDRs, add a `clear` policy entry for the control node CIDR to prevent SSH connection loss during the play.
+    include_tags:
+      - opportunistic
+    examples:
+      - title: Opportunistic Mesh VPN Configuration
+        description: |
+          This example overrides the default policy to `private` and adds a `clear` exception for the controller machine.
+        playbook: |
+          all:
+            hosts:
+              bastion1.example.com:
+                cert_name: bastion1cert
+              bastion2.example.com:
+                cert_name: bastion2cert
+              bastion3.example.com:
+                cert_name: bastion3cert
+            vars:
+              vpn_connections:
+                - opportunistic: true
+                  auth_method: cert
+                  policies:
+                    - policy: private
+                      cidr: default
+                    - policy: private-or-clear
+                      cidr: 192.168.122.0/24
+                    - policy: private
+                      cidr: 192.168.110.0/24
+                    - policy: clear
+                      cidr: 192.168.110.7/32
+
+  - type: scenario
+    title: Firewall and SELinux
+    description: |
+      The firewall must be configured to allow traffic on 500/UDP, 4500/UDP, and 4500/TCP ports for the IKE, ESP, and AH protocols.
+
+      **NOTE:** `vpn_manage_firewall` and `vpn_manage_selinux` are limited to *adding* ports and policy, respectively.
+      They cannot be used for *removing* them.
+      If you want to remove ports or policy, use the firewall or selinux role directly.
+    include_tags:
+      - firewall
+
+  - type: note
+    title: Verifying a Successful Startup
+    content: |
+      ### Verifying Libreswan
+
+      To confirm that a connection is successfully loaded:
+
+      ```bash
+      ipsec status | grep <connectionname>
+      ```
+
+      To confirm that a connection is successfully started:
+
+      ```bash
+      ipsec trafficstatus | grep <connectionname>
+      ```
+
+      To verify that a certificate has been imported:
+
+      ```bash
+      ipsec whack --listcerts
+      ```
+
+      If a connection did not successfully load, try to manually add it:
+
+      ```bash
+      ipsec auto --add <connectionname>
+      ```
+
+      Errors can be found in `/var/log/pluto.log` in RHEL 8, or by issuing `journalctl -u ipsec` in RHEL 7.
+
+  - type: note
+    title: Use Cases
+    content: |
+      The following are common VPN deployment topologies that this role can configure.
+      See the example playbooks above for how to set up each scenario.
+
+      * **Host-to-Host (openstack)**: Encrypt traffic between specific nodes, such as OpenStack instances using IP failover.
+        Useful when individual hosts need dedicated encrypted channels without affecting the rest of the network.
+
+      * **Host-to-Host (data centers)**: Connect two systems across different data centers with encrypted communication, using either FreeIPA certificates or pre-shared keys.
+
+      * **Host-to-Host (single remote peer)**: Set up an encrypted tunnel from one managed system to an existing device (e.g. a Cisco appliance) in another organization using pre-shared keys.
+
+      * **Network-to-Network (site-to-site)**: Link two distinct networks through their routers so that hosts on each side can communicate as if they were on the same network.
+
+      * **VPN Remote Access Server (roadwarrior)**: Configure a single server to accept incoming VPN connections from multiple remote clients using FreeIPA certificates.
+
+      * **Mesh VPN**: Build a fully connected mesh where each node independently establishes host-to-host tunnels with all other nodes.
+        Adding or removing a node does not require reconfiguring the others.
+        Nodes authenticate using a PKI (e.g. FreeIPA).

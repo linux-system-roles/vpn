@@ -17,6 +17,7 @@ argument_specs:
         default: libreswan
         choices:
           - libreswan
+        doc_tags: [general]
         description: >
           The VPN software provider used to configure tunnels. Currently
           only `libreswan` is supported.
@@ -26,6 +27,7 @@ argument_specs:
         choices:
           - psk
           - cert
+        doc_tags: [general]
         description: >
           The default VPN authentication method for tunnels. Use `psk` for
           pre-shared key authentication or `cert` for certificate-based
@@ -33,12 +35,14 @@ argument_specs:
       vpn_regen_keys:
         type: bool
         default: false
+        doc_tags: [general]
         description: >
           Whether pre-shared keys should be regenerated for host pairs that
           already have secrets files.
       vpn_opportunistic:
         type: bool
         default: false
+        doc_tags: [general, opportunistic]
         description: >
           Whether opportunistic mesh configuration should be used by default
           for connections that do not override this setting.
@@ -46,6 +50,7 @@ argument_specs:
         type: list
         elements: dict
         default: []
+        doc_tags: [connections]
         description: >
           List of VPN connection specifications. Each item defines either a
           host-to-host tunnel between named hosts or an opportunistic mesh
@@ -167,6 +172,7 @@ argument_specs:
           - private
           - private-or-clear
           - clear
+        doc_tags: [general, opportunistic]
         description: >
           Default opportunistic mesh policy group applied to target
           machines. Use `private` for encrypted traffic,
@@ -175,18 +181,21 @@ argument_specs:
       vpn_manage_firewall:
         type: bool
         default: false
+        doc_tags: [firewall]
         description: >
           Whether the role should manage IPsec firewall ports 500/UDP,
           4500/UDP, and 4500/TCP using the firewall role.
       vpn_manage_selinux:
         type: bool
         default: false
+        doc_tags: [firewall]
         description: >
           Whether the role should manage IPsec port SELinux settings using
           the selinux role.
       vpn_secure_logging:
         type: bool
         default: true
+        doc_tags: [firewall]
         description: >
           Whether to suppress potentially sensitive output from tasks that
           handle credentials, secrets, and other sensitive data.
